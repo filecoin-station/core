@@ -3,7 +3,7 @@
 	 :artificial_satellite: 
 	<br>
 	<br>
-	Filecoin Station Core
+	core
 	<br>
 	<br>
 	<br>
