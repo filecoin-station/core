@@ -31,6 +31,9 @@ spawn(
     `saturn-L2-node-${platform()}-${archOverwritten}`,
     'saturn-L2-node'
   ), {
+    env: {
+      ROOT_DIR: join(ROOT, 'modules', 'saturn-L2-node')
+    },
     stdio: 'inherit'
   }
 )
