@@ -32,6 +32,12 @@ $ station
 
 ## Development
 
+Update modules:
+
+```bash
+$ ./scripts/update-modules.js
+```
+
 Publish a new version:
 
 ```bash
