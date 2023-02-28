@@ -5,6 +5,7 @@ import { homedir, arch, platform } from 'node:os'
 import { mkdir } from 'node:fs/promises'
 import { spawn } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
+import { createWriteStream } from 'node:fs'
 
 const {
   FIL_WALLET_ADDRESS,
@@ -23,9 +24,8 @@ await mkdir(join(ROOT, 'logs'), { recursive: true })
 await mkdir(join(ROOT, 'logs', 'modules'), { recursive: true })
 
 const modules = join(dirname(fileURLToPath(import.meta.url)), '..', 'modules')
-
 const archOverwritten = platform() === 'darwin' ? 'x64' : arch()
-spawn(
+const ps = spawn(
   join(
     modules,
     `saturn-L2-node-${platform()}-${archOverwritten}`,
@@ -34,7 +34,16 @@ spawn(
     env: {
       ROOT_DIR: join(ROOT, 'modules', 'saturn-L2-node'),
       FIL_WALLET_ADDRESS
-    },
-    stdio: 'inherit'
+    }
   }
+)
+
+ps.stdout.pipe(process.stdout, { end: false })
+ps.stderr.pipe(process.stderr, { end: false })
+
+ps.stdout.pipe(
+  createWriteStream(
+    join(ROOT, 'logs', 'modules', 'saturn-L2-node.log'),
+    { flags: 'a' }
+  )
 )
