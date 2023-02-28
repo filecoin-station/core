@@ -32,7 +32,8 @@ spawn(
     'saturn-L2-node'
   ), {
     env: {
-      ROOT_DIR: join(ROOT, 'modules', 'saturn-L2-node')
+      ROOT_DIR: join(ROOT, 'modules', 'saturn-L2-node'),
+      FIL_WALLET_ADDRESS
     },
     stdio: 'inherit'
   }
