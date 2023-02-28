@@ -19,6 +19,7 @@
     "unzip-stream": "^0.3.1"
   },
   "dependencies": {
+    "bytes": "^3.1.2",
     "execa": "^7.0.0",
     "undici": "^5.20.0"
   }
