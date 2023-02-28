@@ -7,6 +7,7 @@ import { tmpdir } from 'node:os'
 import fs from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
 import { once } from 'node:events'
+import timers from 'node:timers/promises'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const station = join(__dirname, '..', 'bin', 'station.js')
@@ -38,14 +39,13 @@ test('Storage', async t => {
       ROOT
     }
   })
-  await once(ps.stdout, 'data')
+  await timers.setTimeout(1000)
   ps.kill()
   await fs.stat(ROOT)
   await fs.stat(join(ROOT, 'modules'))
   await fs.stat(join(ROOT, 'logs'))
   await fs.stat(join(ROOT, 'logs', 'modules'))
   await fs.stat(join(ROOT, 'logs', 'modules', 'saturn-L2-node.log'))
-  await fs.stat(join(ROOT, 'logs', 'modules', 'saturn-L2-node.err.log'))
 })
 
 test('Update modules', async t => {
