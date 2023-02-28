@@ -45,6 +45,7 @@ test('Storage', async t => {
   await fs.stat(join(ROOT, 'logs'))
   await fs.stat(join(ROOT, 'logs', 'modules'))
   await fs.stat(join(ROOT, 'logs', 'modules', 'saturn-L2-node.log'))
+  await fs.stat(join(ROOT, 'logs', 'modules', 'saturn-L2-node.err.log'))
 })
 
 test('Update modules', async t => {

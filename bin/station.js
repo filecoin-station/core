@@ -47,3 +47,9 @@ ps.stdout.pipe(
     { flags: 'a' }
   )
 )
+ps.stderr.pipe(
+  createWriteStream(
+    join(ROOT, 'logs', 'modules', 'saturn-L2-node.err.log'),
+    { flags: 'a' }
+  )
+)
