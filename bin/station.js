@@ -16,11 +16,11 @@ if (!FIL_WALLET_ADDRESS) {
   process.exit(1)
 }
 
-mkdir(ROOT, { recursive: true })
-mkdir(join(ROOT, 'modules'), { recursive: true })
-mkdir(join(ROOT, 'modules', 'saturn-L2-node'), { recursive: true })
-mkdir(join(ROOT, 'logs'), { recursive: true })
-mkdir(join(ROOT, 'logs', 'modules'), { recursive: true })
+await mkdir(ROOT, { recursive: true })
+await mkdir(join(ROOT, 'modules'), { recursive: true })
+await mkdir(join(ROOT, 'modules', 'saturn-L2-node'), { recursive: true })
+await mkdir(join(ROOT, 'logs'), { recursive: true })
+await mkdir(join(ROOT, 'logs', 'modules'), { recursive: true })
 
 const modules = join(dirname(fileURLToPath(import.meta.url)), '..', 'modules')
 
