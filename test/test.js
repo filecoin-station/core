@@ -6,9 +6,13 @@ import assert from 'node:assert'
 import { tmpdir } from 'node:os'
 import fs from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
+import { once } from 'node:events'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const station = join(__dirname, '..', 'bin', 'station.js')
+
+// From https://spec.filecoin.io/appendix/address/
+const FIL_WALLET_ADDRESS = 'f17uoq6tp427uzv7fztkbsnn64iwotfrristwpryy'
 
 test('FIL_WALLET_ADDRESS', async t => {
   await t.test('require address', async t => {
@@ -20,22 +24,22 @@ test('FIL_WALLET_ADDRESS', async t => {
     assert.fail('should have thrown')
   })
   await t.test('with address', async t => {
-    await execa(station, {
-      env: {
-        FIL_WALLET_ADDRESS: 'f1...'
-      }
-    })
+    const ps = execa(station, { env: { FIL_WALLET_ADDRESS } })
+    await once(ps.stdout, 'data')
+    ps.kill()
   })
 })
 
 test('Storage', async t => {
   const ROOT = join(tmpdir(), randomUUID())
-  await execa(station, {
+  const ps = execa(station, {
     env: {
-      FIL_WALLET_ADDRESS: 'f1...',
+      FIL_WALLET_ADDRESS,
       ROOT
     }
   })
+  await once(ps.stdout, 'data')
+  ps.kill()
   await fs.stat(ROOT)
   await fs.stat(join(ROOT, 'modules'))
   await fs.stat(join(ROOT, 'logs'))
