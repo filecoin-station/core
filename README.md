@@ -30,6 +30,12 @@ $ station
 - `FIL_WALLET_ADDRESS` Filecoin wallet address (required)
 - `ROOT` Module storage root directory (defaults to `~/.station/`)
 
+## Files
+
+```bash
+$ tail $ROOT/logs/modules/*.log
+```
+
 ## Development
 
 Update modules:
