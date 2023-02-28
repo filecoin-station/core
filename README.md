@@ -11,6 +11,8 @@
 
 > Repo for Filecoin Station Core
 
+[![CI](https://github.com/filecoin-station/core/actions/workflows/ci.yml/badge.svg)](https://github.com/filecoin-station/core/actions/workflows/ci.yml)
+
 ## Usage
 
 ```bash
