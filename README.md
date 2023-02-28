@@ -22,7 +22,7 @@ $ npm install -g @filecoin-station/core
 ## Usage
 
 ```bash
-$ station
+$ FIL_WALLET_ADDRESS=f1... station
 ```
 
 ## Development
