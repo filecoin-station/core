@@ -13,8 +13,23 @@
 
 [![CI](https://github.com/filecoin-station/core/actions/workflows/ci.yml/badge.svg)](https://github.com/filecoin-station/core/actions/workflows/ci.yml)
 
+## Installation
+
+```bash
+$ npm install -g @filecoin-station/core
+```
+
 ## Usage
 
 ```bash
 $ station
+```
+
+## Development
+
+Publish a new version:
+
+```bash
+$ npm version <VERSION>
+$ npm publish --access public
 ```
