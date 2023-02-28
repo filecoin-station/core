@@ -22,8 +22,13 @@ $ npm install -g @filecoin-station/core
 ## Usage
 
 ```bash
-$ FIL_WALLET_ADDRESS=f1... station
+$ station
 ```
+
+## Configuration
+
+- `FIL_WALLET_ADDRESS` Filecoin wallet address (required)
+- `ROOT` Module storage root directory (defaults to `~/.station/`)
 
 ## Development
 
