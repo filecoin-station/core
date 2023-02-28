@@ -10,3 +10,9 @@
 </h1>
 
 > Repo for Filecoin Station Core
+
+## Usage
+
+```bash
+$ station
+```
