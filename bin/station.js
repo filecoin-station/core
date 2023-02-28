@@ -2,6 +2,7 @@
 
 import { join } from 'node:path'
 import { homedir } from 'node:os'
+import { mkdir } from 'node:fs/promises'
 
 const {
   FIL_WALLET_ADDRESS,
@@ -13,4 +14,7 @@ if (!FIL_WALLET_ADDRESS) {
   process.exit(1)
 }
 
-console.log({ ROOT })
+mkdir(ROOT, { recursive: true })
+mkdir(join(ROOT, 'modules'), { recursive: true })
+mkdir(join(ROOT, 'logs'), { recursive: true })
+mkdir(join(ROOT, 'logs', 'modules'), { recursive: true })
