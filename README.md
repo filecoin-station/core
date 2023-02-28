@@ -33,7 +33,8 @@ $ station
 ## Files
 
 ```bash
-$ tail $ROOT/logs/modules/*.log
+$ tail -f $ROOT/logs/modules/*.log
+$ tail -f $ROOT/logs/metrics.log
 ```
 
 ## Development
