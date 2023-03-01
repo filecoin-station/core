@@ -33,7 +33,8 @@ $ station
 
 ## Files
 
-Log files are currently used to read `core` state.
+Log files are currently used to read `core` state. Files are rotated after
+`10MB`.
 
 ### Metrics
 
