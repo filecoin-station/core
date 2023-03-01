@@ -54,6 +54,43 @@ $ tail -f $XDG_STATE_HOME/filecoin-station/logs/modules/*.log
 ...
 ```
 
+### Deployment
+
+On a fresh [ubuntu](https://ubuntu.com/) machine:
+
+```bash
+# Install node.js
+$ curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
+sudo apt-get install -y nodejs
+
+# Install core
+$ npm install -g @filecoin-station/core
+
+# Create systemd service
+# Don't forget to replace FIL_WALLET_ADDRESS and User
+$ sudo tee /etc/systemd/system/station.service > /dev/null <<EOF
+[Unit]
+Description=Filecoin Station Core
+Documentation=https://github.com/filecoin-station/core
+After=network.target
+
+[Service]
+Environment=FIL_WALLET_ADDRESS=XYZ
+Type=simple
+User=XYZ
+ExecStart=/usr/bin/station
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Start service
+$ sudo systemctl daemon-reload
+$ sudo systemctl start station
+$ sudo systemctl status station
+```
+
 ## Development
 
 Update modules:
