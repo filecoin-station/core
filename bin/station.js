@@ -4,9 +4,8 @@ import { join, dirname } from 'node:path'
 import { homedir } from 'node:os'
 import fs from 'node:fs/promises'
 import * as saturnNode from '../lib/saturn-node.js'
-import { createWriteStream } from 'node:fs'
-import { pipeline, Transform } from 'node:stream'
 import { fileURLToPath } from 'node:url'
+import { createLogStream } from '../lib/log.js'
 
 const {
   FIL_WALLET_ADDRESS,
@@ -28,33 +27,10 @@ const paths = {
 await fs.mkdir(join(paths.moduleStorage, 'saturn-L2-node'), { recursive: true })
 await fs.mkdir(paths.moduleLogs, { recursive: true })
 
-const formatLog = text =>
-  text
-    .trimEnd()
-    .split(/\n/g)
-    .map(line => `[${new Date().toLocaleTimeString()}] ${line}`)
-    .join('\n') + '\n'
-
 await saturnNode.start({
   FIL_WALLET_ADDRESS,
   storagePath: join(paths.moduleStorage, 'saturn-L2-node'),
   binariesPath: paths.moduleBinaries,
-  storeMetrics: async metrics => {
-    await fs.appendFile(
-      paths.metrics,
-      formatLog(`${JSON.stringify(metrics)}\n`)
-    )
-  },
-  logStream: pipeline(
-    new Transform({
-      transform (text, _, callback) {
-        callback(null, formatLog(text))
-      }
-    }),
-    createWriteStream(
-      join(paths.moduleLogs, 'saturn-L2-node.log'),
-      { flags: 'a' }
-    ),
-    () => {}
-  )
+  metricsStream: createLogStream(paths.metrics),
+  logStream: createLogStream(join(paths.moduleLogs, 'saturn-L2-node.log'))
 })
