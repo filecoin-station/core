@@ -64,7 +64,5 @@ $ ./scripts/update-modules.js
 Publish a new version:
 
 ```bash
-$ npm version <VERSION>
-$ git push --tags && git push
-$ npm publish --access public
+$ npm run release
 ```
