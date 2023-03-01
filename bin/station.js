@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-import { join } from 'node:path'
+import { join, dirname } from 'node:path'
 import { homedir } from 'node:os'
 import fs from 'node:fs/promises'
 import * as saturnNode from '../lib/saturn-node.js'
 import { createWriteStream } from 'node:fs'
 import { pipeline, Transform } from 'node:stream'
+import { fileURLToPath } from 'node:url'
 
 const {
   FIL_WALLET_ADDRESS,
@@ -20,7 +21,8 @@ if (!FIL_WALLET_ADDRESS) {
 const paths = {
   metrics: join(XDG_STATE_HOME, 'filecoin-station', 'logs', 'metrics.log'),
   moduleStorage: join(XDG_STATE_HOME, 'filecoin-station', 'modules'),
-  moduleLogs: join(XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules')
+  moduleLogs: join(XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules'),
+  moduleBinaries: join(dirname(fileURLToPath(import.meta.url)), '..', 'modules')
 }
 
 await fs.mkdir(join(paths.moduleStorage, 'saturn-L2-node'), { recursive: true })
@@ -36,6 +38,7 @@ const formatLog = text =>
 await saturnNode.start({
   FIL_WALLET_ADDRESS,
   storagePath: join(paths.moduleStorage, 'saturn-L2-node'),
+  binariesPath: paths.moduleBinaries,
   storeMetrics: async metrics => {
     await fs.appendFile(
       paths.metrics,
