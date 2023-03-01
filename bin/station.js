@@ -2,9 +2,10 @@
 
 import { join } from 'node:path'
 import { homedir } from 'node:os'
-import { mkdir } from 'node:fs/promises'
+import fs from 'node:fs/promises'
 import * as saturnNode from '../lib/saturn-node.js'
 import { createWriteStream } from 'node:fs'
+import { pipeline, Transform } from 'node:stream'
 
 const {
   FIL_WALLET_ADDRESS,
@@ -22,15 +23,35 @@ const paths = {
   moduleLogs: join(XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules')
 }
 
-await mkdir(join(paths.moduleStorage, 'saturn-L2-node'), { recursive: true })
-await mkdir(paths.moduleLogs, { recursive: true })
+await fs.mkdir(join(paths.moduleStorage, 'saturn-L2-node'), { recursive: true })
+await fs.mkdir(paths.moduleLogs, { recursive: true })
+
+const formatLog = text =>
+  text
+    .trimEnd()
+    .split(/\n/g)
+    .map(line => `[${new Date().toLocaleTimeString()}] ${line}`)
+    .join('\n') + '\n'
 
 await saturnNode.start({
   FIL_WALLET_ADDRESS,
   storagePath: join(paths.moduleStorage, 'saturn-L2-node'),
-  metricsPath: paths.metrics,
-  logStream: createWriteStream(
-    join(paths.moduleLogs, 'saturn-L2-node.log'),
-    { flags: 'a' }
+  storeMetrics: async metrics => {
+    await fs.appendFile(
+      paths.metrics,
+      formatLog(`${JSON.stringify(metrics)}\n`)
+    )
+  },
+  logStream: pipeline(
+    new Transform({
+      transform (text, _, callback) {
+        callback(null, formatLog(text))
+      }
+    }),
+    createWriteStream(
+      join(paths.moduleLogs, 'saturn-L2-node.log'),
+      { flags: 'a' }
+    ),
+    () => {}
   )
 })
