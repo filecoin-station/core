@@ -7,7 +7,7 @@ import * as saturnNode from '../lib/saturn-node.js'
 
 const {
   FIL_WALLET_ADDRESS,
-  ROOT = join(homedir(), '.station')
+  XDG_STATE_HOME = join(homedir(), '.local', 'state')
 } = process.env
 
 if (!FIL_WALLET_ADDRESS) {
@@ -15,10 +15,18 @@ if (!FIL_WALLET_ADDRESS) {
   process.exit(1)
 }
 
-await mkdir(ROOT, { recursive: true })
-await mkdir(join(ROOT, 'modules'), { recursive: true })
-await mkdir(join(ROOT, 'modules', 'saturn-L2-node'), { recursive: true })
-await mkdir(join(ROOT, 'logs'), { recursive: true })
-await mkdir(join(ROOT, 'logs', 'modules'), { recursive: true })
+const paths = {
+  metrics: join(XDG_STATE_HOME, 'filecoin-station', 'logs', 'metrics.log'),
+  moduleStorage: join(XDG_STATE_HOME, 'filecoin-station', 'modules'),
+  moduleLogs: join(XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules')
+}
 
-await saturnNode.start({ ROOT, FIL_WALLET_ADDRESS })
+await mkdir(join(paths.moduleStorage, 'saturn-L2-node'), { recursive: true })
+await mkdir(paths.moduleLogs, { recursive: true })
+
+await saturnNode.start({
+  FIL_WALLET_ADDRESS,
+  storagePath: join(paths.moduleStorage, 'saturn-L2-node'),
+  logPath: join(paths.moduleLogs, 'saturn-L2-node.log'),
+  metricsPath: paths.metrics
+})

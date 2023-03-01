@@ -27,14 +27,15 @@ $ station
 
 ## Configuration
 
-- `FIL_WALLET_ADDRESS` Filecoin wallet address (required)
-- `ROOT` Module storage root directory (defaults to `~/.station/`)
+- `$FIL_WALLET_ADDRESS` Filecoin wallet address (required)
+- `$XDG_STATE_HOME` Station stores logs and module state in
+`$XDG_STATE_HOME/filecoin-station`. Defaults to `~/.local/state`.
 
 ## Files
 
 ```bash
-$ tail -f $ROOT/logs/modules/*.log
-$ tail -f $ROOT/logs/metrics.log
+$ tail -f $XDG_STATE_HOME/filecoin-station/logs/modules/*.log
+$ tail -f $XDG_STATE_HOME/filecoin-station/logs/metrics.log
 ```
 
 ## Development

@@ -32,20 +32,24 @@ test('FIL_WALLET_ADDRESS', async t => {
 })
 
 test('Storage', async t => {
-  const ROOT = join(tmpdir(), randomUUID())
+  const XDG_STATE_HOME = join(tmpdir(), randomUUID())
   const ps = execa(station, {
     env: {
       FIL_WALLET_ADDRESS,
-      ROOT
+      XDG_STATE_HOME
     }
   })
   await timers.setTimeout(1000)
   ps.kill()
-  await fs.stat(ROOT)
-  await fs.stat(join(ROOT, 'modules'))
-  await fs.stat(join(ROOT, 'logs'))
-  await fs.stat(join(ROOT, 'logs', 'modules'))
-  await fs.stat(join(ROOT, 'logs', 'modules', 'saturn-L2-node.log'))
+  await fs.stat(XDG_STATE_HOME, 'filecoin-station')
+  await fs.stat(join(XDG_STATE_HOME, 'filecoin-station', 'modules'))
+  await fs.stat(join(XDG_STATE_HOME, 'filecoin-station', 'logs'))
+  await fs.stat(join(XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules'))
+  await fs.stat(
+    join(
+      XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules', 'saturn-L2-node.log'
+    )
+  )
 })
 
 test('Update modules', async t => {
