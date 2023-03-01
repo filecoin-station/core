@@ -33,9 +33,24 @@ $ station
 
 ## Files
 
+Log files are currently used to read `core` state.
+
+### Metrics
+
+```bash
+$ tail -f $XDG_STATE_HOME/filecoin-station/logs/metrics.log
+2023-02-16T22:59:47.385+0100 {"totalJobsCompleted":123}
+...
+```
+
+### Logs
+
 ```bash
 $ tail -f $XDG_STATE_HOME/filecoin-station/logs/modules/*.log
-$ tail -f $XDG_STATE_HOME/filecoin-station/logs/metrics.log
+==> $XDG_STATE_HOME/filecoin-station/logs/modules/saturn-l2-node.log <==
+2023-02-16T22:59:47.385+0100 INFO: Saturn Node is online and connected to 9 peers
+2023-02-16T22:59:47.385+0100 ERROR: Saturn Node is not able to connect to the network
+...
 ```
 
 ## Development
