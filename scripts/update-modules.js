@@ -27,7 +27,8 @@ const outDir = join(
 const targets = [
   { platform: 'darwin', arch: 'x64', url: 'Darwin_x86_64', archive: 'zip' },
   { platform: 'linux', arch: 'arm64', url: 'Linux_arm64', archive: 'tar.gz' },
-  { platform: 'linux', arch: 'ia32', url: 'Linux_i386', archive: 'tar.gz' }
+  { platform: 'linux', arch: 'ia32', url: 'Linux_i386', archive: 'tar.gz' },
+  { platform: 'linux', arch: 'x64', url: 'Linux_x86_64', archive: 'tar.gz' }
 ]
 
 await Promise.all(targets.map(async ({ platform, arch, url, archive }) => {
