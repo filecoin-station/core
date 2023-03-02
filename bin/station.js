@@ -7,10 +7,18 @@ import * as saturnNode from '../lib/saturn-node.js'
 import { fileURLToPath } from 'node:url'
 import { createLogStream } from '../lib/log.js'
 
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
+
 const {
   FIL_WALLET_ADDRESS,
   XDG_STATE_HOME = join(homedir(), '.local', 'state')
 } = process.env
+
+if (process.argv.includes('-v') || process.argv.includes('--version')) {
+  const pkg = await fs.readFile(join(repoRoot, 'package.json'), 'utf8')
+  console.log(JSON.parse(pkg).version)
+  process.exit()
+}
 
 if (!FIL_WALLET_ADDRESS) {
   console.error('FIL_WALLET_ADDRESS required')
@@ -21,7 +29,7 @@ const paths = {
   metrics: join(XDG_STATE_HOME, 'filecoin-station', 'logs', 'metrics.log'),
   moduleStorage: join(XDG_STATE_HOME, 'filecoin-station', 'modules'),
   moduleLogs: join(XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules'),
-  moduleBinaries: join(dirname(fileURLToPath(import.meta.url)), '..', 'modules')
+  moduleBinaries: join(repoRoot, 'modules')
 }
 
 await fs.mkdir(join(paths.moduleStorage, 'saturn-L2-node'), { recursive: true })
