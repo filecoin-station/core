@@ -52,6 +52,17 @@ test('Storage', async t => {
   )
 })
 
+test('Metrics', async t => {
+  const { stdout } = await execa(station, ['metrics'])
+  assert.ok(stdout.includes('totalJobsComplete'))
+
+  for (const flag of ['-f', '--follow']) {
+    const ps = execa(station, ['metrics', flag])
+    await once(ps.stdout, 'data')
+    ps.kill()
+  }
+})
+
 test('Update modules', async t => {
   await execa(join(__dirname, '..', 'scripts', 'update-modules.js'))
 })
