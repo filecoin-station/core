@@ -6,6 +6,17 @@ import fs from 'node:fs/promises'
 import * as saturnNode from '../lib/saturn-node.js'
 import { fileURLToPath } from 'node:url'
 import { createLogStream } from '../lib/log.js'
+import * as Sentry from '@sentry/node'
+
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
+const pkg = JSON.parse(await fs.readFile(join(repoRoot, 'package.json')))
+
+Sentry.init({
+  dsn: 'https://ff9615d8516545158e186d863a06a0f1@o1408530.ingest.sentry.io/6762462',
+  release: `${pkg.name}@${pkg.version}`,
+  environment: pkg.sentryEnvironment,
+  tracesSampleRate: 0.1
+})
 
 const {
   FIL_WALLET_ADDRESS,
@@ -21,7 +32,7 @@ const paths = {
   metrics: join(XDG_STATE_HOME, 'filecoin-station', 'logs', 'metrics.log'),
   moduleStorage: join(XDG_STATE_HOME, 'filecoin-station', 'modules'),
   moduleLogs: join(XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules'),
-  moduleBinaries: join(dirname(fileURLToPath(import.meta.url)), '..', 'modules')
+  moduleBinaries: join(repoRoot, 'modules')
 }
 
 await fs.mkdir(join(paths.moduleStorage, 'saturn-L2-node'), { recursive: true })
