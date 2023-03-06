@@ -12,8 +12,8 @@ const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
 const pkg = JSON.parse(await fs.readFile(join(repoRoot, 'package.json')))
 
 Sentry.init({
-  dsn: 'https://ff9615d8516545158e186d863a06a0f1@o1408530.ingest.sentry.io/6762462',
-  release: `${pkg.name}@${pkg.version}`,
+  dsn: 'https://6c96a5c2ffa5448d9ec8ddda90012bc9@o1408530.ingest.sentry.io/4504792315199488',
+  release: pkg.version,
   environment: pkg.sentryEnvironment,
   tracesSampleRate: 0.1
 })
