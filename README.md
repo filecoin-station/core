@@ -31,16 +31,18 @@ $ station
 - `$XDG_STATE_HOME` Station stores logs and module state in
 `$XDG_STATE_HOME/filecoin-station`. Defaults to `~/.local/state`.
 
-## Files
-
-Log files are currently used to read `core` state. Files are rotated after
-`10MB`.
-
 ### Metrics
 
 ```bash
-$ tail -f $XDG_STATE_HOME/filecoin-station/logs/metrics.log
-2023-02-16T22:59:47.385+0100 {"totalJobsCompleted":123}
+$ station metrics
+{
+	"totalJobsCompleted": 123
+}
+
+$ station metrics --follow
+{
+	"totalJobsCompleted": 123
+}
 ...
 ```
 
