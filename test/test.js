@@ -12,8 +12,8 @@ import timers from 'node:timers/promises'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const station = join(__dirname, '..', 'bin', 'station.js')
 
-// From https://spec.filecoin.io/appendix/address/
-const FIL_WALLET_ADDRESS = 'f17uoq6tp427uzv7fztkbsnn64iwotfrristwpryy'
+// From https://lotus.filecoin.io/lotus/manage/manage-fil/
+const FIL_WALLET_ADDRESS = 'f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za'
 
 test('FIL_WALLET_ADDRESS', async t => {
   await t.test('require address', async t => {
