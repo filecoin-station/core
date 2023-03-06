@@ -8,6 +8,7 @@ import fs from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
 import { once } from 'node:events'
 import timers from 'node:timers/promises'
+import { getPaths } from '../lib/paths.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const station = join(__dirname, '..', 'bin', 'station.js')
@@ -53,14 +54,41 @@ test('Storage', async t => {
 })
 
 test('Metrics', async t => {
-  const { stdout } = await execa(station, ['metrics'])
-  assert.ok(stdout.includes('totalJobsComplete'))
+  await t.test('No metrics', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const { stdout } = await execa(
+      station,
+      ['metrics'],
+      { env: { XDG_STATE_HOME } }
+    )
+    assert.strictEqual(stdout, JSON.stringify({ totalJobsCompleted: 0 }, 0, 2))
+  })
+  await t.test('With metrics', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    await fs.mkdir(
+      dirname(getPaths(XDG_STATE_HOME).metrics),
+      { recursive: true }
+    )
+    await fs.writeFile(
+      getPaths(XDG_STATE_HOME).metrics,
+      '[date] {"totalJobsCompleted":1}\n'
+    )
+    const { stdout } = await execa(
+      station,
+      ['metrics'],
+      { env: { XDG_STATE_HOME } }
+    )
+    assert.strictEqual(stdout, JSON.stringify({ totalJobsCompleted: 1 }, 0, 2))
+  })
 
-  for (const flag of ['-f', '--follow']) {
-    const ps = execa(station, ['metrics', flag])
-    await once(ps.stdout, 'data')
-    ps.kill()
-  }
+  await t.test('Follow', async t => {
+    for (const flag of ['-f', '--follow']) {
+      const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+      const ps = execa(station, ['metrics', flag], { env: { XDG_STATE_HOME } })
+      await once(ps.stdout, 'data')
+      ps.kill()
+    }
+  })
 })
 
 test('Update modules', async t => {
