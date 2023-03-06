@@ -57,7 +57,17 @@ $ tail -f $XDG_STATE_HOME/filecoin-station/logs/modules/*.log
 ...
 ```
 
-### Deployment
+### Docker
+
+Please replace `FIL_WALLET_ADDRESS`.
+
+```bash
+$ docker run \
+	-e FIL_WALLET_ADDRESS=f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za \
+	-d filecoin-station/core
+```
+
+### Manual deployment
 
 On a fresh [ubuntu](https://ubuntu.com/) machine:
 
