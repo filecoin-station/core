@@ -21,6 +21,8 @@
     "unzip-stream": "^0.3.1"
   },
   "dependencies": {
+    "@influxdata/influxdb-client": "^1.33.2",
+    "@sentry/node": "^7.41.0",
     "execa": "^7.0.0",
     "rotating-file-stream": "^3.1.0",
     "undici": "^5.20.0"

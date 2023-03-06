@@ -6,6 +6,7 @@ import fs from 'node:fs/promises'
 import * as saturnNode from '../lib/saturn-node.js'
 import { fileURLToPath } from 'node:url'
 import { createLogStream } from '../lib/log.js'
+import { createMetricsStream } from '../lib/metrics.js'
 
 const {
   FIL_WALLET_ADDRESS,
@@ -31,6 +32,6 @@ await saturnNode.start({
   FIL_WALLET_ADDRESS,
   storagePath: join(paths.moduleStorage, 'saturn-L2-node'),
   binariesPath: paths.moduleBinaries,
-  metricsStream: createLogStream(paths.metrics),
+  metricsStream: createMetricsStream(paths.metrics),
   logStream: createLogStream(join(paths.moduleLogs, 'saturn-L2-node.log'))
 })
