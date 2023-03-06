@@ -94,6 +94,10 @@ $ sudo systemctl start station
 $ sudo systemctl status station
 ```
 
+## Disclaimer
+
+[InfluxDB](https://www.influxdata.com/) is used for stats.
+
 ## Development
 
 Update modules:
