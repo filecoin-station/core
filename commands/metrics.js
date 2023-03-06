@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises'
 import { Tail } from 'tail'
 import { paths } from '../lib/paths.js'
+import { formatLog } from '../lib/log.js'
 
 const metricsLogLineToJSON = (metrics) =>
   JSON.stringify(
@@ -18,7 +19,7 @@ const maybeCreateMetricsFile = async () => {
     }
     await fs.writeFile(
       paths.metrics,
-      `[${new Date().toLocaleTimeString()}] {"totalJobsCompleted":0}\n`
+      formatLog(JSON.stringify({ totalJobsCompleted: 0 }) + '\n')
     )
   }
 }
