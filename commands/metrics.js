@@ -9,45 +9,33 @@ const metricsLogLineToJSON = (metrics) =>
     2
   )
 
-const tailWithDefaultValue = (path, defaultValue, _isFirstCall = true) => {
-  let tail
+const maybeCreateMetricsFile = async () => {
   try {
-    tail = new Tail(path, { nLines: 1 })
+    await fs.stat(paths.metrics)
   } catch (err) {
-    if (err.code === 'ENOENT') {
-      if (_isFirstCall) {
-        console.log(JSON.stringify(defaultValue, 0, 2))
-      }
-      setTimeout(() => tailWithDefaultValue(path, defaultValue, false), 1000)
-      return
+    if (err.code !== 'ENOENT') {
+      throw err
     }
-    throw err
+    await fs.writeFile(
+      paths.metrics,
+      `[${new Date().toLocaleTimeString()}] {"totalJobsCompleted":0}\n`
+    )
   }
-  tail.on('line', line => console.log(metricsLogLineToJSON(line)))
 }
 
 const followMetrics = () => {
-  tailWithDefaultValue(paths.metrics, { totalJobsCompleted: 0 })
+  const tail = new Tail(paths.metrics, { nLines: 1 })
+  tail.on('line', line => console.log(metricsLogLineToJSON(line)))
 }
 
 const getLatestMetrics = async () => {
-  let metrics
-  try {
-    metrics = await fs.readFile(paths.metrics, 'utf-8')
-  } catch (err) {
-    if (err.code === 'ENOENT') {
-      console.log(JSON.stringify({ totalJobsCompleted: 0 }, 0, 2))
-      return
-    }
-    throw err
-  }
+  const metrics = await fs.readFile(paths.metrics, 'utf-8')
   console.log(metricsLogLineToJSON(metrics.trim().split('\n').pop()))
 }
 
 export const metrics = async () => {
-  const isFollow = process.argv.includes('-f') ||
-    process.argv.includes('--follow')
-  if (isFollow) {
+  await maybeCreateMetricsFile()
+  if (process.argv.includes('-f') || process.argv.includes('--follow')) {
     followMetrics()
   } else {
     await getLatestMetrics()

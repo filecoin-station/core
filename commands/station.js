@@ -1,4 +1,3 @@
-import fs from 'node:fs/promises'
 import { join } from 'node:path'
 import { paths } from '../lib/paths.js'
 import * as saturnNode from '../lib/saturn-node.js'
@@ -11,9 +10,6 @@ export const station = async () => {
     console.error('FIL_WALLET_ADDRESS required')
     process.exit(1)
   }
-
-  await fs.mkdir(join(paths.moduleStorage, 'saturn-L2-node'), { recursive: true })
-  await fs.mkdir(paths.moduleLogs, { recursive: true })
 
   await saturnNode.start({
     FIL_WALLET_ADDRESS,
