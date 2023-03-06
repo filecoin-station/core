@@ -1,14 +1,10 @@
 import fs from 'node:fs/promises'
 import { Tail } from 'tail'
 import { paths } from '../lib/paths.js'
-import { formatLog } from '../lib/log.js'
+import { formatLog, parseLog } from '../lib/log.js'
 
 const metricsLogLineToJSON = (metrics) =>
-  JSON.stringify(
-    JSON.parse(metrics.split(/\[([^\]]+)\] /).pop()),
-    0,
-    2
-  )
+  JSON.stringify(JSON.parse(parseLog(metrics).text), 0, 2)
 
 const maybeCreateMetricsFile = async () => {
   try {
