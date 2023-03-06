@@ -16,7 +16,8 @@ const {
 
 if (process.argv.includes('-v') || process.argv.includes('--version')) {
   const pkg = await fs.readFile(join(repoRoot, 'package.json'), 'utf8')
-  console.log(JSON.parse(pkg).version)
+  const meta = JSON.parse(pkg)
+  console.log("%s: %s", meta.name, meta.version)
   process.exit()
 }
 
