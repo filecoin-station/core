@@ -3,6 +3,7 @@
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { execa } from 'execa'
+import fs from 'node:fs/promises'
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
 const pkg = JSON.parse(await fs.readFile(join(repoRoot, 'package.json')))
