@@ -30,6 +30,9 @@ if (argv._[0] === 'metrics') {
   await commands.metrics(argv)
 } else if (argv._[0] === 'logs') {
   await commands.logs(argv)
+} else if (argv._.length > 0) {
+  console.error(`Unknown command: ${argv._[0]}`)
+  process.exit(1)
 } else {
   await commands.station()
 }
