@@ -62,6 +62,14 @@ $ station metrics --follow
 ...
 ```
 
+### `$ station --version`
+
+Print Station version.
+
+```bash
+@filecoin-station/core: 1.0.1
+```
+
 ## Logs
 
 ```bash
