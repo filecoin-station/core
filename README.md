@@ -91,11 +91,30 @@ $ station logs --follow
 ...
 ```
 
-### `$ station --version`
+### `$ station --help`
 
-Print Station version.
+Show help.
 
 ```bash
+$ station --help
+Usage: station <command> [options]
+
+Commands:
+  station                   Start Station                              [default]
+  station    metrics        Show metrics
+  station    logs [module]  Show module logs
+
+Options:
+  -v, --version  Show version number                                   [boolean]
+  -h, --help     Show help                                             [boolean]
+```
+
+### `$ station --version`
+
+Show version number.
+
+```bash
+$ station --version
 @filecoin-station/core: 1.0.1
 ```
 
