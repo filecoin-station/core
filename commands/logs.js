@@ -27,10 +27,9 @@ const getLogs = async module => {
   process.stdout.end(logs)
 }
 
-export const logs = async argv => {
-  const module = argv.module || 'saturn-l2-node'
+export const logs = async ({ module = 'saturn-l2-node', follow }) => {
   await maybeCreateLogFile(module)
-  if (argv.follow) {
+  if (follow) {
     followLogs(module)
   } else {
     await getLogs(module)

@@ -32,9 +32,9 @@ const getLatestMetrics = async () => {
   console.log(metricsLogLineToJSON(metrics.trim().split('\n').pop()))
 }
 
-export const metrics = async argv => {
+export const metrics = async ({ follow }) => {
   await maybeCreateMetricsFile()
-  if (argv.follow) {
+  if (follow) {
     followMetrics()
   } else {
     await getLatestMetrics()
