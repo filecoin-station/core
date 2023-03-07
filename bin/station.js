@@ -18,10 +18,19 @@ Sentry.init({
   tracesSampleRate: 0.1
 })
 
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
+
 const {
   FIL_WALLET_ADDRESS,
   XDG_STATE_HOME = join(homedir(), '.local', 'state')
 } = process.env
+
+if (process.argv.includes('-v') || process.argv.includes('--version')) {
+  const pkg = await fs.readFile(join(repoRoot, 'package.json'), 'utf8')
+  const meta = JSON.parse(pkg)
+  console.log('%s: %s', meta.name, meta.version)
+  process.exit()
+}
 
 if (!FIL_WALLET_ADDRESS) {
   console.error('FIL_WALLET_ADDRESS required')
