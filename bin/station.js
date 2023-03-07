@@ -18,8 +18,6 @@ Sentry.init({
   tracesSampleRate: 0.1
 })
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
-
 const {
   FIL_WALLET_ADDRESS,
   XDG_STATE_HOME = join(homedir(), '.local', 'state')
