@@ -10,6 +10,8 @@
   },
   "scripts": {
     "test": "standard && node--test",
+    "preversion": "./scripts/pre-version.js",
+    "postpublish": "./scripts/post-publish.js",
     "release": "np"
   },
   "devDependencies": {
@@ -26,5 +28,6 @@
     "execa": "^7.0.0",
     "rotating-file-stream": "^3.1.0",
     "undici": "^5.20.0"
-  }
+  },
+  "sentryEnvironment": "development"
 }

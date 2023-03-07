@@ -96,6 +96,7 @@ $ sudo systemctl status station
 
 ## Disclaimer
 
+[Sentry](https://sentry.io) is used for error tracking.
 [InfluxDB](https://www.influxdata.com/) is used for stats.
 
 ## Development
