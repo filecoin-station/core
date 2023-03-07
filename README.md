@@ -32,11 +32,9 @@ $ FIL_WALLET_ADDRESS=f1... station
 
 ## Commands
 
-### Station
+### `$ station`
 
-```bash
-$ station
-```
+Start Station.
 
 Configuration:
 
@@ -45,7 +43,9 @@ to give `core` a quick spin, you can use the address
 `f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za`. Please note that any earnings
 sent there will be lost.
 
-### Metrics
+### `$ station metrics`
+
+Get Station metrics.
 
 ```bash
 $ station metrics
