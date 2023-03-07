@@ -34,13 +34,16 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      - uses: martinbeentjes/npm-get-version-action@main
+        id: package-version
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
           tags: |
-            ghcr.io/filecoin-station/core
+            ghcr.io/filecoin-station/core:${{ steps.package-version.outputs.current-version }}
           platforms: linux/amd64,linux/arm64
           cache-from: type=registry,ref=ghcr.io/filecoin-station/core
           cache-to: type=inline
