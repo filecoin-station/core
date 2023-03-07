@@ -22,32 +22,55 @@ $ npm install -g @filecoin-station/core
 ## Usage
 
 ```bash
-$ station
+$ FIL_WALLET_ADDRESS=f1... station
 ```
 
 ## Configuration
+
+- `$XDG_STATE_HOME` Station stores logs and module state in
+`$XDG_STATE_HOME/filecoin-station`. Defaults to `~/.local/state`.
+
+## Commands
+
+### `$ station`
+
+Start Station.
+
+Configuration:
 
 - `$FIL_WALLET_ADDRESS` Filecoin wallet address (required). If you just want
 to give `core` a quick spin, you can use the address
 `f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za`. Please note that any earnings
 sent there will be lost.
-- `$XDG_STATE_HOME` Station stores logs and module state in
-`$XDG_STATE_HOME/filecoin-station`. Defaults to `~/.local/state`.
 
-## Files
+### `$ station metrics`
 
-Log files are currently used to read `core` state. Files are rotated after
-`10MB`.
-
-### Metrics
+Get Station metrics.
 
 ```bash
-$ tail -f $XDG_STATE_HOME/filecoin-station/logs/metrics.log
-2023-02-16T22:59:47.385+0100 {"totalJobsCompleted":123}
+$ station metrics
+{
+	"totalJobsCompleted": 123,
+	"totalEarnings": "0"
+}
+
+$ station metrics --follow
+{
+	"totalJobsCompleted": 123,
+	"totalEarnings": "0"
+}
 ...
 ```
 
-### Logs
+### `$ station --version`
+
+Print Station version.
+
+```bash
+@filecoin-station/core: 1.0.1
+```
+
+## Logs
 
 ```bash
 $ tail -f $XDG_STATE_HOME/filecoin-station/logs/modules/*.log
@@ -57,9 +80,10 @@ $ tail -f $XDG_STATE_HOME/filecoin-station/logs/modules/*.log
 ...
 ```
 
-### Docker
+## Docker
 
-Please replace `FIL_WALLET_ADDRESS`.
+Deploy Station with [Docker](https://www.docker.com/). Please replace
+`FIL_WALLET_ADDRESS`.
 
 ```bash
 $ docker run \
@@ -67,7 +91,7 @@ $ docker run \
 	-d filecoin-station/core
 ```
 
-### Manual deployment
+## Manual deployment
 
 On a fresh [ubuntu](https://ubuntu.com/) machine:
 
@@ -103,6 +127,11 @@ $ sudo systemctl daemon-reload
 $ sudo systemctl start station
 $ sudo systemctl status station
 ```
+
+## Disclaimer
+
+[Sentry](https://sentry.io) is used for error tracking.
+[InfluxDB](https://www.influxdata.com/) is used for stats.
 
 ## Development
 

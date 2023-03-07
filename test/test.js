@@ -8,12 +8,13 @@ import fs from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
 import { once } from 'node:events'
 import timers from 'node:timers/promises'
+import { getPaths } from '../lib/paths.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const station = join(__dirname, '..', 'bin', 'station.js')
 
-// From https://spec.filecoin.io/appendix/address/
-const FIL_WALLET_ADDRESS = 'f17uoq6tp427uzv7fztkbsnn64iwotfrristwpryy'
+// From https://lotus.filecoin.io/lotus/manage/manage-fil/
+const FIL_WALLET_ADDRESS = 'f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za'
 
 test('FIL_WALLET_ADDRESS', async t => {
   await t.test('require address', async t => {
@@ -29,6 +30,11 @@ test('FIL_WALLET_ADDRESS', async t => {
     await once(ps.stdout, 'data')
     ps.kill()
   })
+})
+
+test('--version', async t => {
+  await execa(station, ['--version'])
+  await execa(station, ['-v'])
 })
 
 test('Storage', async t => {
@@ -50,6 +56,50 @@ test('Storage', async t => {
       XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules', 'saturn-L2-node.log'
     )
   )
+})
+
+test('Metrics', async t => {
+  await t.test('No metrics', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const { stdout } = await execa(
+      station,
+      ['metrics'],
+      { env: { XDG_STATE_HOME } }
+    )
+    assert.strictEqual(
+      stdout,
+      JSON.stringify({ totalJobsCompleted: 0, totalEarnings: '0' }, 0, 2)
+    )
+  })
+  await t.test('With metrics', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    await fs.mkdir(
+      dirname(getPaths(XDG_STATE_HOME).metrics),
+      { recursive: true }
+    )
+    await fs.writeFile(
+      getPaths(XDG_STATE_HOME).metrics,
+      '[date] {"totalJobsCompleted":1,"totalEarnings":"2"}\n'
+    )
+    const { stdout } = await execa(
+      station,
+      ['metrics'],
+      { env: { XDG_STATE_HOME } }
+    )
+    assert.strictEqual(
+      stdout,
+      JSON.stringify({ totalJobsCompleted: 1, totalEarnings: '2' }, 0, 2)
+    )
+  })
+
+  await t.test('Follow', async t => {
+    for (const flag of ['-f', '--follow']) {
+      const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+      const ps = execa(station, ['metrics', flag], { env: { XDG_STATE_HOME } })
+      await once(ps.stdout, 'data')
+      ps.kill()
+    }
+  })
 })
 
 test('Update modules', async t => {
