@@ -120,10 +120,7 @@ test('Logs', async t => {
   await t.test('With logs', async t => {
     const XDG_STATE_HOME = join(tmpdir(), randomUUID())
     await fs.mkdir(getPaths(XDG_STATE_HOME).moduleLogs, { recursive: true })
-    await fs.writeFile(
-      join(getPaths(XDG_STATE_HOME).moduleLogs, 'saturn-l2-node.log'),
-      '[date] beep boop\n'
-    )
+    await fs.writeFile(getPaths(XDG_STATE_HOME).allLogs, '[date] beep boop\n')
     const { stdout } = await execa(
       station,
       ['logs'],
@@ -142,10 +139,7 @@ test('Logs', async t => {
       const ps = execa(station, ['logs', flag], { env: { XDG_STATE_HOME } })
       await Promise.all([
         once(ps.stdout, 'data'),
-        fs.writeFile(
-          join(getPaths(XDG_STATE_HOME).moduleLogs, 'saturn-l2-node.log'),
-          '[date] beep boop\n'
-        )
+        fs.writeFile(getPaths(XDG_STATE_HOME).allLogs, '[date] beep boop\n')
       ])
       ps.kill()
     }
