@@ -94,6 +94,10 @@ $ sudo systemctl start station
 $ sudo systemctl status station
 ```
 
+## Disclaimer
+
+[Sentry](https://sentry.io) is used for error tracking.
+
 ## Development
 
 Update modules:

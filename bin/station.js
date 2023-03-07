@@ -6,8 +6,17 @@ import fs from 'node:fs/promises'
 import * as saturnNode from '../lib/saturn-node.js'
 import { fileURLToPath } from 'node:url'
 import { createLogStream } from '../lib/log.js'
+import * as Sentry from '@sentry/node'
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
+const pkg = JSON.parse(await fs.readFile(join(repoRoot, 'package.json')))
+
+Sentry.init({
+  dsn: 'https://6c96a5c2ffa5448d9ec8ddda90012bc9@o1408530.ingest.sentry.io/4504792315199488',
+  release: pkg.version,
+  environment: pkg.sentryEnvironment,
+  tracesSampleRate: 0.1
+})
 
 const {
   FIL_WALLET_ADDRESS,
