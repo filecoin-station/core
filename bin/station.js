@@ -8,7 +8,6 @@ import * as Sentry from '@sentry/node'
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 
-const { argv } = yargs(hideBin(process.argv))
 const pkg = JSON.parse(await fs.readFile(join(paths.repoRoot, 'package.json')))
 
 Sentry.init({
@@ -18,21 +17,13 @@ Sentry.init({
   tracesSampleRate: 0.1
 })
 
-if (argv.version || argv.v) {
-  console.log('%s: %s', pkg.name, pkg.version)
-  process.exit()
-}
-
 await fs.mkdir(join(paths.moduleStorage, 'saturn-L2-node'), { recursive: true })
 await fs.mkdir(paths.moduleLogs, { recursive: true })
 
-if (argv._[0] === 'metrics') {
-  await commands.metrics(argv)
-} else if (argv._[0] === 'logs') {
-  await commands.logs(argv)
-} else if (argv._.length > 0) {
-  console.error(`Unknown command: ${argv._[0]}`)
-  process.exit(1)
-} else {
-  await commands.station()
-}
+yargs(hideBin(process.argv))
+  .usage('Usage: $0 <command> [options]')
+  .command('$0', 'Start Station', () => {}, commands.station)
+  .command('metrics', 'Show metrics', () => {}, commands.metrics)
+  .command('logs', 'Show logs', () => {}, commands.logs)
+  .version(`${pkg.name}: ${pkg.version}`)
+  .parse()

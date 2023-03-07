@@ -34,7 +34,10 @@ test('FIL_WALLET_ADDRESS', async t => {
 
 test('--version', async t => {
   await execa(station, ['--version'])
-  await execa(station, ['-v'])
+})
+
+test('--help', async t => {
+  await execa(station, ['--help'])
 })
 
 test('Storage', async t => {
