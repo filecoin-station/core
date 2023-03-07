@@ -2,9 +2,9 @@ name: Docker
 on:
   push:
     # tags: ["*"]
-    paths:
-      - ".github/workflows/docker.yml"
-      - "Dockerfile"
+    # paths:
+    #   - ".github/workflows/docker.yml"
+    #   - "Dockerfile"
 
 env:
   REGISTRY: ghcr.io
