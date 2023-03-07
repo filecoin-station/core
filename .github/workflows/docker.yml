@@ -1,7 +1,7 @@
 name: Docker
 on:
   push:
-    tags: ["*"]
+    # tags: ["*"]
     paths:
       - ".github/workflows/docker.yml"
       - "Dockerfile"
