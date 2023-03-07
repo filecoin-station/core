@@ -3,13 +3,9 @@ import { Tail } from 'tail'
 import { paths } from '../lib/paths.js'
 import { join } from 'node:path'
 
-const maybeCreateLogFile = async module => {
+const maybeCreateLogFile = async path => {
   try {
-    await fs.writeFile(
-      join(paths.moduleLogs, `${module}.log`),
-      '',
-      { flag: 'wx' }
-    )
+    await fs.writeFile(path, '', { flag: 'wx' })
   } catch (err) {
     if (err.code !== 'EEXIST') {
       throw err
@@ -17,21 +13,23 @@ const maybeCreateLogFile = async module => {
   }
 }
 
-const followLogs = module => {
-  const tail = new Tail(join(paths.moduleLogs, `${module}.log`), { nLines: 10 })
+const followLogs = path => {
+  const tail = new Tail(path, { nLines: 10 })
   tail.on('line', line => console.log(line))
 }
 
-const getLogs = async module => {
-  const logs = await fs.readFile(join(paths.moduleLogs, `${module}.log`))
-  process.stdout.end(logs)
+const getLogs = async path => {
+  process.stdout.end(await fs.readFile(path))
 }
 
-export const logs = async ({ module = 'saturn-l2-node', follow }) => {
-  await maybeCreateLogFile(module)
+export const logs = async ({ module, follow }) => {
+  const path = module
+    ? join(paths.moduleLogs, `${module}.log`)
+    : paths.allLogs
+  await maybeCreateLogFile(path)
   if (follow) {
-    followLogs(module)
+    followLogs(path)
   } else {
-    await getLogs(module)
+    await getLogs(path)
   }
 }
