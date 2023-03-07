@@ -3,8 +3,6 @@ import { Tail } from 'tail'
 import { paths } from '../lib/paths.js'
 import { join } from 'node:path'
 
-const modules = ['saturn-l2-node']
-
 const maybeCreateLogFile = async module => {
   try {
     await fs.writeFile(
@@ -31,14 +29,6 @@ const getLogs = async module => {
 
 export const logs = async argv => {
   const module = argv.module || 'saturn-l2-node'
-
-  if (!modules.includes(module)) {
-    console.error(
-      `unknown module: ${module}. must be one of: ${modules.join(', ')}`
-    )
-    process.exit(1)
-  }
-
   await maybeCreateLogFile(module)
   if (argv.follow || argv.f) {
     followLogs(module)
