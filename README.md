@@ -39,12 +39,14 @@ sent there will be lost.
 ```bash
 $ station metrics
 {
-	"totalJobsCompleted": 123
+	"totalJobsCompleted": 123,
+	"totalEarnings": "0"
 }
 
 $ station metrics --follow
 {
-	"totalJobsCompleted": 123
+	"totalJobsCompleted": 123,
+	"totalEarnings": "0"
 }
 ...
 ```
@@ -95,6 +97,11 @@ $ sudo systemctl daemon-reload
 $ sudo systemctl start station
 $ sudo systemctl status station
 ```
+
+## Disclaimer
+
+[Sentry](https://sentry.io) is used for error tracking.
+[InfluxDB](https://www.influxdata.com/) is used for stats.
 
 ## Development
 

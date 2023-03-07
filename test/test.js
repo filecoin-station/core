@@ -32,6 +32,11 @@ test('FIL_WALLET_ADDRESS', async t => {
   })
 })
 
+test('--version', async t => {
+  await execa(station, ['--version'])
+  await execa(station, ['-v'])
+})
+
 test('Storage', async t => {
   const XDG_STATE_HOME = join(tmpdir(), randomUUID())
   const ps = execa(station, {

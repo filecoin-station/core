@@ -15,7 +15,9 @@ const maybeCreateMetricsFile = async () => {
     }
     await fs.writeFile(
       paths.metrics,
-      formatLog(JSON.stringify({ totalJobsCompleted: 0 }) + '\n')
+      formatLog(
+        JSON.stringify({ totalJobsCompleted: 0, totalEarnings: '0' }) + '\n'
+      )
     )
   }
 }
