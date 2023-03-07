@@ -3,7 +3,7 @@ import { Tail } from 'tail'
 import { paths } from '../lib/paths.js'
 import { formatLog, parseLog } from '../lib/log.js'
 
-const metricsLogLineToJSON = (metrics) =>
+const metricsLogLineToJSON = metrics =>
   JSON.stringify(JSON.parse(parseLog(metrics).text), 0, 2)
 
 const maybeCreateMetricsFile = async () => {
