@@ -22,17 +22,28 @@ $ npm install -g @filecoin-station/core
 ## Usage
 
 ```bash
-$ station
+$ FIL_WALLET_ADDRESS=f1... station
 ```
 
 ## Configuration
+
+- `$XDG_STATE_HOME` Station stores logs and module state in
+`$XDG_STATE_HOME/filecoin-station`. Defaults to `~/.local/state`.
+
+## Commands
+
+### Station
+
+```bash
+$ station
+```
+
+Configuration:
 
 - `$FIL_WALLET_ADDRESS` Filecoin wallet address (required). If you just want
 to give `core` a quick spin, you can use the address
 `f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za`. Please note that any earnings
 sent there will be lost.
-- `$XDG_STATE_HOME` Station stores logs and module state in
-`$XDG_STATE_HOME/filecoin-station`. Defaults to `~/.local/state`.
 
 ### Metrics
 
@@ -51,7 +62,7 @@ $ station metrics --follow
 ...
 ```
 
-### Logs
+## Logs
 
 ```bash
 $ tail -f $XDG_STATE_HOME/filecoin-station/logs/modules/*.log
@@ -61,7 +72,7 @@ $ tail -f $XDG_STATE_HOME/filecoin-station/logs/modules/*.log
 ...
 ```
 
-### Deployment
+## Deployment
 
 On a fresh [ubuntu](https://ubuntu.com/) machine:
 
