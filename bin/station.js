@@ -5,7 +5,10 @@ import fs from 'node:fs/promises'
 import { join } from 'node:path'
 import { paths } from '../lib/paths.js'
 import * as Sentry from '@sentry/node'
+import yargs from 'yargs/yargs'
+import { hideBin } from 'yargs/helpers'
 
+const { argv } = yargs(hideBin(process.argv))
 const pkg = JSON.parse(await fs.readFile(join(paths.repoRoot, 'package.json')))
 
 Sentry.init({
@@ -15,7 +18,7 @@ Sentry.init({
   tracesSampleRate: 0.1
 })
 
-if (process.argv.includes('-v') || process.argv.includes('--version')) {
+if (argv.version || argv.v) {
   console.log('%s: %s', pkg.name, pkg.version)
   process.exit()
 }
@@ -23,8 +26,10 @@ if (process.argv.includes('-v') || process.argv.includes('--version')) {
 await fs.mkdir(join(paths.moduleStorage, 'saturn-L2-node'), { recursive: true })
 await fs.mkdir(paths.moduleLogs, { recursive: true })
 
-if (process.argv.includes('metrics')) {
-  await commands.metrics()
+if (argv._[0] === 'metrics') {
+  await commands.metrics(argv)
+} else if (argv._[0] === 'logs') {
+  await commands.logs(argv)
 } else {
   await commands.station()
 }

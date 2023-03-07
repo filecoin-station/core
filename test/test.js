@@ -102,6 +102,51 @@ test('Metrics', async t => {
   })
 })
 
+test('Logs', async t => {
+  await t.test('No logs', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const { stdout } = await execa(
+      station,
+      ['logs'],
+      { env: { XDG_STATE_HOME } }
+    )
+    assert.strictEqual(stdout, '')
+  })
+  await t.test('With logs', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    await fs.mkdir(getPaths(XDG_STATE_HOME).moduleLogs, { recursive: true })
+    await fs.writeFile(
+      join(getPaths(XDG_STATE_HOME).moduleLogs, 'saturn-l2-node.log'),
+      '[date] beep boop\n'
+    )
+    const { stdout } = await execa(
+      station,
+      ['logs'],
+      { env: { XDG_STATE_HOME } }
+    )
+    assert.strictEqual(
+      stdout,
+      '[date] beep boop'
+    )
+  })
+
+  await t.test('Follow', async t => {
+    for (const flag of ['-f', '--follow']) {
+      const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+      await fs.mkdir(getPaths(XDG_STATE_HOME).moduleLogs, { recursive: true })
+      const ps = execa(station, ['logs', flag], { env: { XDG_STATE_HOME } })
+      await Promise.all([
+        once(ps.stdout, 'data'),
+        fs.writeFile(
+          join(getPaths(XDG_STATE_HOME).moduleLogs, 'saturn-l2-node.log'),
+          '[date] beep boop\n'
+        )
+      ])
+      ps.kill()
+    }
+  })
+})
+
 test('Update modules', async t => {
   await execa(join(__dirname, '..', 'scripts', 'update-modules.js'))
 })

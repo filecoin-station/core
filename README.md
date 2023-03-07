@@ -62,22 +62,41 @@ $ station metrics --follow
 ...
 ```
 
+### `$ station logs <module>`
+
+Get Station module logs.
+
+Get all logs:
+
+```bash
+$ station logs
+2023-02-16T22:59:47.385+0100 INFO: Saturn Node is online and connected to 9 peers
+2023-02-16T22:59:47.385+0100 ERROR: Saturn Node is not able to connect to the network
+```
+
+Get specific module logs:
+
+```bash
+$ station logs saturn-l2-node
+2023-02-16T22:59:47.385+0100 INFO: Saturn Node is online and connected to 9 peers
+2023-02-16T22:59:47.385+0100 ERROR: Saturn Node is not able to connect to the network
+```
+
+Follow logs:
+
+```bash
+$ station logs --follow
+2023-02-16T22:59:47.385+0100 INFO: Saturn Node is online and connected to 9 peers
+2023-02-16T22:59:47.385+0100 ERROR: Saturn Node is not able to connect to the network
+...
+```
+
 ### `$ station --version`
 
 Print Station version.
 
 ```bash
 @filecoin-station/core: 1.0.1
-```
-
-## Logs
-
-```bash
-$ tail -f $XDG_STATE_HOME/filecoin-station/logs/modules/*.log
-==> $XDG_STATE_HOME/filecoin-station/logs/modules/saturn-l2-node.log <==
-2023-02-16T22:59:47.385+0100 INFO: Saturn Node is online and connected to 9 peers
-2023-02-16T22:59:47.385+0100 ERROR: Saturn Node is not able to connect to the network
-...
 ```
 
 ## Deployment
