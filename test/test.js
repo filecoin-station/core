@@ -66,7 +66,10 @@ test('Metrics', async t => {
       ['metrics'],
       { env: { XDG_STATE_HOME } }
     )
-    assert.strictEqual(stdout, JSON.stringify({ totalJobsCompleted: 0 }, 0, 2))
+    assert.strictEqual(
+      stdout,
+      JSON.stringify({ totalJobsCompleted: 0, totalEarnings: '0' }, 0, 2)
+    )
   })
   await t.test('With metrics', async t => {
     const XDG_STATE_HOME = join(tmpdir(), randomUUID())
@@ -76,14 +79,17 @@ test('Metrics', async t => {
     )
     await fs.writeFile(
       getPaths(XDG_STATE_HOME).metrics,
-      '[date] {"totalJobsCompleted":1}\n'
+      '[date] {"totalJobsCompleted":1,"totalEarnings":"2"}\n'
     )
     const { stdout } = await execa(
       station,
       ['metrics'],
       { env: { XDG_STATE_HOME } }
     )
-    assert.strictEqual(stdout, JSON.stringify({ totalJobsCompleted: 1 }, 0, 2))
+    assert.strictEqual(
+      stdout,
+      JSON.stringify({ totalJobsCompleted: 1, totalEarnings: '2' }, 0, 2)
+    )
   })
 
   await t.test('Follow', async t => {
