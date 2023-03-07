@@ -88,7 +88,7 @@ Deploy Station with [Docker](https://www.docker.com/). Please replace
 ```bash
 $ docker run \
 	-e FIL_WALLET_ADDRESS=f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za \
-	-d filecoin-station/core
+	-d ghcr.io/filecoin-station/core
 ```
 
 ## Manual deployment
