@@ -64,7 +64,7 @@ $ station metrics --follow
 
 ### `$ station logs <module>`
 
-Get Station module logs.
+Get Station logs.
 
 Get all logs:
 
