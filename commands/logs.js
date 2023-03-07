@@ -30,7 +30,7 @@ const getLogs = async module => {
 export const logs = async argv => {
   const module = argv.module || 'saturn-l2-node'
   await maybeCreateLogFile(module)
-  if (argv.follow || argv.f) {
+  if (argv.follow) {
     followLogs(module)
   } else {
     await getLogs(module)

@@ -34,7 +34,7 @@ const getLatestMetrics = async () => {
 
 export const metrics = async argv => {
   await maybeCreateMetricsFile()
-  if (argv.follow || argv.f) {
+  if (argv.follow) {
     followMetrics()
   } else {
     await getLatestMetrics()
