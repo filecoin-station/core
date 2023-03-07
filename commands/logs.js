@@ -30,7 +30,7 @@ const getLogs = async module => {
 }
 
 export const logs = async argv => {
-  const module = argv._[1] || 'saturn-l2-node'
+  const module = argv.module || 'saturn-l2-node'
 
   if (!modules.includes(module)) {
     console.error(
