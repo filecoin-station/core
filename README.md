@@ -125,7 +125,7 @@ Deploy Station with [Docker](https://www.docker.com/). Please replace
 
 ```bash
 # Run container
-$ docker run ghcr.io/filecoin-station/core --name station -d -e FIL_WALLET_ADDRESS=f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za
+$ docker run --name station -d -e FIL_WALLET_ADDRESS=f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za ghcr.io/filecoin-station/core
 
 # Get logs
 $ docker exec station ./bin/station.js logs
