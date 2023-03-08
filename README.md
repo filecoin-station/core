@@ -124,11 +124,9 @@ Deploy Station with [Docker](https://www.docker.com/). Please replace
 `FIL_WALLET_ADDRESS`.
 
 ```bash
-# Launch Station
-$ docker run --name station ghcr.io/filecoin-station/core -d -e FIL_WALLET_ADDRESS=f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za
-
-# Get logs etc
-$ docker exec station -- station logs
+$ docker run \
+	-e FIL_WALLET_ADDRESS=f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za \
+	-d ghcr.io/filecoin-station/core
 ```
 
 ## Deployment
