@@ -8,17 +8,17 @@ const metricsLogLineToJSON = metrics =>
 
 const maybeCreateMetricsFile = async () => {
   try {
-    await fs.stat(paths.metrics)
-  } catch (err) {
-    if (err.code !== 'ENOENT') {
-      throw err
-    }
     await fs.writeFile(
       paths.metrics,
       formatLog(
         JSON.stringify({ totalJobsCompleted: 0, totalEarnings: '0' }) + '\n'
-      )
+      ),
+      { flag: 'wx' }
     )
+  } catch (err) {
+    if (err.code !== 'EEXIST') {
+      throw err
+    }
   }
 }
 
@@ -32,9 +32,9 @@ const getLatestMetrics = async () => {
   console.log(metricsLogLineToJSON(metrics.trim().split('\n').pop()))
 }
 
-export const metrics = async () => {
+export const metrics = async ({ follow }) => {
   await maybeCreateMetricsFile()
-  if (process.argv.includes('-f') || process.argv.includes('--follow')) {
+  if (follow) {
     followMetrics()
   } else {
     await getLatestMetrics()

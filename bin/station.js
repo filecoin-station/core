@@ -5,6 +5,8 @@ import fs from 'node:fs/promises'
 import { join } from 'node:path'
 import { paths } from '../lib/paths.js'
 import * as Sentry from '@sentry/node'
+import yargs from 'yargs/yargs'
+import { hideBin } from 'yargs/helpers'
 
 const pkg = JSON.parse(await fs.readFile(join(paths.repoRoot, 'package.json')))
 
@@ -15,16 +17,17 @@ Sentry.init({
   tracesSampleRate: 0.1
 })
 
-if (process.argv.includes('-v') || process.argv.includes('--version')) {
-  console.log('%s: %s', pkg.name, pkg.version)
-  process.exit()
-}
-
 await fs.mkdir(join(paths.moduleStorage, 'saturn-L2-node'), { recursive: true })
 await fs.mkdir(paths.moduleLogs, { recursive: true })
 
-if (process.argv.includes('metrics')) {
-  await commands.metrics()
-} else {
-  await commands.station()
-}
+yargs(hideBin(process.argv))
+  .usage('Usage: $0 <command> [options]')
+  .command('$0', 'Start Station', () => {}, commands.station)
+  .command('metrics', 'Show metrics', () => {}, commands.metrics)
+  .command('logs [module]', 'Show module logs', () => {}, commands.logs)
+  .choices('module', ['saturn-l2-node'])
+  .version(`${pkg.name}: ${pkg.version}`)
+  .alias('v', 'version')
+  .alias('h', 'help')
+  .alias('f', 'follow')
+  .parse()
