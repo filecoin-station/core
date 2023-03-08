@@ -62,22 +62,60 @@ $ station metrics --follow
 ...
 ```
 
-### `$ station --version`
+### `$ station logs <module>`
 
-Print Station version.
+Get Station logs.
+
+Get all logs:
 
 ```bash
-@filecoin-station/core: 1.0.1
+$ station logs
+[5:15:26 PM] [saturn-L2-node] INFO: Saturn Node is online and connected to 9 peers
+[5:15:26 PM] [saturn-L2-node] ERROR: Saturn Node is not able to connect to the network
 ```
 
-## Logs
+Get specific module logs:
 
 ```bash
-$ tail -f $XDG_STATE_HOME/filecoin-station/logs/modules/*.log
-==> $XDG_STATE_HOME/filecoin-station/logs/modules/saturn-l2-node.log <==
-2023-02-16T22:59:47.385+0100 INFO: Saturn Node is online and connected to 9 peers
-2023-02-16T22:59:47.385+0100 ERROR: Saturn Node is not able to connect to the network
+$ station logs saturn-l2-node
+[5:15:26 PM] INFO: Saturn Node is online and connected to 9 peers
+[5:15:26 PM] ERROR: Saturn Node is not able to connect to the network
+```
+
+Follow logs:
+
+```bash
+$ station logs --follow
+[5:15:26 PM] [saturn-L2-node] INFO: Saturn Node is online and connected to 9 peers
+[5:15:26 PM] [saturn-L2-node] ERROR: Saturn Node is not able to connect to the network
 ...
+```
+
+### `$ station --help`
+
+Show help.
+
+```bash
+$ station --help
+Usage: station <command> [options]
+
+Commands:
+  station                   Start Station                              [default]
+  station    metrics        Show metrics
+  station    logs [module]  Show module logs
+
+Options:
+  -v, --version  Show version number                                   [boolean]
+  -h, --help     Show help                                             [boolean]
+```
+
+### `$ station --version`
+
+Show version number.
+
+```bash
+$ station --version
+@filecoin-station/core: 1.0.1
 ```
 
 ## Docker
@@ -91,7 +129,7 @@ $ docker run \
 	-d ghcr.io/filecoin-station/core
 ```
 
-## Manual deployment
+## Deployment
 
 On a fresh [ubuntu](https://ubuntu.com/) machine:
 

@@ -37,6 +37,11 @@ test('--version', async t => {
   await execa(station, ['-v'])
 })
 
+test('--help', async t => {
+  await execa(station, ['--help'])
+  await execa(station, ['-h'])
+})
+
 test('Storage', async t => {
   const XDG_STATE_HOME = join(tmpdir(), randomUUID())
   const ps = execa(station, {
@@ -97,6 +102,46 @@ test('Metrics', async t => {
       const XDG_STATE_HOME = join(tmpdir(), randomUUID())
       const ps = execa(station, ['metrics', flag], { env: { XDG_STATE_HOME } })
       await once(ps.stdout, 'data')
+      ps.kill()
+    }
+  })
+})
+
+test('Logs', async t => {
+  await t.test('No logs', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const { stdout } = await execa(
+      station,
+      ['logs'],
+      { env: { XDG_STATE_HOME } }
+    )
+    assert.strictEqual(stdout, '')
+  })
+  await t.test('With logs', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    await fs.mkdir(getPaths(XDG_STATE_HOME).moduleLogs, { recursive: true })
+    await fs.writeFile(getPaths(XDG_STATE_HOME).allLogs, '[date] beep boop\n')
+    const { stdout } = await execa(
+      station,
+      ['logs'],
+      { env: { XDG_STATE_HOME } }
+    )
+    assert.strictEqual(
+      stdout,
+      '[date] beep boop'
+    )
+  })
+
+  await t.test('Follow', async t => {
+    for (const flag of ['-f', '--follow']) {
+      const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+      await fs.mkdir(getPaths(XDG_STATE_HOME).moduleLogs, { recursive: true })
+      const ps = execa(station, ['logs', flag], { env: { XDG_STATE_HOME } })
+      const [data] = await Promise.all([
+        once(ps.stdout, 'data'),
+        fs.writeFile(getPaths(XDG_STATE_HOME).allLogs, '[date] beep boop\n')
+      ])
+      assert.strictEqual(data.toString(), '[date] beep boop\n')
       ps.kill()
     }
   })
