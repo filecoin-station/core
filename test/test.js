@@ -137,10 +137,11 @@ test('Logs', async t => {
       const XDG_STATE_HOME = join(tmpdir(), randomUUID())
       await fs.mkdir(getPaths(XDG_STATE_HOME).moduleLogs, { recursive: true })
       const ps = execa(station, ['logs', flag], { env: { XDG_STATE_HOME } })
-      await Promise.all([
+      const [data] = await Promise.all([
         once(ps.stdout, 'data'),
         fs.writeFile(getPaths(XDG_STATE_HOME).allLogs, '[date] beep boop\n')
       ])
+      assert.strictEqual(data.toString(), '[date] beep boop\n')
       ps.kill()
     }
   })
