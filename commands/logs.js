@@ -19,7 +19,7 @@ const followLogs = path => {
 }
 
 const getLogs = async path => {
-  process.stdout.end(await fs.readFile(path))
+  process.stdout.write(await fs.readFile(path))
 }
 
 export const logs = async ({ module, follow }) => {
