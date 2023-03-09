@@ -7,7 +7,6 @@ import { tmpdir } from 'node:os'
 import fs from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
 import { once } from 'node:events'
-import timers from 'node:timers/promises'
 import { getPaths } from '../lib/paths.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -50,17 +49,22 @@ test('Storage', async t => {
       XDG_STATE_HOME
     }
   })
-  await timers.setTimeout(1000)
+  while (true) {
+    await once(ps.stdout, 'data')
+    try {
+      await fs.stat(
+        join(
+          XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules', 'saturn-L2-node.log'
+        )
+      )
+      break
+    } catch {}
+  }
   ps.kill()
   await fs.stat(XDG_STATE_HOME, 'filecoin-station')
   await fs.stat(join(XDG_STATE_HOME, 'filecoin-station', 'modules'))
   await fs.stat(join(XDG_STATE_HOME, 'filecoin-station', 'logs'))
   await fs.stat(join(XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules'))
-  await fs.stat(
-    join(
-      XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules', 'saturn-L2-node.log'
-    )
-  )
 })
 
 test('Metrics', async t => {
