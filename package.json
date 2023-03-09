@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "standard && node--test",
-    "preversion": "./scripts/pre-version.js",
+    "version": "./scripts/version.js",
     "postpublish": "./scripts/post-publish.js",
     "release": "np"
   },
