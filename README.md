@@ -118,6 +118,25 @@ $ station --version
 @filecoin-station/core: 1.0.1
 ```
 
+## Docker
+
+Deploy Station with [Docker](https://www.docker.com/). Please replace
+`FIL_WALLET_ADDRESS`.
+
+```bash
+$ docker run \
+	--name station \
+	--detach \
+	--env FIL_WALLET_ADDRESS=f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za \
+	ghcr.io/filecoin-station/core
+```
+
+Inspect logs:
+
+```bash
+$ docker exec station ./bin/station.js logs
+```
+
 ## Deployment
 
 On a fresh [ubuntu](https://ubuntu.com/) machine:
