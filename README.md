@@ -91,24 +91,24 @@ Get all logs:
 
 ```bash
 $ station logs
-[5:15:26 PM] [saturn-L2-node] INFO: Saturn Node is online and connected to 9 peers
-[5:15:26 PM] [saturn-L2-node] ERROR: Saturn Node is not able to connect to the network
+[3/14/2023, 5:15:26 PM] [saturn-L2-node] INFO: Saturn Node is online and connected to 9 peers
+[3/14/2023, 5:15:26 PM] [saturn-L2-node] ERROR: Saturn Node is not able to connect to the network
 ```
 
 Get specific module logs:
 
 ```bash
 $ station logs saturn-l2-node
-[5:15:26 PM] INFO: Saturn Node is online and connected to 9 peers
-[5:15:26 PM] ERROR: Saturn Node is not able to connect to the network
+[3/14/2023, 5:15:26 PM] INFO: Saturn Node is online and connected to 9 peers
+[3/14/2023, 5:15:26 PM] ERROR: Saturn Node is not able to connect to the network
 ```
 
 Follow logs:
 
 ```bash
 $ station logs --follow
-[5:15:26 PM] [saturn-L2-node] INFO: Saturn Node is online and connected to 9 peers
-[5:15:26 PM] [saturn-L2-node] ERROR: Saturn Node is not able to connect to the network
+[3/14/2023, 5:15:26 PM] [saturn-L2-node] INFO: Saturn Node is online and connected to 9 peers
+[3/14/2023, 5:15:26 PM] [saturn-L2-node] ERROR: Saturn Node is not able to connect to the network
 ...
 ```
 
