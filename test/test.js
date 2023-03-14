@@ -151,6 +151,58 @@ test('Logs', async t => {
   })
 })
 
+test('Activity', async t => {
+  await t.test('No activity', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const { stdout } = await execa(
+      station,
+      ['activity'],
+      { env: { XDG_STATE_HOME } }
+    )
+    assert.strictEqual(stdout, '')
+  })
+  await t.test('With activity', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    await fs.mkdir(
+      dirname(getPaths(XDG_STATE_HOME).activity),
+      { recursive: true }
+    )
+    await fs.writeFile(
+      getPaths(XDG_STATE_HOME).activity,
+      '[3/14/2023, 10:38:14 AM] {"source":"Saturn","message":"beep boop"}\n'
+    )
+    const { stdout } = await execa(
+      station,
+      ['activity'],
+      { env: { XDG_STATE_HOME } }
+    )
+    assert.strictEqual(
+      stdout,
+      '[3/14/2023, 10:38:14 AM] beep boop'
+    )
+  })
+
+  await t.test('Follow', async t => {
+    for (const flag of ['-f', '--follow']) {
+      const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+      await fs.mkdir(
+        dirname(getPaths(XDG_STATE_HOME).activity),
+        { recursive: true }
+      )
+      const ps = execa(station, ['activity', flag], { env: { XDG_STATE_HOME } })
+      const [data] = await Promise.all([
+        once(ps.stdout, 'data'),
+        fs.writeFile(
+          getPaths(XDG_STATE_HOME).activity,
+          '[3/14/2023, 10:38:14 AM] {"source":"Saturn","message":"beep boop"}\n'
+        )
+      ])
+      assert.strictEqual(data.toString(), '[3/14/2023, 10:38:14 AM] beep boop\n')
+      ps.kill()
+    }
+  })
+})
+
 test('Update modules', async t => {
   await execa(join(__dirname, '..', 'scripts', 'update-modules.js'))
 })

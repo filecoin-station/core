@@ -26,7 +26,7 @@ const followActivity = () => {
 
 const getActivity = async () => {
   const activityLog = await fs.readFile(paths.activity, 'utf-8')
-  for (const line of activityLog.trim().split('\n')) {
+  for (const line of activityLog.trim().split('\n').filter(Boolean)) {
     process.stdout.write(formatLogLine(line))
   }
 }
