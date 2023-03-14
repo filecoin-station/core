@@ -18,7 +18,7 @@ export const station = async () => {
     storagePath: join(paths.moduleStorage, 'saturn-L2-node'),
     binariesPath: paths.moduleBinaries,
     metricsStream: createMetricsStream(paths.metrics),
-    activityStream: createActivityStream(),
+    activityStream: createActivityStream('Saturn'),
     logStream: createLogStream(join(paths.moduleLogs, 'saturn-L2-node.log'))
   })
 }
