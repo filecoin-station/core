@@ -117,7 +117,7 @@ Usage: station <command> [options]
 Commands:
   station                   Start Station                              [default]
   station    metrics        Show metrics
-	station    activity       Show activity log
+  station    activity       Show activity log
   station    logs [module]  Show module logs
 
 Options:
