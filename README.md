@@ -62,6 +62,21 @@ $ station metrics --follow
 ...
 ```
 
+### `$ station activity`
+
+Get Station activity logs.
+
+```bash
+$ station activity
+[3/14/2023, 10:23:14 AM] Saturn Node is online and connected to 1 peers
+[3/14/2023, 10:23:18 AM] Saturn Node is online and connected to 9 peers
+
+$ station activity --follow
+[3/14/2023, 10:23:14 AM] Saturn Node is online and connected to 1 peers
+[3/14/2023, 10:23:18 AM] Saturn Node is online and connected to 9 peers
+...
+```
+
 ### `$ station logs <module>`
 
 Get Station logs.
@@ -102,6 +117,7 @@ Usage: station <command> [options]
 Commands:
   station                   Start Station                              [default]
   station    metrics        Show metrics
+	station    activity       Show activity log
   station    logs [module]  Show module logs
 
 Options:
