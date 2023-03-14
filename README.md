@@ -28,7 +28,7 @@ $ FIL_WALLET_ADDRESS=f1... station
 ## Configuration
 
 - `$XDG_STATE_HOME` Station stores logs and module state in
-`$XDG_STATE_HOME/filecoin-station`. Defaults to `~/.local/state`.
+  `$XDG_STATE_HOME/filecoin-station`. Defaults to `~/.local/state`.
 
 ## Commands
 
@@ -38,10 +38,10 @@ Start Station.
 
 Configuration:
 
-- `$FIL_WALLET_ADDRESS` Filecoin wallet address (required). If you just want
-to give `core` a quick spin, you can use the address
-`f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za`. Please note that any earnings
-sent there will be lost.
+- `$FIL_WALLET_ADDRESS` Filecoin wallet address (required). If you just want to
+  give `core` a quick spin, you can use the address
+  `f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za`. Please note that any earnings
+  sent there will be lost.
 
 ### `$ station metrics`
 
