@@ -5,8 +5,8 @@ import { parseLog, formatLog } from '../lib/log.js'
 
 const formatLogLine = line => {
   const { date, text } = parseLog(line)
-  const { message } = JSON.parse(text)
-  return formatLog(message, date)
+  const { type, message } = JSON.parse(text)
+  return formatLog(`${type.toUpperCase().padEnd(5)} ${message}`, date)
 }
 
 const maybeCreateActivityFile = async () => {

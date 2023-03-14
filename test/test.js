@@ -169,7 +169,7 @@ test('Activity', async t => {
     )
     await fs.writeFile(
       getPaths(XDG_STATE_HOME).activity,
-      '[3/14/2023, 10:38:14 AM] {"source":"Saturn","message":"beep boop"}\n'
+      '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
     )
     const { stdout } = await execa(
       station,
@@ -178,7 +178,7 @@ test('Activity', async t => {
     )
     assert.strictEqual(
       stdout,
-      '[3/14/2023, 10:38:14 AM] beep boop'
+      '[3/14/2023, 10:38:14 AM] INFO  beep boop'
     )
   })
 
@@ -194,10 +194,10 @@ test('Activity', async t => {
         once(ps.stdout, 'data'),
         fs.writeFile(
           getPaths(XDG_STATE_HOME).activity,
-          '[3/14/2023, 10:38:14 AM] {"source":"Saturn","message":"beep boop"}\n'
+          '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
         )
       ])
-      assert.strictEqual(data.toString(), '[3/14/2023, 10:38:14 AM] beep boop\n')
+      assert.strictEqual(data.toString(), '[3/14/2023, 10:38:14 AM] INFO  beep boop\n')
       ps.kill()
     }
   })

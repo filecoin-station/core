@@ -70,16 +70,16 @@ Get all activity:
 
 ```bash
 $ station activity
-[3/14/2023, 10:23:14 AM] Saturn Node is online and connected to 1 peers
-[3/14/2023, 10:23:18 AM] Saturn Node is online and connected to 9 peers
+[3/14/2023, 10:23:14 AM] INFO  Saturn Node is online and connected to 1 peers
+[3/14/2023, 10:23:18 AM] INFO  Saturn Node is online and connected to 9 peers
 ```
 
 Follow activity:
 
 ```bash
 $ station activity --follow
-[3/14/2023, 10:23:14 AM] Saturn Node is online and connected to 1 peers
-[3/14/2023, 10:23:18 AM] Saturn Node is online and connected to 9 peers
+[3/14/2023, 10:23:14 AM] INFO  Saturn Node is online and connected to 1 peers
+[3/14/2023, 10:23:18 AM] INFO  Saturn Node is online and connected to 9 peers
 ...
 ```
 
