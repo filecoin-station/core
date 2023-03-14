@@ -8,6 +8,9 @@
   "bin": {
     "station": "./bin/station.js"
   },
+  "engines": {
+    "node": ">=18.12"
+  },
   "scripts": {
     "test": "prettier --check . && standard && node--test",
     "version": "./scripts/version.js",
