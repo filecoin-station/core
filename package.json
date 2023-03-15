@@ -8,8 +8,11 @@
   "bin": {
     "station": "./bin/station.js"
   },
+  "engines": {
+    "node": ">=16"
+  },
   "scripts": {
-    "test": "standard && node--test",
+    "test": "prettier --check . && standard && node--test",
     "version": "./scripts/version.js",
     "postpublish": "./scripts/post-publish.js",
     "release": "np"
@@ -17,6 +20,7 @@
   "devDependencies": {
     "gunzip-maybe": "^1.4.2",
     "np": "^7.6.3",
+    "prettier": "^2.8.4",
     "standard": "^17.0.0",
     "tar-fs": "^2.1.1",
     "test": "^3.3.0",
