@@ -27,7 +27,7 @@ Station Core requires Node.js, it supports all maintained LTS major versions. We
 recommend using the latest LTS version.
 
 ```bash
-$ npm install -g @filecoin-station/core
+$ npm install -g --engine-strict @filecoin-station/core
 ```
 
 ## Usage
