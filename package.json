@@ -9,7 +9,7 @@
     "station": "./bin/station.js"
   },
   "scripts": {
-    "test": "standard && node--test",
+    "test": "standard && tap --no-coverage",
     "version": "./scripts/version.js",
     "postpublish": "./scripts/post-publish.js",
     "release": "np"
@@ -18,8 +18,8 @@
     "gunzip-maybe": "^1.4.2",
     "np": "^7.6.3",
     "standard": "^17.0.0",
+    "tap": "^16.3.4",
     "tar-fs": "^2.1.1",
-    "test": "^3.3.0",
     "unzip-stream": "^0.3.1"
   },
   "dependencies": {
