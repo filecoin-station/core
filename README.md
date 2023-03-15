@@ -71,9 +71,6 @@ the configuration options described in
 
 ### `$ station metrics`
 
-_This command reads information from the state files created by the main Station
-process._
-
 Get Station metrics.
 
 ```bash
@@ -92,9 +89,6 @@ $ station metrics --follow
 ```
 
 ### `$ station logs <module>`
-
-_This command reads information from the state files created by the main Station
-process._
 
 Get combined logs from Station Core and all Station Modules:
 
