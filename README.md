@@ -23,8 +23,12 @@ Station Core supports different deployment options:
 
 ## Installation
 
-Station Core requires Node.js, it supports all maintained LTS major versions. We
-recommend using the latest LTS version.
+> **Note**: Station Core requires Node.js, we recommend using the latest LTS
+> version. You can install Node.js using your favorite package manager or get
+> the official installer from
+> [Node.js downloads](https://nodejs.org/en/download/).
+
+With Node.js installed, run `npm` to install Station Core.
 
 ```bash
 $ npm install -g @filecoin-station/core
