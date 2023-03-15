@@ -23,8 +23,8 @@ Station Core supports different deployment options:
 
 ## Installation
 
-Station Core requires Node.js version 18.12 or newer. We recommend using the
-latest LTS version.
+Station Core requires Node.js, it supports all maintained LTS major versions. We
+recommend using the latest LTS version.
 
 ```bash
 $ npm install -g @filecoin-station/core
@@ -92,7 +92,7 @@ $ station metrics --follow
 _This command reads information from the state files created by the main Station
 process._
 
-Get a combined log from the Station Core and all Station Modules:
+Get combined logs from Station Core and all Station Modules:
 
 ```bash
 $ station logs

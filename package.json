@@ -9,7 +9,7 @@
     "station": "./bin/station.js"
   },
   "engines": {
-    "node": ">=18.12"
+    "node": "^16.13 || >=18.12"
   },
   "scripts": {
     "test": "prettier --check . && standard && node--test",
