@@ -158,7 +158,7 @@ test('Activity', async t => {
       ['activity'],
       { env: { XDG_STATE_HOME } }
     )
-    assert.strictEqual(stdout, '')
+    t.equal(stdout, '')
   })
   await t.test('With activity', async t => {
     const XDG_STATE_HOME = join(tmpdir(), randomUUID())
@@ -168,16 +168,16 @@ test('Activity', async t => {
     )
     await fs.writeFile(
       getPaths(XDG_STATE_HOME).activity,
-      '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
+      '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
     )
     const { stdout } = await execa(
       station,
       ['activity'],
       { env: { XDG_STATE_HOME } }
     )
-    assert.strictEqual(
+    t.equal(
       stdout,
-      '[3/14/2023, 10:38:14 AM] INFO  beep boop'
+      '[3/14/2023, 10:38:14 AM] INFO  beep boop'
     )
   })
 
@@ -193,10 +193,10 @@ test('Activity', async t => {
         once(ps.stdout, 'data'),
         fs.writeFile(
           getPaths(XDG_STATE_HOME).activity,
-          '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
+          '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
         )
       ])
-      assert.strictEqual(data.toString(), '[3/14/2023, 10:38:14 AM] INFO  beep boop\n')
+      t.equal(data.toString(), '[3/14/2023, 10:38:14 AM] INFO  beep boop\n')
       ps.kill()
     }
   })
