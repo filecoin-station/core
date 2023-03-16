@@ -1,6 +1,6 @@
 {
   "name": "@filecoin-station/core",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "type": "module",
   "description": "Filecoin Station Core",
   "license": "(Apache-2.0 AND MIT)",
@@ -8,8 +8,11 @@
   "bin": {
     "station": "./bin/station.js"
   },
+  "engines": {
+    "node": ">=16"
+  },
   "scripts": {
-    "test": "standard && tap --no-coverage",
+    "test": "prettier --check . && standard && tap --no-coverage",
     "version": "./scripts/version.js",
     "postpublish": "./scripts/post-publish.js",
     "release": "np"
@@ -17,6 +20,7 @@
   "devDependencies": {
     "gunzip-maybe": "^1.4.2",
     "np": "^7.6.3",
+    "prettier": "^2.8.4",
     "standard": "^17.0.0",
     "tap": "^16.3.4",
     "tar-fs": "^2.1.1",
