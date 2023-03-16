@@ -88,30 +88,51 @@ $ station metrics --follow
 ...
 ```
 
+### `$ station activity`
+
+Get Station activity logs.
+
+Get all activity:
+
+```bash
+$ station activity
+[3/14/2023, 10:23:14 AM] INFO  Saturn Node is online and connected to 1 peers
+[3/14/2023, 10:23:18 AM] INFO  Saturn Node is online and connected to 9 peers
+```
+
+Follow activity:
+
+```bash
+$ station activity --follow
+[3/14/2023, 10:23:14 AM] INFO  Saturn Node is online and connected to 1 peers
+[3/14/2023, 10:23:18 AM] INFO  Saturn Node is online and connected to 9 peers
+...
+```
+
 ### `$ station logs <module>`
 
 Get combined logs from Station Core and all Station Modules:
 
 ```bash
 $ station logs
-[5:15:26 PM] [saturn-L2-node] INFO: Saturn Node is online and connected to 9 peers
-[5:15:26 PM] [saturn-L2-node] ERROR: Saturn Node is not able to connect to the network
+[3/14/2023, 5:15:26 PM] [saturn-L2-node] INFO: Saturn Node is online and connected to 9 peers
+[3/14/2023, 5:15:26 PM] [saturn-L2-node] ERROR: Saturn Node is not able to connect to the network
 ```
 
 Get logs from a specific Station Module:
 
 ```bash
 $ station logs saturn-l2-node
-[5:15:26 PM] INFO: Saturn Node is online and connected to 9 peers
-[5:15:26 PM] ERROR: Saturn Node is not able to connect to the network
+[3/14/2023, 5:15:26 PM] INFO: Saturn Node is online and connected to 9 peers
+[3/14/2023, 5:15:26 PM] ERROR: Saturn Node is not able to connect to the network
 ```
 
 Follow logs:
 
 ```bash
 $ station logs --follow
-[5:15:26 PM] [saturn-L2-node] INFO: Saturn Node is online and connected to 9 peers
-[5:15:26 PM] [saturn-L2-node] ERROR: Saturn Node is not able to connect to the network
+[3/14/2023, 5:15:26 PM] [saturn-L2-node] INFO: Saturn Node is online and connected to 9 peers
+[3/14/2023, 5:15:26 PM] [saturn-L2-node] ERROR: Saturn Node is not able to connect to the network
 ...
 ```
 
@@ -126,6 +147,7 @@ Usage: station <command> [options]
 Commands:
   station                   Start Station                              [default]
   station    metrics        Show metrics
+  station    activity       Show activity log
   station    logs [module]  Show module logs
 
 Options:
