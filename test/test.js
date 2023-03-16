@@ -1,8 +1,7 @@
-import test from 'test'
+import { test } from 'tap'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { execa } from 'execa'
-import assert from 'node:assert'
 import { tmpdir } from 'node:os'
 import fs from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
@@ -22,7 +21,7 @@ test('FIL_WALLET_ADDRESS', async t => {
     } catch (err) {
       return
     }
-    assert.fail('should have thrown')
+    t.fail('should have thrown')
   })
   await t.test('with address', async t => {
     const ps = execa(station, { env: { FIL_WALLET_ADDRESS } })
@@ -75,7 +74,7 @@ test('Metrics', async t => {
       ['metrics'],
       { env: { XDG_STATE_HOME } }
     )
-    assert.strictEqual(
+    t.equal(
       stdout,
       JSON.stringify({ totalJobsCompleted: 0, totalEarnings: '0' }, 0, 2)
     )
@@ -95,7 +94,7 @@ test('Metrics', async t => {
       ['metrics'],
       { env: { XDG_STATE_HOME } }
     )
-    assert.strictEqual(
+    t.equal(
       stdout,
       JSON.stringify({ totalJobsCompleted: 1, totalEarnings: '2' }, 0, 2)
     )
@@ -119,7 +118,7 @@ test('Logs', async t => {
       ['logs'],
       { env: { XDG_STATE_HOME } }
     )
-    assert.strictEqual(stdout, '')
+    t.equal(stdout, '')
   })
   await t.test('With logs', async t => {
     const XDG_STATE_HOME = join(tmpdir(), randomUUID())
@@ -130,7 +129,7 @@ test('Logs', async t => {
       ['logs'],
       { env: { XDG_STATE_HOME } }
     )
-    assert.strictEqual(
+    t.equal(
       stdout,
       '[date] beep boop'
     )
@@ -145,7 +144,7 @@ test('Logs', async t => {
         once(ps.stdout, 'data'),
         fs.writeFile(getPaths(XDG_STATE_HOME).allLogs, '[date] beep boop\n')
       ])
-      assert.strictEqual(data.toString(), '[date] beep boop\n')
+      t.equal(data.toString(), '[date] beep boop\n')
       ps.kill()
     }
   })
