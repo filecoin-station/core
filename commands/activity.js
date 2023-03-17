@@ -2,21 +2,12 @@ import fs from 'node:fs/promises'
 import { Tail } from 'tail'
 import { paths } from '../lib/paths.js'
 import { parseLog, formatLog } from '../lib/log.js'
+import { maybeCreateFile } from '../lib/util.js'
 
 const formatLogLine = line => {
   const { date, text } = parseLog(line)
   const { type, message } = JSON.parse(text)
   return formatLog(`${type.toUpperCase().padEnd(5)} ${message}`, date)
-}
-
-const maybeCreateActivityFile = async () => {
-  try {
-    await fs.writeFile(paths.activity, '', { flag: 'wx' })
-  } catch (err) {
-    if (err.code !== 'EEXIST') {
-      throw err
-    }
-  }
 }
 
 const followActivity = () => {
@@ -32,7 +23,7 @@ const getActivity = async () => {
 }
 
 export const activity = async ({ follow }) => {
-  await maybeCreateActivityFile()
+  await maybeCreateFile(paths.activity)
   if (follow) {
     followActivity()
   } else {
