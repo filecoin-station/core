@@ -212,6 +212,8 @@ test('Lockfile', async t => {
     t.equal(err.exitCode, 1)
     t.match(err.stderr, /is already running/)
     return
+  } finally {
+    ps.kill()
   }
   throw new Error('did not throw')
 })
