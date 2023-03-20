@@ -238,8 +238,8 @@ test('HTTP API', async t => {
     const port = await getPort()
     const ps = execa(
       station,
-      ['--listen', `--port=${port}`],
-      { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
+      ['--listen'],
+      { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS, PORT: port } }
     )
     await once(ps.stdout, 'data')
     const res = await fetch(`http://127.0.0.1:${port}`)

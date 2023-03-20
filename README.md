@@ -140,13 +140,15 @@ $ station logs --follow
 
 Open HTTP API.
 
+This command has the following additional configuration in addition to common
+the configuration options described in
+[Common Configuration](#common-configuration):
+
+- `PORT` _(number)_: The port to listen on. Defaults to `7834`.
+
 Routes:
 
 - `/` 404 (Placeholder route)
-
-### `$ station --listen --port`
-
-Set HTTP API port. Default: `7834`
 
 ### `$ station --help`
 

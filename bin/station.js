@@ -30,12 +30,6 @@ yargs(hideBin(process.argv))
         alias: 'l',
         type: 'boolean',
         description: 'Open HTTP API'
-      })
-      .option('port', {
-        alias: 'p',
-        type: 'number',
-        default: 7834,
-        description: 'HTTP API port'
       }),
     commands.station
   )

@@ -9,7 +9,7 @@ import { maybeCreateFile } from '../lib/util.js'
 import http from 'node:http'
 import { once } from 'node:events'
 
-const { FIL_WALLET_ADDRESS } = process.env
+const { FIL_WALLET_ADDRESS, PORT = 7834 } = process.env
 
 const handler = (req, res) => {
   res.statusCode = 404
@@ -33,7 +33,7 @@ export const station = async ({ listen, port }) => {
 
   if (listen) {
     const server = http.createServer(handler)
-    server.listen(port).unref()
+    server.listen(PORT).unref()
     await once(server, 'listening')
   }
 
