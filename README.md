@@ -3,7 +3,7 @@
 	 :artificial_satellite:
 	<br>
 	<br>
-	core
+	Station Core
 	<br>
 	<br>
 	<br>
