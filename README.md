@@ -136,6 +136,18 @@ $ station logs --follow
 ...
 ```
 
+### `$ station --listen`
+
+Open HTTP API.
+
+Routes:
+
+- `/` 404 (Placeholder route)
+
+### `$ station --listen --port`
+
+Set HTTP API port. Default: `7834`
+
 ### `$ station --help`
 
 Show help.
@@ -145,12 +157,14 @@ $ station --help
 Usage: station <command> [options]
 
 Commands:
-  station                   Start Station                              [default]
-  station    metrics        Show metrics
-  station    activity       Show activity log
-  station    logs [module]  Show module logs
+  station                Start Station                                 [default]
+  station metrics        Show metrics
+  station activity       Show activity log
+  station logs [module]  Show module logs
 
 Options:
+  -l, --listen   Open HTTP API                                         [boolean]
+  -p, --port     HTTP API port                          [number] [default: 7834]
   -v, --version  Show version number                                   [boolean]
   -h, --help     Show help                                             [boolean]
 ```

@@ -7,6 +7,8 @@ import fs from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
 import { once } from 'node:events'
 import { getPaths } from '../lib/paths.js'
+import fetch from 'node-fetch'
+import getPort from 'get-port'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const station = join(__dirname, '..', 'bin', 'station.js')
@@ -216,6 +218,34 @@ test('Lockfile', async t => {
     ps.kill()
   }
   throw new Error('did not throw')
+})
+
+test('HTTP API', async t => {
+  await t.test('Default port', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const ps = execa(
+      station,
+      ['--listen'],
+      { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
+    )
+    await once(ps.stdout, 'data')
+    const res = await fetch('http://127.0.0.1:7834')
+    t.equal(res.status, 404)
+    ps.kill()
+  })
+  await t.test('Custom port', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const port = await getPort()
+    const ps = execa(
+      station,
+      ['--listen', `--port=${port}`],
+      { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
+    )
+    await once(ps.stdout, 'data')
+    const res = await fetch(`http://127.0.0.1:${port}`)
+    t.equal(res.status, 404)
+    ps.kill()
+  })
 })
 
 test('Update modules', async t => {

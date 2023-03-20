@@ -22,7 +22,23 @@ await fs.mkdir(paths.moduleLogs, { recursive: true })
 
 yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')
-  .command('$0', 'Start Station', () => {}, commands.station)
+  .command(
+    '$0',
+    'Start Station',
+    yargs => yargs
+      .option('listen', {
+        alias: 'l',
+        type: 'boolean',
+        description: 'Open HTTP API'
+      })
+      .option('port', {
+        alias: 'p',
+        type: 'number',
+        default: 7834,
+        description: 'HTTP API port'
+      }),
+    commands.station
+  )
   .command('metrics', 'Show metrics', () => {}, commands.metrics)
   .commands('activity', 'Show activity log', () => {}, commands.activity)
   .command('logs [module]', 'Show module logs', () => {}, commands.logs)
