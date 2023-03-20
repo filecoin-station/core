@@ -30,6 +30,7 @@
     "@influxdata/influxdb-client": "^1.33.2",
     "@sentry/node": "^7.41.0",
     "execa": "^7.0.0",
+    "proper-lockfile": "^4.1.2",
     "rotating-file-stream": "^3.1.0",
     "tail": "^2.2.6",
     "undici": "^5.20.0",

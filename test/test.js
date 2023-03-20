@@ -202,6 +202,22 @@ test('Activity', async t => {
   })
 })
 
+test('Lockfile', async t => {
+  const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+  const ps = execa(station, { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } })
+  await once(ps.stdout, 'data')
+  try {
+    await execa(station, { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } })
+  } catch (err) {
+    t.equal(err.exitCode, 1)
+    t.match(err.stderr, /is already running/)
+    return
+  } finally {
+    ps.kill()
+  }
+  throw new Error('did not throw')
+})
+
 test('Update modules', async t => {
   await execa(join(__dirname, '..', 'scripts', 'update-modules.js'))
 })
