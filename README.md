@@ -142,7 +142,7 @@ Open HTTP API.
 
 Routes:
 
-- `/` 404 (Placeholder route)
+- `/` 404
 
 ### `$ station --listen --port`
 

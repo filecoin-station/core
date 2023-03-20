@@ -2,7 +2,7 @@ import { join } from 'node:path'
 import { paths } from '../lib/paths.js'
 import * as saturnNode from '../lib/saturn-node.js'
 import { createLogStream } from '../lib/log.js'
-import { createMetricsStream } from '../lib/metrics.js'
+import { createMetricsStream, getLatestMetrics } from '../lib/metrics.js'
 import { createActivityStream } from '../lib/activity.js'
 import lockfile from 'proper-lockfile'
 import { maybeCreateFile } from '../lib/util.js'
@@ -12,8 +12,19 @@ import { once } from 'node:events'
 const { FIL_WALLET_ADDRESS } = process.env
 
 const handler = (req, res) => {
-  res.statusCode = 404
-  res.end(http.STATUS_CODES[404])
+  ;(async () => {
+    if (req.url === '/metrics') {
+      res.setHeader('Content-Type', 'application/json')
+      res.end(await getLatestMetrics())
+    } else {
+      res.statusCode = 404
+      res.end(http.STATUS_CODES[404])
+    }
+  })().catch(err => {
+    console.error(err)
+    res.statusCode = 500
+    res.end(err?.stack || err?.message || String(err))
+  })
 }
 
 export const station = async ({ listen, port }) => {
