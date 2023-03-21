@@ -264,6 +264,6 @@ test('HTTP API', async t => {
   })
 })
 
-// test('Update modules', async t => {
-//   await execa(join(__dirname, '..', 'scripts', 'update-modules.js'))
-// })
+test('Update modules', async t => {
+  await execa(join(__dirname, '..', 'scripts', 'update-modules.js'))
+})

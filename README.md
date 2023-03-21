@@ -143,6 +143,7 @@ Open HTTP API.
 Routes:
 
 - `/` 404
+- `/metrics` Get metrics
 
 ### `$ station --listen --port`
 
