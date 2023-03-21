@@ -247,20 +247,44 @@ test('HTTP API', async t => {
     ps.kill()
   })
   await t.test('/metrics', async t => {
-    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-    const ps = execa(
-      station,
-      ['--listen'],
-      { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
-    )
-    await once(ps.stdout, 'data')
-    const res = await fetch('http://127.0.0.1:7834/metrics')
-    t.equal(res.status, 200)
-    t.same(await res.json(), {
-      totalJobsCompleted: 0,
-      totalEarnings: 0
+    await t.test('Get latest', async t => {
+      const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+      const ps = execa(
+        station,
+        ['--listen'],
+        { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
+      )
+      await once(ps.stdout, 'data')
+      const res = await fetch('http://127.0.0.1:7834/metrics')
+      t.equal(res.status, 200)
+      t.same(await res.json(), {
+        totalJobsCompleted: 0,
+        totalEarnings: 0
+      })
+      ps.kill()
     })
-    ps.kill()
+    await t.test('Follow', async t => {
+      const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+      const ps = execa(
+        station,
+        ['--listen'],
+        { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
+      )
+      await once(ps.stdout, 'data')
+      const controller = new AbortController()
+      const { signal } = controller
+      const res = await fetch(
+        'http://127.0.0.1:7834/metrics?follow',
+        { signal }
+      )
+      const value = await res.body.read()
+      t.same(JSON.parse(value.toString()), {
+        totalJobsCompleted: 0,
+        totalEarnings: 0
+      })
+      controller.abort()
+      ps.kill()
+    })
   })
 })
 
