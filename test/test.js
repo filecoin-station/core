@@ -202,6 +202,33 @@ test('Activity', async t => {
   })
 })
 
+test('Events', async t => {
+  const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+  await fs.mkdir(
+    dirname(getPaths(XDG_STATE_HOME).activity),
+    { recursive: true }
+  )
+  await fs.writeFile(
+    getPaths(XDG_STATE_HOME).activity,
+    '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
+  )
+  const ps = execa(
+    station,
+    ['events'],
+    { env: { XDG_STATE_HOME } }
+  )
+  const events = []
+  for await (const line of ps.stdout) {
+    events.push(JSON.parse(line.toString()))
+    if (events.length === 2) break
+  }
+  ps.kill()
+  t.same(events, [
+    { type: 'jobs-completed', total: 0 },
+    { type: 'activity:info', module: 'Saturn', message: 'beep boop' }
+  ])
+})
+
 test('Lockfile', async t => {
   const XDG_STATE_HOME = join(tmpdir(), randomUUID())
   const ps = execa(station, { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } })
