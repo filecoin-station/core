@@ -150,13 +150,13 @@ $ station events
 The following event types exist:
 
 - `jobs-completed`
-	- `total`
+  - `total`
 - `activity:info`
-	- `module`
-	- `message`
+  - `module`
+  - `message`
 - `activity:error`
-	- `module`
-	- `message`
+  - `module`
+  - `message`
 
 ### `$ station --help`
 
