@@ -7,6 +7,7 @@ import { paths } from '../lib/paths.js'
 import * as Sentry from '@sentry/node'
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
+import { maybeCreateMetricsFile } from '../lib/metrics.js'
 
 const pkg = JSON.parse(await fs.readFile(join(paths.repoRoot, 'package.json')))
 
@@ -19,6 +20,7 @@ Sentry.init({
 
 await fs.mkdir(join(paths.moduleStorage, 'saturn-L2-node'), { recursive: true })
 await fs.mkdir(paths.moduleLogs, { recursive: true })
+await maybeCreateMetricsFile()
 
 yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')
