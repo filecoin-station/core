@@ -77,6 +77,7 @@ test('Station', async t => {
       (await once(ps.stdout, 'data'))[0].toString(),
       'Starting Saturn node...\n'
     )
+    ps.stderr.pipe(process.stderr)
     t.equal(
       (await once(ps.stdout, 'data'))[0].toString(),
       '[SATURN] INFO: Saturn Node will try to connect to the Saturn Orchestrator...\n'
