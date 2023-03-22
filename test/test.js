@@ -75,6 +75,7 @@ test('Station', async t => {
     )
     const [data] = await once(ps.stdout, 'data')
     t.equal(data.toString(), 'Starting Saturn node...\n')
+    ps.kill()
   })
 })
 
