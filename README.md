@@ -49,7 +49,7 @@ The following configuration options are shared by all Station commands:
 
 - `$XDG_STATE_HOME` _(string; optional)_: Station stores logs and module state
   in the directory `$XDG_STATE_HOME/filecoin-station`. State home defaults to
-  `~/.local/state`.
+  `~/.local/state`. On Windows, `$LOCALAPPDATA` is used instead.
 
 ## Commands
 

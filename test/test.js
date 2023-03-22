@@ -41,29 +41,53 @@ test('--help', async t => {
 })
 
 test('Storage', async t => {
-  const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-  const ps = execa(station, {
-    env: {
-      FIL_WALLET_ADDRESS,
-      XDG_STATE_HOME
-    }
-  })
-  while (true) {
-    await once(ps.stdout, 'data')
-    try {
-      await fs.stat(
-        join(
-          XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules', 'saturn-L2-node.log'
+  await t.test('Linux / macOS', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const ps = execa(station, {
+      env: {
+        FIL_WALLET_ADDRESS,
+        XDG_STATE_HOME
+      }
+    })
+    while (true) {
+      await once(ps.stdout, 'data')
+      try {
+        await fs.stat(
+          join(
+            XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules', 'saturn-L2-node.log'
+          )
         )
-      )
-      break
-    } catch {}
-  }
-  ps.kill()
-  await fs.stat(XDG_STATE_HOME, 'filecoin-station')
-  await fs.stat(join(XDG_STATE_HOME, 'filecoin-station', 'modules'))
-  await fs.stat(join(XDG_STATE_HOME, 'filecoin-station', 'logs'))
-  await fs.stat(join(XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules'))
+        break
+      } catch {}
+    }
+    ps.kill()
+    await fs.stat(XDG_STATE_HOME, 'filecoin-station')
+    await fs.stat(join(XDG_STATE_HOME, 'filecoin-station', 'modules'))
+    await fs.stat(join(XDG_STATE_HOME, 'filecoin-station', 'logs'))
+    await fs.stat(join(XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules'))
+  })
+
+  await t.test('Windows', async t => {
+    const LOCALAPPDATA = join(tmpdir(), randomUUID())
+    const ps = execa(station, {
+      env: {
+        FIL_WALLET_ADDRESS,
+        LOCALAPPDATA
+      }
+    })
+    while (true) {
+      await once(ps.stdout, 'data')
+      try {
+        await fs.stat(
+          join(
+            LOCALAPPDATA, 'filecoin-station', 'logs', 'modules', 'saturn-L2-node.log'
+          )
+        )
+        break
+      } catch {}
+    }
+    ps.kill()
+  })
 })
 
 test('Station', async t => {
