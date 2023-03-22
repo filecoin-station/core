@@ -360,6 +360,6 @@ test('Lockfile', async t => {
   throw new Error('did not throw')
 })
 
-// test('Update modules', async t => {
-//   await execa(join(__dirname, '..', 'scripts', 'update-modules.js'))
-// })
+test('Update modules', async t => {
+  await execa(join(__dirname, '..', 'scripts', 'update-modules.js'))
+})
