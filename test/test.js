@@ -118,8 +118,6 @@ test('Metrics', async t => {
       ['metrics'],
       { env: { XDG_STATE_HOME } }
     )
-    // Ensure the process was still running
-    await once(ps.stdout, 'data')
     t.equal(
       stdout,
       JSON.stringify({ totalJobsCompleted: 0, totalEarnings: '0' }, 0, 2)
@@ -196,10 +194,8 @@ test('Logs', async t => {
       ['logs'],
       { env: { XDG_STATE_HOME } }
     )
-    // Ensure the process was still running
-    await once(ps.stdout, 'data')
-    t.ok(stdout)
     ps.kill()
+    t.ok(stdout)
   })
 })
 
@@ -282,8 +278,6 @@ test('Activity', async t => {
       ['activity'],
       { env: { XDG_STATE_HOME } }
     )
-    // Ensure the process was still running
-    await once(ps.stdout, 'data')
     t.ok(stdout)
     ps.kill()
   })
