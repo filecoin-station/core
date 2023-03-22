@@ -73,8 +73,14 @@ test('Station', async t => {
       station,
       { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
     )
-    const [data] = await once(ps.stdout, 'data')
-    t.equal(data.toString(), 'Starting Saturn node...\n')
+    t.equal(
+      (await once(ps.stdout, 'data'))[0].toString(),
+      'Starting Saturn node...\n'
+    )
+    t.equal(
+      (await once(ps.stdout, 'data'))[0].toString(),
+      '[SATURN] INFO: Saturn Node will try to connect to the Saturn Orchestrator...\n'
+    )
     ps.kill()
   })
 })
