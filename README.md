@@ -136,6 +136,28 @@ $ station logs --follow
 ...
 ```
 
+### `$ station events`
+
+Get combined real-time events from `$ station metrics` and `$ station activity`.
+
+```bash
+$ station events
+{"type":"jobs-completed","total":36}
+{"type":"activity:info","module":"Saturn","message":"Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network..."}
+...
+```
+
+The following event types exist:
+
+- `jobs-completed`
+  - `total`
+- `activity:info`
+  - `module`
+  - `message`
+- `activity:error`
+  - `module`
+  - `message`
+
 ### `$ station --help`
 
 Show help.
@@ -145,10 +167,11 @@ $ station --help
 Usage: station <command> [options]
 
 Commands:
-  station                   Start Station                              [default]
-  station    metrics        Show metrics
-  station    activity       Show activity log
-  station    logs [module]  Show module logs
+  station                Start Station                                 [default]
+  station metrics        Show metrics
+  station activity       Show activity log
+  station logs [module]  Show module logs
+  station events         Events stream
 
 Options:
   -v, --version  Show version number                                   [boolean]
