@@ -102,11 +102,29 @@ test('Metrics', async t => {
 
   await t.test('Follow', async t => {
     for (const flag of ['-f', '--follow']) {
-      const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-      const ps = execa(station, ['metrics', flag], { env: { XDG_STATE_HOME } })
-      await once(ps.stdout, 'data')
-      ps.kill()
+      await t.test(flag, async t => {
+        const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+        const ps = execa(station, ['metrics', flag], { env: { XDG_STATE_HOME } })
+        await once(ps.stdout, 'data')
+        ps.kill()
+      })
     }
+  })
+
+  await t.test('Can be read while station is running', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const ps = execa(station, { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } })
+    await once(ps.stdout, 'data')
+    const { stdout } = await execa(
+      station,
+      ['metrics'],
+      { env: { XDG_STATE_HOME } }
+    )
+    t.equal(
+      stdout,
+      JSON.stringify({ totalJobsCompleted: 0, totalEarnings: '0' }, 0, 2)
+    )
+    ps.kill()
   })
 })
 
@@ -136,17 +154,55 @@ test('Logs', async t => {
   })
 
   await t.test('Follow', async t => {
-    for (const flag of ['-f', '--follow']) {
+    await t.test('Read logs', async t => {
+      for (const flag of ['-f', '--follow']) {
+        await t.test(flag, async t => {
+          const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+          await fs.mkdir(
+            getPaths(XDG_STATE_HOME).moduleLogs,
+            { recursive: true }
+          )
+          const ps = execa(station, ['logs', flag], { env: { XDG_STATE_HOME } })
+          const [data] = await Promise.all([
+            once(ps.stdout, 'data'),
+            fs.writeFile(getPaths(XDG_STATE_HOME).allLogs, '[date] beep boop\n')
+          ])
+          t.equal(data.toString(), '[date] beep boop\n')
+          ps.kill()
+        })
+      }
+    })
+    await t.test('Doesn\'t block station from running', async t => {
       const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-      await fs.mkdir(getPaths(XDG_STATE_HOME).moduleLogs, { recursive: true })
-      const ps = execa(station, ['logs', flag], { env: { XDG_STATE_HOME } })
-      const [data] = await Promise.all([
-        once(ps.stdout, 'data'),
-        fs.writeFile(getPaths(XDG_STATE_HOME).allLogs, '[date] beep boop\n')
+      const logsPs = execa(
+        station,
+        ['logs', '--follow'],
+        { env: { XDG_STATE_HOME } }
+      )
+      const stationPs = execa(
+        station,
+        { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
+      )
+      await Promise.all([
+        once(stationPs.stdout, 'data'),
+        once(logsPs.stdout, 'data')
       ])
-      t.equal(data.toString(), '[date] beep boop\n')
-      ps.kill()
-    }
+      logsPs.kill()
+      stationPs.kill()
+    })
+  })
+
+  await t.test('Can be read while station is running', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const ps = execa(station, { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } })
+    await once(ps.stdout, 'data')
+    const { stdout } = await execa(
+      station,
+      ['logs'],
+      { env: { XDG_STATE_HOME } }
+    )
+    ps.kill()
+    t.ok(stdout)
   })
 })
 
@@ -180,52 +236,125 @@ test('Activity', async t => {
   })
 
   await t.test('Follow', async t => {
-    for (const flag of ['-f', '--follow']) {
+    await t.test('Read activity', async t => {
+      for (const flag of ['-f', '--follow']) {
+        await t.test(flag, async t => {
+          const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+          await fs.mkdir(
+            dirname(getPaths(XDG_STATE_HOME).activity),
+            { recursive: true }
+          )
+          const ps = execa(
+            station,
+            ['activity', flag],
+            { env: { XDG_STATE_HOME } }
+          )
+          const [data] = await Promise.all([
+            once(ps.stdout, 'data'),
+            fs.writeFile(
+              getPaths(XDG_STATE_HOME).activity,
+              '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
+            )
+          ])
+          t.match(data.toString(), '3/14/2023')
+          t.match(data.toString(), 'beep boop')
+          ps.kill()
+        })
+      }
+    })
+    await t.test('Doesn\'t block station from running', async t => {
       const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-      await fs.mkdir(
-        dirname(getPaths(XDG_STATE_HOME).activity),
-        { recursive: true }
+      const activityPs = execa(
+        station,
+        ['activity', '--follow'],
+        { env: { XDG_STATE_HOME } }
       )
-      const ps = execa(station, ['activity', flag], { env: { XDG_STATE_HOME } })
-      const [data] = await Promise.all([
-        once(ps.stdout, 'data'),
-        fs.writeFile(
-          getPaths(XDG_STATE_HOME).activity,
-          '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
-        )
+      const stationPs = execa(
+        station,
+        { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
+      )
+      await Promise.all([
+        once(stationPs.stdout, 'data'),
+        once(activityPs.stdout, 'data')
       ])
-      t.match(data.toString(), '3/14/2023')
-      t.match(data.toString(), 'beep boop')
-      ps.kill()
-    }
+      activityPs.kill()
+      stationPs.kill()
+    })
+  })
+
+  await t.test('Can be read while station is running', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const ps = execa(station, { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } })
+    await once(ps.stdout, 'data')
+    const { stdout } = await execa(
+      station,
+      ['activity'],
+      { env: { XDG_STATE_HOME } }
+    )
+    t.ok(stdout)
+    ps.kill()
   })
 })
 
 test('Events', async t => {
-  const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-  await fs.mkdir(
-    dirname(getPaths(XDG_STATE_HOME).activity),
-    { recursive: true }
-  )
-  await fs.writeFile(
-    getPaths(XDG_STATE_HOME).activity,
-    '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
-  )
-  const ps = execa(
-    station,
-    ['events'],
-    { env: { XDG_STATE_HOME } }
-  )
-  const events = []
-  for await (const line of ps.stdout) {
-    events.push(JSON.parse(line.toString()))
-    if (events.length === 2) break
-  }
-  ps.kill()
-  t.same(events, [
-    { type: 'jobs-completed', total: 0 },
-    { type: 'activity:info', module: 'Saturn', message: 'beep boop' }
-  ])
+  await t.test('Read events', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    await fs.mkdir(
+      dirname(getPaths(XDG_STATE_HOME).activity),
+      { recursive: true }
+    )
+    await fs.writeFile(
+      getPaths(XDG_STATE_HOME).activity,
+      '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
+    )
+    const ps = execa(
+      station,
+      ['events'],
+      { env: { XDG_STATE_HOME } }
+    )
+    const events = []
+    for await (const line of ps.stdout) {
+      events.push(JSON.parse(line.toString()))
+      if (events.length === 2) break
+    }
+    ps.kill()
+    t.same(events, [
+      { type: 'jobs-completed', total: 0 },
+      { type: 'activity:info', module: 'Saturn', message: 'beep boop' }
+    ])
+  })
+  await t.test('Can be read while station is running', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const stationPs = execa(
+      station,
+      { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
+    )
+    const eventsPs = execa(
+      station,
+      ['events'],
+      { env: { XDG_STATE_HOME } }
+    )
+    await Promise.all([
+      once(stationPs.stdout, 'data'),
+      once(eventsPs.stdout, 'data')
+    ])
+    stationPs.kill()
+    eventsPs.kill()
+  })
+  await t.test('Doesn\'t block station from running', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const eventsPs = execa(station, ['events'], { env: { XDG_STATE_HOME } })
+    const stationPs = execa(
+      station,
+      { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
+    )
+    await Promise.all([
+      once(stationPs.stdout, 'data'),
+      once(eventsPs.stdout, 'data')
+    ])
+    eventsPs.kill()
+    stationPs.kill()
+  })
 })
 
 test('Lockfile', async t => {
