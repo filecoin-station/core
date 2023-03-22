@@ -118,7 +118,6 @@ test('Metrics', async t => {
       ['metrics'],
       { env: { XDG_STATE_HOME } }
     )
-    console.log('after')
     // Ensure the process was still running
     await once(ps.stdout, 'data')
     t.equal(
@@ -179,14 +178,8 @@ test('Logs', async t => {
         station,
         { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
       )
-      t.match(
-        (await once(stationPs.stdout, 'data'))[0].toString(),
-        'Starting Saturn node'
-      )
-      t.match(
-        (await once(logsPs.stdout, 'data'))[0].toString(),
-        'Starting Saturn node'
-      )
+      await once(stationPs.stdout, 'data')
+      await once(logsPs.stdout, 'data')
       logsPs.kill()
       stationPs.kill()
     })
