@@ -250,11 +250,8 @@ test('Events', async t => {
 
 test('Lockfile', async t => {
   const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-  console.log('before launch')
   const ps = execa(station, { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } })
-  console.log('after launch')
   await once(ps.stdout, 'data')
-  console.log('got data')
   try {
     await execa(station, { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } })
   } catch (err) {
