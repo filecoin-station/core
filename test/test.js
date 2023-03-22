@@ -66,6 +66,18 @@ test('Storage', async t => {
   await fs.stat(join(XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules'))
 })
 
+test('Station', async t => {
+  await t.test('Saturn', async t => {
+    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const ps = execa(
+      station,
+      { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
+    )
+    const [data] = await once(ps.stdout, 'data')
+    t.equal(data.toString(), 'Starting Saturn node...\n')
+  })
+})
+
 test('Metrics', async t => {
   await t.test('No metrics', async t => {
     const XDG_STATE_HOME = join(tmpdir(), randomUUID())
