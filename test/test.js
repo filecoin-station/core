@@ -102,10 +102,12 @@ test('Metrics', async t => {
 
   await t.test('Follow', async t => {
     for (const flag of ['-f', '--follow']) {
-      const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-      const ps = execa(station, ['metrics', flag], { env: { XDG_STATE_HOME } })
-      await once(ps.stdout, 'data')
-      ps.kill()
+      await t.test(flag, async t => {
+        const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+        const ps = execa(station, ['metrics', flag], { env: { XDG_STATE_HOME } })
+        await once(ps.stdout, 'data')
+        ps.kill()
+      })
     }
   })
 
@@ -154,15 +156,20 @@ test('Logs', async t => {
   await t.test('Follow', async t => {
     await t.test('Read logs', async t => {
       for (const flag of ['-f', '--follow']) {
-        const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-        await fs.mkdir(getPaths(XDG_STATE_HOME).moduleLogs, { recursive: true })
-        const ps = execa(station, ['logs', flag], { env: { XDG_STATE_HOME } })
-        const [data] = await Promise.all([
-          once(ps.stdout, 'data'),
-          fs.writeFile(getPaths(XDG_STATE_HOME).allLogs, '[date] beep boop\n')
-        ])
-        t.equal(data.toString(), '[date] beep boop\n')
-        ps.kill()
+        await t.test(flag, async t => {
+          const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+          await fs.mkdir(
+            getPaths(XDG_STATE_HOME).moduleLogs,
+            { recursive: true }
+          )
+          const ps = execa(station, ['logs', flag], { env: { XDG_STATE_HOME } })
+          const [data] = await Promise.all([
+            once(ps.stdout, 'data'),
+            fs.writeFile(getPaths(XDG_STATE_HOME).allLogs, '[date] beep boop\n')
+          ])
+          t.equal(data.toString(), '[date] beep boop\n')
+          ps.kill()
+        })
       }
     })
     await t.test('Doesn\'t block station from running', async t => {
@@ -231,22 +238,28 @@ test('Activity', async t => {
   await t.test('Follow', async t => {
     await t.test('Read activity', async t => {
       for (const flag of ['-f', '--follow']) {
-        const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-        await fs.mkdir(
-          dirname(getPaths(XDG_STATE_HOME).activity),
-          { recursive: true }
-        )
-        const ps = execa(station, ['activity', flag], { env: { XDG_STATE_HOME } })
-        const [data] = await Promise.all([
-          once(ps.stdout, 'data'),
-          fs.writeFile(
-            getPaths(XDG_STATE_HOME).activity,
-            '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
+        await t.test(flag, async t => {
+          const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+          await fs.mkdir(
+            dirname(getPaths(XDG_STATE_HOME).activity),
+            { recursive: true }
           )
-        ])
-        t.match(data.toString(), '3/14/2023')
-        t.match(data.toString(), 'beep boop')
-        ps.kill()
+          const ps = execa(
+            station,
+            ['activity', flag],
+            { env: { XDG_STATE_HOME } }
+          )
+          const [data] = await Promise.all([
+            once(ps.stdout, 'data'),
+            fs.writeFile(
+              getPaths(XDG_STATE_HOME).activity,
+              '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
+            )
+          ])
+          t.match(data.toString(), '3/14/2023')
+          t.match(data.toString(), 'beep boop')
+          ps.kill()
+        })
       }
     })
     await t.test('Doesn\'t block station from running', async t => {
