@@ -312,8 +312,10 @@ test('Events', async t => {
   })
   await t.test('Can be read while station is running', async t => {
     const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-    const stationPs = execa(station, { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } })
-    await once(stationPs.stdout, 'data')
+    const stationPs = execa(
+      station,
+      { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
+    )
     const eventsPs = execa(
       station,
       ['events'],
