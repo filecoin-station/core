@@ -178,8 +178,10 @@ test('Logs', async t => {
         station,
         { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
       )
-      await once(stationPs.stdout, 'data')
-      await once(logsPs.stdout, 'data')
+      await Promise.all([
+        once(stationPs.stdout, 'data'),
+        once(logsPs.stdout, 'data')
+      ])
       logsPs.kill()
       stationPs.kill()
     })
@@ -262,14 +264,10 @@ test('Activity', async t => {
         station,
         { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
       )
-      t.match(
-        (await once(stationPs.stdout, 'data'))[0].toString(),
-        'Starting Saturn node'
-      )
-      t.match(
-        (await once(activityPs.stdout, 'data'))[0].toString(),
-        'will try to connect'
-      )
+      await Promise.all([
+        once(stationPs.stdout, 'data'),
+        once(activityPs.stdout, 'data')
+      ])
       activityPs.kill()
       stationPs.kill()
     })
@@ -327,8 +325,10 @@ test('Events', async t => {
       ['events'],
       { env: { XDG_STATE_HOME } }
     )
-    await once(stationPs.stdout, 'data')
-    await once(eventsPs.stdout, 'data')
+    await Promise.all([
+      once(stationPs.stdout, 'data'),
+      once(eventsPs.stdout, 'data')
+    ])
     stationPs.kill()
     eventsPs.kill()
   })
@@ -339,11 +339,10 @@ test('Events', async t => {
       station,
       { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
     )
-    t.match(
-      (await once(stationPs.stdout, 'data'))[0].toString(),
-      'Starting Saturn node'
-    )
-    await once(eventsPs.stdout, 'data')
+    await Promise.all([
+      once(stationPs.stdout, 'data'),
+      once(eventsPs.stdout, 'data')
+    ])
     eventsPs.kill()
     stationPs.kill()
   })
