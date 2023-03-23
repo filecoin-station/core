@@ -41,11 +41,11 @@ test('--help', async t => {
 })
 
 test('Storage', async t => {
-  const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+  const STATION_ROOT = join(tmpdir(), randomUUID())
   const ps = execa(station, {
     env: {
       FIL_WALLET_ADDRESS,
-      XDG_STATE_HOME
+      STATION_ROOT
     }
   })
   while (true) {
@@ -53,26 +53,26 @@ test('Storage', async t => {
     try {
       await fs.stat(
         join(
-          XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules', 'saturn-L2-node.log'
+          STATION_ROOT, 'logs', 'modules', 'saturn-L2-node.log'
         )
       )
       break
     } catch {}
   }
   ps.kill()
-  await fs.stat(XDG_STATE_HOME, 'filecoin-station')
-  await fs.stat(join(XDG_STATE_HOME, 'filecoin-station', 'modules'))
-  await fs.stat(join(XDG_STATE_HOME, 'filecoin-station', 'logs'))
-  await fs.stat(join(XDG_STATE_HOME, 'filecoin-station', 'logs', 'modules'))
+  await fs.stat(STATION_ROOT)
+  await fs.stat(join(STATION_ROOT, 'modules'))
+  await fs.stat(join(STATION_ROOT, 'logs'))
+  await fs.stat(join(STATION_ROOT, 'logs', 'modules'))
 })
 
 test('Metrics', async t => {
   await t.test('No metrics', async t => {
-    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const STATION_ROOT = join(tmpdir(), randomUUID())
     const { stdout } = await execa(
       station,
       ['metrics'],
-      { env: { XDG_STATE_HOME } }
+      { env: { STATION_ROOT } }
     )
     t.equal(
       stdout,
@@ -80,19 +80,19 @@ test('Metrics', async t => {
     )
   })
   await t.test('With metrics', async t => {
-    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const STATION_ROOT = join(tmpdir(), randomUUID())
     await fs.mkdir(
-      dirname(getPaths(XDG_STATE_HOME).metrics),
+      dirname(getPaths(STATION_ROOT).metrics),
       { recursive: true }
     )
     await fs.writeFile(
-      getPaths(XDG_STATE_HOME).metrics,
+      getPaths(STATION_ROOT).metrics,
       '[date] {"totalJobsCompleted":1,"totalEarnings":"2"}\n'
     )
     const { stdout } = await execa(
       station,
       ['metrics'],
-      { env: { XDG_STATE_HOME } }
+      { env: { STATION_ROOT } }
     )
     t.equal(
       stdout,
@@ -103,8 +103,8 @@ test('Metrics', async t => {
   await t.test('Follow', async t => {
     for (const flag of ['-f', '--follow']) {
       await t.test(flag, async t => {
-        const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-        const ps = execa(station, ['metrics', flag], { env: { XDG_STATE_HOME } })
+        const STATION_ROOT = join(tmpdir(), randomUUID())
+        const ps = execa(station, ['metrics', flag], { env: { STATION_ROOT } })
         await once(ps.stdout, 'data')
         ps.kill()
       })
@@ -112,13 +112,13 @@ test('Metrics', async t => {
   })
 
   await t.test('Can be read while station is running', async t => {
-    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-    const ps = execa(station, { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } })
+    const STATION_ROOT = join(tmpdir(), randomUUID())
+    const ps = execa(station, { env: { STATION_ROOT, FIL_WALLET_ADDRESS } })
     await once(ps.stdout, 'data')
     const { stdout } = await execa(
       station,
       ['metrics'],
-      { env: { XDG_STATE_HOME } }
+      { env: { STATION_ROOT } }
     )
     t.equal(
       stdout,
@@ -130,22 +130,22 @@ test('Metrics', async t => {
 
 test('Logs', async t => {
   await t.test('No logs', async t => {
-    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const STATION_ROOT = join(tmpdir(), randomUUID())
     const { stdout } = await execa(
       station,
       ['logs'],
-      { env: { XDG_STATE_HOME } }
+      { env: { STATION_ROOT } }
     )
     t.equal(stdout, '')
   })
   await t.test('With logs', async t => {
-    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-    await fs.mkdir(getPaths(XDG_STATE_HOME).moduleLogs, { recursive: true })
-    await fs.writeFile(getPaths(XDG_STATE_HOME).allLogs, '[date] beep boop\n')
+    const STATION_ROOT = join(tmpdir(), randomUUID())
+    await fs.mkdir(getPaths(STATION_ROOT).moduleLogs, { recursive: true })
+    await fs.writeFile(getPaths(STATION_ROOT).allLogs, '[date] beep boop\n')
     const { stdout } = await execa(
       station,
       ['logs'],
-      { env: { XDG_STATE_HOME } }
+      { env: { STATION_ROOT } }
     )
     t.equal(
       stdout,
@@ -157,15 +157,15 @@ test('Logs', async t => {
     await t.test('Read logs', async t => {
       for (const flag of ['-f', '--follow']) {
         await t.test(flag, async t => {
-          const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+          const STATION_ROOT = join(tmpdir(), randomUUID())
           await fs.mkdir(
-            getPaths(XDG_STATE_HOME).moduleLogs,
+            getPaths(STATION_ROOT).moduleLogs,
             { recursive: true }
           )
-          const ps = execa(station, ['logs', flag], { env: { XDG_STATE_HOME } })
+          const ps = execa(station, ['logs', flag], { env: { STATION_ROOT } })
           const [data] = await Promise.all([
             once(ps.stdout, 'data'),
-            fs.writeFile(getPaths(XDG_STATE_HOME).allLogs, '[date] beep boop\n')
+            fs.writeFile(getPaths(STATION_ROOT).allLogs, '[date] beep boop\n')
           ])
           t.equal(data.toString(), '[date] beep boop\n')
           ps.kill()
@@ -173,15 +173,15 @@ test('Logs', async t => {
       }
     })
     await t.test('Doesn\'t block station from running', async t => {
-      const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+      const STATION_ROOT = join(tmpdir(), randomUUID())
       const logsPs = execa(
         station,
         ['logs', '--follow'],
-        { env: { XDG_STATE_HOME } }
+        { env: { STATION_ROOT } }
       )
       const stationPs = execa(
         station,
-        { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
+        { env: { STATION_ROOT, FIL_WALLET_ADDRESS } }
       )
       await Promise.all([
         once(stationPs.stdout, 'data'),
@@ -193,13 +193,13 @@ test('Logs', async t => {
   })
 
   await t.test('Can be read while station is running', async t => {
-    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-    const ps = execa(station, { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } })
+    const STATION_ROOT = join(tmpdir(), randomUUID())
+    const ps = execa(station, { env: { STATION_ROOT, FIL_WALLET_ADDRESS } })
     await once(ps.stdout, 'data')
     const { stdout } = await execa(
       station,
       ['logs'],
-      { env: { XDG_STATE_HOME } }
+      { env: { STATION_ROOT } }
     )
     ps.kill()
     t.ok(stdout)
@@ -208,28 +208,28 @@ test('Logs', async t => {
 
 test('Activity', async t => {
   await t.test('No activity', async t => {
-    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const STATION_ROOT = join(tmpdir(), randomUUID())
     const { stdout } = await execa(
       station,
       ['activity'],
-      { env: { XDG_STATE_HOME } }
+      { env: { STATION_ROOT } }
     )
     t.equal(stdout, '')
   })
   await t.test('With activity', async t => {
-    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const STATION_ROOT = join(tmpdir(), randomUUID())
     await fs.mkdir(
-      dirname(getPaths(XDG_STATE_HOME).activity),
+      dirname(getPaths(STATION_ROOT).activity),
       { recursive: true }
     )
     await fs.writeFile(
-      getPaths(XDG_STATE_HOME).activity,
+      getPaths(STATION_ROOT).activity,
       '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
     )
     const { stdout } = await execa(
       station,
       ['activity'],
-      { env: { XDG_STATE_HOME } }
+      { env: { STATION_ROOT } }
     )
     t.match(stdout, '3/14/2023')
     t.match(stdout, 'beep boop')
@@ -239,20 +239,20 @@ test('Activity', async t => {
     await t.test('Read activity', async t => {
       for (const flag of ['-f', '--follow']) {
         await t.test(flag, async t => {
-          const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+          const STATION_ROOT = join(tmpdir(), randomUUID())
           await fs.mkdir(
-            dirname(getPaths(XDG_STATE_HOME).activity),
+            dirname(getPaths(STATION_ROOT).activity),
             { recursive: true }
           )
           const ps = execa(
             station,
             ['activity', flag],
-            { env: { XDG_STATE_HOME } }
+            { env: { STATION_ROOT } }
           )
           const [data] = await Promise.all([
             once(ps.stdout, 'data'),
             fs.writeFile(
-              getPaths(XDG_STATE_HOME).activity,
+              getPaths(STATION_ROOT).activity,
               '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
             )
           ])
@@ -263,15 +263,15 @@ test('Activity', async t => {
       }
     })
     await t.test('Doesn\'t block station from running', async t => {
-      const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+      const STATION_ROOT = join(tmpdir(), randomUUID())
       const activityPs = execa(
         station,
         ['activity', '--follow'],
-        { env: { XDG_STATE_HOME } }
+        { env: { STATION_ROOT } }
       )
       const stationPs = execa(
         station,
-        { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
+        { env: { STATION_ROOT, FIL_WALLET_ADDRESS } }
       )
       await Promise.all([
         once(stationPs.stdout, 'data'),
@@ -283,13 +283,13 @@ test('Activity', async t => {
   })
 
   await t.test('Can be read while station is running', async t => {
-    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-    const ps = execa(station, { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } })
+    const STATION_ROOT = join(tmpdir(), randomUUID())
+    const ps = execa(station, { env: { STATION_ROOT, FIL_WALLET_ADDRESS } })
     await once(ps.stdout, 'data')
     const { stdout } = await execa(
       station,
       ['activity'],
-      { env: { XDG_STATE_HOME } }
+      { env: { STATION_ROOT } }
     )
     t.ok(stdout)
     ps.kill()
@@ -298,19 +298,19 @@ test('Activity', async t => {
 
 test('Events', async t => {
   await t.test('Read events', async t => {
-    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const STATION_ROOT = join(tmpdir(), randomUUID())
     await fs.mkdir(
-      dirname(getPaths(XDG_STATE_HOME).activity),
+      dirname(getPaths(STATION_ROOT).activity),
       { recursive: true }
     )
     await fs.writeFile(
-      getPaths(XDG_STATE_HOME).activity,
+      getPaths(STATION_ROOT).activity,
       '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
     )
     const ps = execa(
       station,
       ['events'],
-      { env: { XDG_STATE_HOME } }
+      { env: { STATION_ROOT } }
     )
     const events = []
     for await (const line of ps.stdout) {
@@ -324,15 +324,15 @@ test('Events', async t => {
     ])
   })
   await t.test('Can be read while station is running', async t => {
-    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
+    const STATION_ROOT = join(tmpdir(), randomUUID())
     const stationPs = execa(
       station,
-      { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
+      { env: { STATION_ROOT, FIL_WALLET_ADDRESS } }
     )
     const eventsPs = execa(
       station,
       ['events'],
-      { env: { XDG_STATE_HOME } }
+      { env: { STATION_ROOT } }
     )
     await Promise.all([
       once(stationPs.stdout, 'data'),
@@ -342,11 +342,11 @@ test('Events', async t => {
     eventsPs.kill()
   })
   await t.test('Doesn\'t block station from running', async t => {
-    const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-    const eventsPs = execa(station, ['events'], { env: { XDG_STATE_HOME } })
+    const STATION_ROOT = join(tmpdir(), randomUUID())
+    const eventsPs = execa(station, ['events'], { env: { STATION_ROOT } })
     const stationPs = execa(
       station,
-      { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
+      { env: { STATION_ROOT, FIL_WALLET_ADDRESS } }
     )
     await Promise.all([
       once(stationPs.stdout, 'data'),
@@ -358,11 +358,11 @@ test('Events', async t => {
 })
 
 test('Lockfile', async t => {
-  const XDG_STATE_HOME = join(tmpdir(), randomUUID())
-  const ps = execa(station, { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } })
+  const STATION_ROOT = join(tmpdir(), randomUUID())
+  const ps = execa(station, { env: { STATION_ROOT, FIL_WALLET_ADDRESS } })
   await once(ps.stdout, 'data')
   try {
-    await execa(station, { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } })
+    await execa(station, { env: { STATION_ROOT, FIL_WALLET_ADDRESS } })
   } catch (err) {
     t.equal(err.exitCode, 1)
     t.match(err.stderr, /is already running/)
