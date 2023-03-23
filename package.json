@@ -36,5 +36,5 @@
     "undici": "^5.20.0",
     "yargs": "^17.7.1"
   },
-  "sentryEnvironment": "production"
+  "sentryEnvironment": "development"
 }
