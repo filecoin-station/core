@@ -5,7 +5,7 @@ import { join } from 'node:path'
 import { maybeCreateFile } from '../lib/util.js'
 
 const followLogs = path => {
-  const tail = new Tail(path, { nLines: 10 })
+  const tail = new Tail(path, { nLines: 10, useWatchFile: true })
   tail.on('line', line => console.log(line))
 }
 
