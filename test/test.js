@@ -223,14 +223,14 @@ test('Logs', async t => {
         ['logs', '--follow'],
         { env: { XDG_STATE_HOME } }
       )
-      logsPs.stdout.pipe(process.stdout)
-      logsPs.stderr.pipe(process.stderr)
       const stationPs = execa(
         station,
         { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
       )
-      stationPs.stdout.pipe(process.stdout)
-      stationPs.stderr.pipe(process.stderr)
+      logsPs.stdout.on('data', d => console.log('logsPs stdout', d.toString()))
+      logsPs.stderr.on('data', d => console.log('logsPs stderr', d.toString()))
+      stationPs.stdout.on('data', d => console.log('stationPs stdout', d.toString()))
+      stationPs.stderr.on('data', d => console.log('stationPs stderr', d.toString()))
       await Promise.all([
         once(stationPs.stdout, 'data'),
         once(logsPs.stdout, 'data')
