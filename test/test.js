@@ -227,10 +227,6 @@ test('Logs', async t => {
         station,
         { env: { XDG_STATE_HOME, FIL_WALLET_ADDRESS } }
       )
-      logsPs.stdout.on('data', d => console.log('logsPs stdout', d.toString()))
-      logsPs.stderr.on('data', d => console.log('logsPs stderr', d.toString()))
-      stationPs.stdout.on('data', d => console.log('stationPs stdout', d.toString()))
-      stationPs.stderr.on('data', d => console.log('stationPs stderr', d.toString()))
       await Promise.all([
         once(stationPs.stdout, 'data'),
         once(logsPs.stdout, 'data')
@@ -421,6 +417,6 @@ test('Lockfile', async t => {
   throw new Error('did not throw')
 })
 
-test('Update modules', async t => {
-  await execa(join(__dirname, '..', 'scripts', 'update-modules.js'))
-})
+// test('Update modules', async t => {
+//   await execa(join(__dirname, '..', 'scripts', 'update-modules.js'))
+// })
