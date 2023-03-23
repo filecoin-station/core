@@ -49,9 +49,9 @@ The following configuration options are shared by all Station commands:
 
 - `$ROOT_DIR`_(string; optional)_: Station stores logs and module state in
   this directory. Defaults to
-  - Linux: `${XDG_STATE_HOME:-~/.local/state}/@filecoin-station/core`
+  - Linux: `${XDG_STATE_HOME:-~/.local/state}/filecoin-station-core`
   - macOS: `~/Library/Application Support/app.filstation.core`
-  - Windows: `%LOCALAPPDATA%/@filecoin-station/core`
+  - Windows: `%LOCALAPPDATA%/Filecoin Station Core`
 
 ## Commands
 
