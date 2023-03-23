@@ -12,7 +12,7 @@
     "node": ">=16"
   },
   "scripts": {
-    "test": "prettier --ddebug-check && standard && tap --no-coverage",
+    "test": "prettier --debug-check . && standard && tap --no-coverage",
     "version": "./scripts/version.js",
     "postpublish": "./scripts/post-publish.js",
     "release": "np"
