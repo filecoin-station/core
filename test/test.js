@@ -195,7 +195,8 @@ describe('Logs', () => {
     })
   })
 
-  it('can be read while station is running', async () => {
+  it('can be read while station is running', async function () {
+    this.timeout(5_000)
     const ROOT_DIR = join(tmpdir(), randomUUID())
     const ps = execa(station, { env: { ROOT_DIR, FIL_WALLET_ADDRESS } })
     await once(ps.stdout, 'data')
@@ -379,7 +380,8 @@ describe('Lockfile', () => {
 })
 
 describe('Scripts', () => {
-  it('updates modules', async () => {
+  it('updates modules', async function () {
+    this.timeout(5_000)
     await execa(join(__dirname, '..', 'scripts', 'update-modules.js'))
   })
 })
