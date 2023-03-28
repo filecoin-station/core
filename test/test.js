@@ -1,4 +1,3 @@
-import { test } from 'tap'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { execa } from 'execa'
@@ -7,6 +6,7 @@ import fs from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
 import { once } from 'node:events'
 import { getPaths } from '../lib/paths.js'
+import assert from 'node:assert'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const station = join(__dirname, '..', 'bin', 'station.js')
@@ -14,72 +14,73 @@ const station = join(__dirname, '..', 'bin', 'station.js')
 // From https://lotus.filecoin.io/lotus/manage/manage-fil/
 const FIL_WALLET_ADDRESS = 'f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za'
 
-test('FIL_WALLET_ADDRESS', async t => {
-  await t.test('require address', async t => {
-    try {
-      await execa(station)
-    } catch (err) {
-      return
-    }
-    t.fail('should have thrown')
+describe('FIL_WALLET_ADDRESS', () => {
+  it('fails without address', async () => {
+    await assert.rejects(execa(station))
   })
-  await t.test('with address', async t => {
+  it('works with address', async () => {
     const ps = execa(station, { env: { FIL_WALLET_ADDRESS } })
     await once(ps.stdout, 'data')
     ps.kill()
   })
 })
 
-test('--version', async t => {
-  await execa(station, ['--version'])
-  await execa(station, ['-v'])
-})
-
-test('--help', async t => {
-  await execa(station, ['--help'])
-  await execa(station, ['-h'])
-})
-
-test('Storage', async t => {
-  const ROOT_DIR = join(tmpdir(), randomUUID())
-  const ps = execa(station, {
-    env: {
-      FIL_WALLET_ADDRESS,
-      ROOT_DIR
-    }
+describe('--version', () => {
+  it('outputs version', async () => {
+    await execa(station, ['--version'])
+    await execa(station, ['-v'])
   })
-  while (true) {
-    await once(ps.stdout, 'data')
-    try {
-      await fs.stat(
-        join(
-          ROOT_DIR, 'logs', 'modules', 'saturn-L2-node.log'
-        )
-      )
-      break
-    } catch {}
-  }
-  ps.kill()
-  await fs.stat(ROOT_DIR)
-  await fs.stat(join(ROOT_DIR, 'modules'))
-  await fs.stat(join(ROOT_DIR, 'logs'))
-  await fs.stat(join(ROOT_DIR, 'logs', 'modules'))
 })
 
-test('Metrics', async t => {
-  await t.test('No metrics', async t => {
+describe('--help', () => {
+  it('outputs help text', async () => {
+    await execa(station, ['--help'])
+    await execa(station, ['-h'])
+  })
+})
+
+describe('Storage', async () => {
+  it('creates files', async () => {
+    const ROOT_DIR = join(tmpdir(), randomUUID())
+    const ps = execa(station, {
+      env: {
+        FIL_WALLET_ADDRESS,
+        ROOT_DIR
+      }
+    })
+    while (true) {
+      await once(ps.stdout, 'data')
+      try {
+        await fs.stat(
+          join(
+            ROOT_DIR, 'logs', 'modules', 'saturn-L2-node.log'
+          )
+        )
+        break
+      } catch {}
+    }
+    ps.kill()
+    await fs.stat(ROOT_DIR)
+    await fs.stat(join(ROOT_DIR, 'modules'))
+    await fs.stat(join(ROOT_DIR, 'logs'))
+    await fs.stat(join(ROOT_DIR, 'logs', 'modules'))
+  })
+})
+
+describe('Metrics', () => {
+  it('handles empty metrics', async () => {
     const ROOT_DIR = join(tmpdir(), randomUUID())
     const { stdout } = await execa(
       station,
       ['metrics'],
       { env: { ROOT_DIR } }
     )
-    t.equal(
+    assert.deepStrictEqual(
       stdout,
       JSON.stringify({ totalJobsCompleted: 0, totalEarnings: '0' }, 0, 2)
     )
   })
-  await t.test('With metrics', async t => {
+  it('outputs metrics', async () => {
     const ROOT_DIR = join(tmpdir(), randomUUID())
     await fs.mkdir(
       dirname(getPaths(ROOT_DIR).metrics),
@@ -94,15 +95,15 @@ test('Metrics', async t => {
       ['metrics'],
       { env: { ROOT_DIR } }
     )
-    t.equal(
+    assert.deepStrictEqual(
       stdout,
       JSON.stringify({ totalJobsCompleted: 1, totalEarnings: '2' }, 0, 2)
     )
   })
 
-  await t.test('Follow', async t => {
+  describe('Follow', async () => {
     for (const flag of ['-f', '--follow']) {
-      await t.test(flag, async t => {
+      it(flag, async () => {
         const ROOT_DIR = join(tmpdir(), randomUUID())
         const ps = execa(station, ['metrics', flag], { env: { ROOT_DIR } })
         await once(ps.stdout, 'data')
@@ -111,7 +112,7 @@ test('Metrics', async t => {
     }
   })
 
-  await t.test('Can be read while station is running', async t => {
+  it('can be read while station is running', async () => {
     const ROOT_DIR = join(tmpdir(), randomUUID())
     const ps = execa(station, { env: { ROOT_DIR, FIL_WALLET_ADDRESS } })
     await once(ps.stdout, 'data')
@@ -120,7 +121,7 @@ test('Metrics', async t => {
       ['metrics'],
       { env: { ROOT_DIR } }
     )
-    t.equal(
+    assert.deepStrictEqual(
       stdout,
       JSON.stringify({ totalJobsCompleted: 0, totalEarnings: '0' }, 0, 2)
     )
@@ -128,17 +129,17 @@ test('Metrics', async t => {
   })
 })
 
-test('Logs', async t => {
-  await t.test('No logs', async t => {
+describe('Logs', () => {
+  it('handles no logs', async () => {
     const ROOT_DIR = join(tmpdir(), randomUUID())
     const { stdout } = await execa(
       station,
       ['logs'],
       { env: { ROOT_DIR } }
     )
-    t.equal(stdout, '')
+    assert.strictEqual(stdout, '')
   })
-  await t.test('With logs', async t => {
+  it('outputs logs', async () => {
     const ROOT_DIR = join(tmpdir(), randomUUID())
     await fs.mkdir(getPaths(ROOT_DIR).moduleLogs, { recursive: true })
     await fs.writeFile(getPaths(ROOT_DIR).allLogs, '[date] beep boop\n')
@@ -147,16 +148,13 @@ test('Logs', async t => {
       ['logs'],
       { env: { ROOT_DIR } }
     )
-    t.equal(
-      stdout,
-      '[date] beep boop'
-    )
+    assert.strictEqual(stdout, '[date] beep boop')
   })
 
-  await t.test('Follow', async t => {
-    await t.test('Read logs', async t => {
+  describe('Follow', () => {
+    it('reads logs', async () => {
       for (const flag of ['-f', '--follow']) {
-        await t.test(flag, async t => {
+        it(flag, async () => {
           const ROOT_DIR = join(tmpdir(), randomUUID())
           await fs.mkdir(
             getPaths(ROOT_DIR).moduleLogs,
@@ -167,12 +165,12 @@ test('Logs', async t => {
             once(ps.stdout, 'data'),
             fs.writeFile(getPaths(ROOT_DIR).allLogs, '[date] beep boop\n')
           ])
-          t.equal(data.toString(), '[date] beep boop\n')
+          assert.strictEqual(data.toString(), '[date] beep boop\n')
           ps.kill()
         })
       }
     })
-    await t.test('Doesn\'t block station from running', async t => {
+    it('doesn\'t block station from running', async () => {
       const ROOT_DIR = join(tmpdir(), randomUUID())
       const logsPs = execa(
         station,
@@ -192,7 +190,8 @@ test('Logs', async t => {
     })
   })
 
-  await t.test('Can be read while station is running', async t => {
+  it('can be read while station is running', async function () {
+    this.timeout(5_000)
     const ROOT_DIR = join(tmpdir(), randomUUID())
     const ps = execa(station, { env: { ROOT_DIR, FIL_WALLET_ADDRESS } })
     await once(ps.stdout, 'data')
@@ -202,21 +201,21 @@ test('Logs', async t => {
       { env: { ROOT_DIR } }
     )
     ps.kill()
-    t.ok(stdout)
+    assert(stdout)
   })
 })
 
-test('Activity', async t => {
-  await t.test('No activity', async t => {
+describe('Activity', () => {
+  it('handles no activity', async () => {
     const ROOT_DIR = join(tmpdir(), randomUUID())
     const { stdout } = await execa(
       station,
       ['activity'],
       { env: { ROOT_DIR } }
     )
-    t.equal(stdout, '')
+    assert.strictEqual(stdout, '')
   })
-  await t.test('With activity', async t => {
+  it('outputs activity', async () => {
     const ROOT_DIR = join(tmpdir(), randomUUID())
     await fs.mkdir(
       dirname(getPaths(ROOT_DIR).activity),
@@ -231,14 +230,14 @@ test('Activity', async t => {
       ['activity'],
       { env: { ROOT_DIR } }
     )
-    t.match(stdout, '3/14/2023')
-    t.match(stdout, 'beep boop')
+    assert.match(stdout, /3\/14\/2023/)
+    assert.match(stdout, /beep boop/)
   })
 
-  await t.test('Follow', async t => {
-    await t.test('Read activity', async t => {
+  describe('Follow', () => {
+    it('reads activity', async () => {
       for (const flag of ['-f', '--follow']) {
-        await t.test(flag, async t => {
+        it(flag, async () => {
           const ROOT_DIR = join(tmpdir(), randomUUID())
           await fs.mkdir(
             dirname(getPaths(ROOT_DIR).activity),
@@ -256,13 +255,13 @@ test('Activity', async t => {
               '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
             )
           ])
-          t.match(data.toString(), '3/14/2023')
-          t.match(data.toString(), 'beep boop')
+          assert.match(data.toString(), '3/14/2023')
+          assert.match(data.toString(), 'beep boop')
           ps.kill()
         })
       }
     })
-    await t.test('Doesn\'t block station from running', async t => {
+    it('doesn\'t block station from running', async () => {
       const ROOT_DIR = join(tmpdir(), randomUUID())
       const activityPs = execa(
         station,
@@ -282,7 +281,7 @@ test('Activity', async t => {
     })
   })
 
-  await t.test('Can be read while station is running', async t => {
+  it('can be read while station is running', async () => {
     const ROOT_DIR = join(tmpdir(), randomUUID())
     const ps = execa(station, { env: { ROOT_DIR, FIL_WALLET_ADDRESS } })
     await once(ps.stdout, 'data')
@@ -291,13 +290,13 @@ test('Activity', async t => {
       ['activity'],
       { env: { ROOT_DIR } }
     )
-    t.ok(stdout)
+    assert(stdout)
     ps.kill()
   })
 })
 
-test('Events', async t => {
-  await t.test('Read events', async t => {
+describe('Events', () => {
+  it('read events', async () => {
     const ROOT_DIR = join(tmpdir(), randomUUID())
     await fs.mkdir(
       dirname(getPaths(ROOT_DIR).activity),
@@ -318,12 +317,12 @@ test('Events', async t => {
       if (events.length === 2) break
     }
     ps.kill()
-    t.same(events, [
+    assert.deepStrictEqual(events, [
       { type: 'jobs-completed', total: 0 },
       { type: 'activity:info', module: 'Saturn', message: 'beep boop' }
     ])
   })
-  await t.test('Can be read while station is running', async t => {
+  it('can be read while station is running', async () => {
     const ROOT_DIR = join(tmpdir(), randomUUID())
     const stationPs = execa(
       station,
@@ -341,7 +340,7 @@ test('Events', async t => {
     stationPs.kill()
     eventsPs.kill()
   })
-  await t.test('Doesn\'t block station from running', async t => {
+  it('doesn\'t block station from running', async () => {
     const ROOT_DIR = join(tmpdir(), randomUUID())
     const eventsPs = execa(station, ['events'], { env: { ROOT_DIR } })
     const stationPs = execa(
@@ -357,22 +356,29 @@ test('Events', async t => {
   })
 })
 
-test('Lockfile', async t => {
-  const ROOT_DIR = join(tmpdir(), randomUUID())
-  const ps = execa(station, { env: { ROOT_DIR, FIL_WALLET_ADDRESS } })
-  await once(ps.stdout, 'data')
-  try {
-    await execa(station, { env: { ROOT_DIR, FIL_WALLET_ADDRESS } })
-  } catch (err) {
-    t.equal(err.exitCode, 1)
-    t.match(err.stderr, /is already running/)
-    return
-  } finally {
-    ps.kill()
-  }
-  throw new Error('did not throw')
+describe('Lockfile', () => {
+  it('prevents multiple instances from running', async () => {
+    const ROOT_DIR = join(tmpdir(), randomUUID())
+    const ps = execa(station, { env: { ROOT_DIR, FIL_WALLET_ADDRESS } })
+    await once(ps.stdout, 'data')
+    try {
+      await assert.rejects(
+        execa(station, { env: { ROOT_DIR, FIL_WALLET_ADDRESS } }),
+        err => {
+          assert.strictEqual(err.exitCode, 1)
+          assert.match(err.stderr, /is already running/)
+          return true
+        }
+      )
+    } finally {
+      ps.kill()
+    }
+  })
 })
 
-test('Update modules', async t => {
-  await execa(join(__dirname, '..', 'scripts', 'update-modules.js'))
+describe('Scripts', () => {
+  it('updates modules', async function () {
+    this.timeout(5_000)
+    await execa(join(__dirname, '..', 'scripts', 'update-modules.js'))
+  })
 })
