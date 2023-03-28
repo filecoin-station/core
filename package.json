@@ -12,6 +12,7 @@
     "node": ">=16"
   },
   "scripts": {
+    "format": "prettier --write .",
     "test": "prettier --check . && standard && mocha",
     "version": "./scripts/version.js",
     "postpublish": "./scripts/post-publish.js",
