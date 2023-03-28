@@ -13,6 +13,6 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - run: npm ci
-      - run: npm test:lint
+      - run: npm run test:lint
         if: matrix.os != 'windows-latest'
-      - run: npm test:unit
+      - run: npm run test:unit
