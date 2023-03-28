@@ -16,12 +16,7 @@ const FIL_WALLET_ADDRESS = 'f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za'
 
 describe('FIL_WALLET_ADDRESS', () => {
   it('fails without address', async () => {
-    try {
-      await execa(station)
-    } catch (err) {
-      return
-    }
-    throw new Error('should have thrown')
+    await assert.rejects(execa(station))
   })
   it('works with address', async () => {
     const ps = execa(station, { env: { FIL_WALLET_ADDRESS } })
@@ -367,15 +362,17 @@ describe('Lockfile', () => {
     const ps = execa(station, { env: { ROOT_DIR, FIL_WALLET_ADDRESS } })
     await once(ps.stdout, 'data')
     try {
-      await execa(station, { env: { ROOT_DIR, FIL_WALLET_ADDRESS } })
-    } catch (err) {
-      assert.strictEqual(err.exitCode, 1)
-      assert.match(err.stderr, /is already running/)
-      return
+      await assert.rejects(
+        execa(station, { env: { ROOT_DIR, FIL_WALLET_ADDRESS } }),
+        err => {
+          assert.strictEqual(err.exitCode, 1)
+          assert.match(err.stderr, /is already running/)
+          return true
+        }
+      )
     } finally {
       ps.kill()
     }
-    throw new Error('did not throw')
   })
 })
 
