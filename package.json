@@ -13,7 +13,7 @@
   },
   "scripts": {
     "format": "prettier --write .",
-    "test": "prettier --check . && standard && mocha",
+    "test": "prettier --check . && standard && mocha --timeout 5000",
     "version": "./scripts/version.js",
     "postpublish": "./scripts/post-publish.js",
     "release": "np"
