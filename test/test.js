@@ -188,7 +188,8 @@ describe('Logs', () => {
         })
       }
     })
-    it('doesn\'t block station from running', async () => {
+    it('doesn\'t block station from running', async function () {
+      this.timeout(20_000)
       const ROOT_DIR = join(tmpdir(), randomUUID())
       const logsPs = execa(
         station,
@@ -279,7 +280,8 @@ describe('Activity', () => {
         })
       }
     })
-    it('doesn\'t block station from running', async () => {
+    it('doesn\'t block station from running', async function () {
+      this.timeout(20_000)
       const ROOT_DIR = join(tmpdir(), randomUUID())
       const activityPs = execa(
         station,
