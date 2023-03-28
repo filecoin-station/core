@@ -47,9 +47,11 @@ Station Core is configured using environment variables (see
 
 The following configuration options are shared by all Station commands:
 
-- `$XDG_STATE_HOME` _(string; optional)_: Station stores logs and module state
-  in the directory `$XDG_STATE_HOME/filecoin-station`. State home defaults to
-  `~/.local/state`. On Windows, `$LOCALAPPDATA` is used instead.
+- `$ROOT_DIR`_(string; optional)_: Station stores logs and module state in this
+  directory. Defaults to
+  - Linux: `${XDG_STATE_HOME:-~/.local/state}/filecoin-station-core`
+  - macOS: `~/Library/Application Support/app.filstation.core`
+  - Windows: `%LOCALAPPDATA%/Filecoin Station Core`
 
 ## Commands
 

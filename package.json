@@ -1,6 +1,6 @@
 {
   "name": "@filecoin-station/core",
-  "version": "2.3.0",
+  "version": "2.5.1",
   "type": "module",
   "description": "Filecoin Station Core",
   "license": "(Apache-2.0 AND MIT)",
@@ -12,17 +12,22 @@
     "node": ">=16"
   },
   "scripts": {
-    "test": "prettier --check . && standard && tap --no-coverage",
+    "test": "prettier --check . && standard && mocha",
     "version": "./scripts/version.js",
     "postpublish": "./scripts/post-publish.js",
     "release": "np"
   },
+  "standard": {
+    "env": [
+      "mocha"
+    ]
+  },
   "devDependencies": {
     "gunzip-maybe": "^1.4.2",
+    "mocha": "^10.2.0",
     "np": "^7.6.3",
     "prettier": "^2.8.4",
     "standard": "^17.0.0",
-    "tap": "^16.3.4",
     "tar-fs": "^2.1.1",
     "unzip-stream": "^0.3.1"
   },
