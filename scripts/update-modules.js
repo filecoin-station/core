@@ -29,7 +29,6 @@ const targets = [
   { platform: 'linux', arch: 'arm64', url: 'Linux_arm64', archive: 'tar.gz' },
   { platform: 'linux', arch: 'ia32', url: 'Linux_i386', archive: 'tar.gz' },
   { platform: 'linux', arch: 'x64', url: 'Linux_x86_64', archive: 'tar.gz' },
-  { platform: 'win32', arch: 'ia32', url: 'Windows_i386', archive: 'tar.gz' },
   { platform: 'win32', arch: 'x64', url: 'Windows_x86_64', archive: 'tar.gz' }
 ]
 
