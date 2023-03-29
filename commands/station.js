@@ -29,7 +29,7 @@ export const station = async () => {
 
   await saturnNode.start({
     FIL_WALLET_ADDRESS,
-    storagePath: join(paths.moduleStorage, 'saturn-L2-node'),
+    storagePath: join(paths.moduleCache, 'saturn-L2-node'),
     binariesPath: paths.moduleBinaries,
     metricsStream: createMetricsStream(paths.metrics),
     activityStream: createActivityStream('Saturn'),

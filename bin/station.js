@@ -19,7 +19,8 @@ Sentry.init({
   tracesSampleRate: 0.1
 })
 
-await fs.mkdir(join(paths.moduleStorage, 'saturn-L2-node'), { recursive: true })
+await fs.mkdir(join(paths.moduleCache, 'saturn-L2-node'), { recursive: true })
+await fs.mkdir(join(paths.moduleState, 'saturn-L2-node'), { recursive: true })
 await fs.mkdir(paths.moduleLogs, { recursive: true })
 await maybeCreateMetricsFile()
 await maybeCreateActivityFile()
