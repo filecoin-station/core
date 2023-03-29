@@ -6,6 +6,7 @@ import { createMetricsStream } from '../lib/metrics.js'
 import { createActivityStream } from '../lib/activity.js'
 import lockfile from 'proper-lockfile'
 import { maybeCreateFile } from '../lib/util.js'
+import { startPingLoop } from '../lib/telemetry.js'
 
 const { FIL_WALLET_ADDRESS } = process.env
 
@@ -23,6 +24,8 @@ export const station = async () => {
     console.error(`If you are sure this is not the case, please delete the lock file at "${paths.lockFile}" and try again.`)
     process.exit(1)
   }
+
+  startPingLoop().unref()
 
   await saturnNode.start({
     FIL_WALLET_ADDRESS,

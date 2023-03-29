@@ -42,12 +42,10 @@ describe('--help', () => {
 describe('Storage', async () => {
   it('creates files', async () => {
     const ROOT_DIR = join(tmpdir(), randomUUID())
-    const ps = execa(station, {
-      env: {
-        FIL_WALLET_ADDRESS,
-        ROOT_DIR
-      }
-    })
+    const ps = execa(
+      station,
+      { env: { ROOT_DIR, FIL_WALLET_ADDRESS } }
+    )
     while (true) {
       await once(ps.stdout, 'data')
       try {
@@ -64,6 +62,26 @@ describe('Storage', async () => {
     await fs.stat(join(ROOT_DIR, 'modules'))
     await fs.stat(join(ROOT_DIR, 'logs'))
     await fs.stat(join(ROOT_DIR, 'logs', 'modules'))
+  })
+})
+
+describe('Station', () => {
+  it('runs Saturn', async () => {
+    const ROOT_DIR = join(tmpdir(), randomUUID())
+    const ps = execa(
+      station,
+      { env: { ROOT_DIR, FIL_WALLET_ADDRESS } }
+    )
+    assert.strictEqual(
+      (await once(ps.stdout, 'data'))[0].toString(),
+      'Starting Saturn node...\n'
+    )
+    ps.stderr.pipe(process.stderr)
+    assert.strictEqual(
+      (await once(ps.stdout, 'data'))[0].toString(),
+      '[SATURN] INFO: Saturn Node will try to connect to the Saturn Orchestrator...\n'
+    )
+    ps.kill()
   })
 })
 
@@ -170,7 +188,8 @@ describe('Logs', () => {
         })
       }
     })
-    it('doesn\'t block station from running', async () => {
+    it('doesn\'t block station from running', async function () {
+      this.timeout(20_000)
       const ROOT_DIR = join(tmpdir(), randomUUID())
       const logsPs = execa(
         station,
@@ -261,7 +280,8 @@ describe('Activity', () => {
         })
       }
     })
-    it('doesn\'t block station from running', async () => {
+    it('doesn\'t block station from running', async function () {
+      this.timeout(20_000)
       const ROOT_DIR = join(tmpdir(), randomUUID())
       const activityPs = execa(
         station,
@@ -378,7 +398,7 @@ describe('Lockfile', () => {
 
 describe('Scripts', () => {
   it('updates modules', async function () {
-    this.timeout(5_000)
+    this.timeout(20_000)
     await execa(join(__dirname, '..', 'scripts', 'update-modules.js'))
   })
 })

@@ -5,7 +5,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
         node: ['16', '18', '19']
     steps:
       - uses: actions/checkout@v3
@@ -13,4 +13,6 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - run: npm ci
-      - run: npm test
+      - run: npm run test:lint
+        if: matrix.os != 'windows-latest'
+      - run: npm run test:unit

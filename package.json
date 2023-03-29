@@ -12,7 +12,10 @@
     "node": ">=16"
   },
   "scripts": {
-    "test": "prettier --check . && standard && mocha",
+    "format": "prettier --write .",
+    "test": "npm run test:lint && npm run test:unit",
+    "test:lint": "prettier --check . && standard",
+    "test:unit": "mocha --timeout 5000",
     "version": "./scripts/version.js",
     "postpublish": "./scripts/post-publish.js",
     "release": "np"

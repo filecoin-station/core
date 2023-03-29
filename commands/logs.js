@@ -3,9 +3,13 @@ import { Tail } from 'tail'
 import { paths } from '../lib/paths.js'
 import { join } from 'node:path'
 import { maybeCreateFile } from '../lib/util.js'
+import { platform } from 'node:os'
 
 const followLogs = path => {
-  const tail = new Tail(path, { nLines: 10 })
+  const tail = new Tail(path, {
+    nLines: 10,
+    useWatchFile: platform() === 'win32'
+  })
   tail.on('line', line => console.log(line))
 }
 
