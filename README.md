@@ -47,13 +47,13 @@ Station Core is configured using environment variables (see
 
 The following configuration options are shared by all Station commands:
 
-- `$CACHE_ROOT`_(string; optional)_: Station stores logs and module state in
-  this directory. Defaults to
+- `$CACHE_ROOT`_(string; optional)_: Station stores module caches in this
+  directory. Defaults to
   - Linux: `${XDG_STATE_HOME:-~/.local/cache}/filecoin-station-core`
   - macOS: `~/Library/Caches/app.filstation.core`
   - Windows: `%LOCALAPPDATA%/Filecoin Station Core/Cache`
-- `$STATE_ROOT`_(string; optional)_: Station stores module caches in this
-  directory. Defaults to
+- `$STATE_ROOT`_(string; optional)_: Station stores logs and module state in
+  this directory. Defaults to
   - Linux: `${XDG_STATE_HOME:-~/.local/state}/filecoin-station-core`
   - macOS: `~/Library/Application Support/app.filstation.core`
   - Windows: `%LOCALAPPDATA%/Filecoin Station Core/State`
