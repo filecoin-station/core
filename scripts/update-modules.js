@@ -11,7 +11,7 @@ import gunzip from 'gunzip-maybe'
 import unzip from 'unzip-stream'
 import { once } from 'node:events'
 
-const SATURN_DIST_TAG = 'v0.4.5'
+const SATURN_DIST_TAG = 'v0.5.0'
 
 const githubToken = process.env.GITHUB_TOKEN
 const authorization = githubToken ? `Bearer ${githubToken}` : undefined
