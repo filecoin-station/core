@@ -16,7 +16,8 @@ Sentry.init({
   dsn: 'https://6c96a5c2ffa5448d9ec8ddda90012bc9@o1408530.ingest.sentry.io/4504792315199488',
   release: pkg.version,
   environment: pkg.sentryEnvironment,
-  tracesSampleRate: 0.1
+  tracesSampleRate: 0.1,
+  ignoreErrors: [/EACCES/, /EPERM/, /ENOSPC/, /EPIPE/]
 })
 
 await fs.mkdir(join(paths.moduleCache, 'saturn-L2-node'), { recursive: true })
