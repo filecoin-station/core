@@ -8,7 +8,7 @@ import lockfile from 'proper-lockfile'
 import { maybeCreateFile } from '../lib/util.js'
 import { startPingLoop } from '../lib/telemetry.js'
 
-const { FIL_WALLET_ADDRESS } = process.env
+const { FIL_WALLET_ADDRESS, MAX_DISK_SPACE } = process.env
 
 export const station = async () => {
   if (!FIL_WALLET_ADDRESS) {
@@ -29,6 +29,7 @@ export const station = async () => {
 
   await saturnNode.start({
     FIL_WALLET_ADDRESS,
+    MAX_DISK_SPACE,
     storagePath: join(paths.moduleCache, 'saturn-L2-node'),
     binariesPath: paths.moduleBinaries,
     metricsStream: createMetricsStream(paths.metrics),
