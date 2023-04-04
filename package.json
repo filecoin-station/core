@@ -27,22 +27,22 @@
     ]
   },
   "devDependencies": {
-    "gunzip-maybe": "^1.4.2",
     "mocha": "^10.2.0",
     "np": "^7.6.3",
     "prettier": "^2.8.4",
-    "standard": "^17.0.0",
-    "tar-fs": "^2.1.1",
-    "unzip-stream": "^0.3.1"
+    "standard": "^17.0.0"
   },
   "dependencies": {
     "@influxdata/influxdb-client": "^1.33.2",
     "@sentry/node": "^7.41.0",
     "execa": "^7.0.0",
+    "gunzip-maybe": "^1.4.2",
     "proper-lockfile": "^4.1.2",
     "rotating-file-stream": "^3.1.0",
     "tail": "^2.2.6",
+    "tar-fs": "^2.1.1",
     "undici": "^5.20.0",
+    "unzip-stream": "^0.3.1",
     "yargs": "^17.7.1"
   },
   "sentryEnvironment": "development"
