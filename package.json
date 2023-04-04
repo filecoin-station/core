@@ -17,6 +17,7 @@
     "test:lint": "prettier --check . && standard",
     "test:unit": "mocha --timeout 5000",
     "version": "./scripts/version.js",
+    "postinstall": "./scripts/post-install.js",
     "postpublish": "./scripts/post-publish.js",
     "release": "np"
   },

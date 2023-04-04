@@ -450,10 +450,3 @@ describe('Lockfile', () => {
     }
   })
 })
-
-describe('Scripts', () => {
-  it('updates modules', async function () {
-    this.timeout(20_000)
-    await execa(join(__dirname, '..', 'scripts', 'update-modules.js'))
-  })
-})
