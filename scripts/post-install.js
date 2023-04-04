@@ -39,7 +39,7 @@ const outDir = join(
   '..',
   'modules'
 )
-await mkdir(outDir)
+await mkdir(outDir, { recursive: true })
 
 const outName = `saturn-L2-node-${platform()}-${archOverwritten}`
 const outFile = join(outDir, outName)
