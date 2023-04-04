@@ -12,6 +12,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
+      - run: npm ci --omit=dev
       - run: npm ci
       - run: npm run test:lint
         if: matrix.os != 'windows-latest'
