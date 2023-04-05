@@ -290,6 +290,29 @@ describe('Activity', () => {
     assert.match(stdout, /3\/14\/2023/)
     assert.match(stdout, /beep boop/)
   })
+  it('outputs activity json', async () => {
+    const CACHE_ROOT = join(tmpdir(), randomUUID())
+    const STATE_ROOT = join(tmpdir(), randomUUID())
+    await fs.mkdir(
+      dirname(getPaths(CACHE_ROOT, STATE_ROOT).activity),
+      { recursive: true }
+    )
+    await fs.writeFile(
+      getPaths(CACHE_ROOT, STATE_ROOT).activity,
+      '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
+    )
+    const { stdout } = await execa(
+      station,
+      ['activity', '--json'],
+      { env: { CACHE_ROOT, STATE_ROOT } }
+    )
+    const activity = JSON.parse(stdout)
+    assert(activity[0].date)
+    assert.equal(activity.length, 1)
+    assert.equal(activity[0].source, 'Saturn')
+    assert.equal(activity[0].type, 'info')
+    assert.equal(activity[0].message, 'beep boop')
+  })
 
   describe('Follow', () => {
     it('reads activity', async () => {
@@ -318,6 +341,32 @@ describe('Activity', () => {
           ps.kill()
         })
       }
+    })
+    it('outputs json', async () => {
+      const CACHE_ROOT = join(tmpdir(), randomUUID())
+      const STATE_ROOT = join(tmpdir(), randomUUID())
+      await fs.mkdir(
+        dirname(getPaths(CACHE_ROOT, STATE_ROOT).activity),
+        { recursive: true }
+      )
+      const ps = execa(
+        station,
+        ['activity', '--follow', '--json'],
+        { env: { CACHE_ROOT, STATE_ROOT } }
+      )
+      const [data] = await Promise.all([
+        once(ps.stdout, 'data'),
+        fs.writeFile(
+          getPaths(CACHE_ROOT, STATE_ROOT).activity,
+          '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
+        )
+      ])
+      const activity = JSON.parse(data.toString())
+      assert(activity.date)
+      assert.equal(activity.source, 'Saturn')
+      assert.equal(activity.type, 'info')
+      assert.equal(activity.message, 'beep boop')
+      ps.kill()
     })
     it('doesn\'t block station from running', async function () {
       this.timeout(20_000)

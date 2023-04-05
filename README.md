@@ -109,6 +109,24 @@ $ station activity
 [3/14/2023, 10:23:18 AM] INFO  Saturn Node is online and connected to 9 peers
 ```
 
+```bash
+$ station activity --json
+[
+  {
+    "date": "2023-04-05T11:26:41.000Z",
+    "type": "info",
+    "source": "Saturn",
+    "message": "Saturn Node is online and connected to 1 peers"
+  },
+  {
+    "date": "2023-04-05T11:26:46.000Z",
+    "type": "info",
+    "source": "Saturn",
+    "message": "Saturn Node is online and connected to 9 peers"
+  }
+]
+```
+
 Follow activity:
 
 ```bash
@@ -116,6 +134,12 @@ $ station activity --follow
 [3/14/2023, 10:23:14 AM] INFO  Saturn Node is online and connected to 1 peers
 [3/14/2023, 10:23:18 AM] INFO  Saturn Node is online and connected to 9 peers
 ...
+```
+
+```bash
+$ station activity --follow --json
+{"date":"2023-04-05T11:26:41.000Z","type":"info","source":"Saturn","message":"Saturn Node is online and connected to 1 peers"}
+{"date":"2023-04-05T11:26:46.000Z","type":"info","source":"Saturn","message":"Saturn Node is online and connected to 9 peers"}
 ```
 
 ### `$ station logs <module>`

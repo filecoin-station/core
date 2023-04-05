@@ -30,7 +30,16 @@ yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')
   .command('$0', 'Start Station', () => {}, commands.station)
   .command('metrics', 'Show metrics', () => {}, commands.metrics)
-  .commands('activity', 'Show activity log', () => {}, commands.activity)
+  .commands(
+    'activity',
+    'Show activity log',
+    yargs => yargs.option('json', {
+      alias: 'j',
+      type: 'boolean',
+      description: 'Output JSON'
+    }),
+    commands.activity
+  )
   .command('logs [module]', 'Show module logs', () => {}, commands.logs)
   .choices('module', ['saturn-l2-node'])
   .command('events', 'Events stream', () => {}, commands.events)
