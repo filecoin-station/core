@@ -431,6 +431,8 @@ describe('Events', () => {
       if (events.length === 2) break
     }
     ps.kill()
+    assert(events[1].date)
+    delete events[1].date
     assert.deepStrictEqual(events, [
       { type: 'jobs-completed', total: 0 },
       { type: 'activity:info', module: 'Saturn', message: 'beep boop' }

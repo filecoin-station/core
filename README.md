@@ -176,7 +176,7 @@ Get combined real-time events from `$ station metrics` and `$ station activity`.
 ```bash
 $ station events
 {"type":"jobs-completed","total":36}
-{"type":"activity:info","module":"Saturn","message":"Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network..."}
+{"date":"2023-04-05T11:26:41.000Z","type":"activity:info","module":"Saturn","message":"Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network..."}
 ...
 ```
 
@@ -187,9 +187,11 @@ The following event types exist:
 - `activity:info`
   - `module`
   - `message`
+  - `date`
 - `activity:error`
   - `module`
   - `message`
+  - `date`
 
 ### `$ station --help`
 
