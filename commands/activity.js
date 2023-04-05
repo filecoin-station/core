@@ -5,16 +5,25 @@ const formatActivityObject = ({ type, message, date }) => {
   return formatLog(`${type.toUpperCase().padEnd(5)} ${message}`, date)
 }
 
-export const activity = async ({ follow }) => {
+export const activity = async ({ follow, json }) => {
   if (follow) {
     for await (const obj of followActivity()) {
-      process.stdout.write(formatActivityObject(obj))
+      if (json) {
+        process.stdout.write(JSON.stringify(obj) + '\n')
+      } else {
+        process.stdout.write(formatActivityObject(obj))
+      }
     }
   } else {
-    process.stdout.write(
-      (await getActivity())
-        .map(obj => formatActivityObject(obj))
-        .join('')
-    )
+    const activity = await getActivity()
+    if (json) {
+      console.log(JSON.stringify(activity, 0, 2))
+    } else {
+      process.stdout.write(
+        activity
+          .map(obj => formatActivityObject(obj))
+          .join('')
+      )
+    }
   }
 }
