@@ -114,7 +114,7 @@ async function downloadZinniaRuntime () {
     { platform: 'darwin', arch: 'x64', fileSuffix: 'macos-x64', archive: 'zip' },
     { platform: 'linux', arch: 'arm64', fileSuffix: 'linux-arm64', archive: 'tar.gz' },
     { platform: 'linux', arch: 'x64', fileSuffix: 'linux-x64', archive: 'tar.gz' },
-    { platform: 'win32', arch: 'x64', fileSuffix: 'windows-x64', archive: '.zip' }
+    { platform: 'win32', arch: 'x64', fileSuffix: 'windows-x64', archive: 'zip' }
   ]
 
   const target = targets.find(target =>
