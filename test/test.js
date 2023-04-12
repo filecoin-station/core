@@ -76,16 +76,19 @@ describe('Station', () => {
       station,
       { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
     )
-    assert.strictEqual(
-      (await once(ps.stdout, 'data'))[0].toString(),
-      'Starting Saturn node...\n'
-    )
-    ps.stderr.pipe(process.stderr)
-    assert.strictEqual(
-      (await once(ps.stdout, 'data'))[0].toString(),
-      '[SATURN] INFO: Saturn Node will try to connect to the Saturn Orchestrator...\n'
-    )
-    ps.kill()
+    try {
+      assert.strictEqual(
+        (await once(ps.stdout, 'data'))[0].toString(),
+        'Starting Saturn node...\n'
+      )
+      ps.stderr.pipe(process.stderr)
+      assert.strictEqual(
+        (await once(ps.stdout, 'data'))[0].toString(),
+        '[SATURN] INFO: Saturn Node will try to connect to the Saturn Orchestrator...\n'
+      )
+    } finally {
+      ps.kill()
+    }
   })
 })
 
