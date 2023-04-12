@@ -22,6 +22,8 @@ Sentry.init({
 
 await fs.mkdir(join(paths.moduleCache, 'saturn-L2-node'), { recursive: true })
 await fs.mkdir(join(paths.moduleState, 'saturn-L2-node'), { recursive: true })
+await fs.mkdir(join(paths.moduleCache, 'zinnia'), { recursive: true })
+await fs.mkdir(join(paths.moduleState, 'zinnia'), { recursive: true })
 await fs.mkdir(paths.moduleLogs, { recursive: true })
 await maybeCreateMetricsFile()
 await maybeCreateActivityFile()
@@ -41,7 +43,12 @@ yargs(hideBin(process.argv))
     commands.activity
   )
   .command('logs [module]', 'Show module logs', () => {}, commands.logs)
-  .choices('module', ['saturn-l2-node'])
+  .choices('module', [
+    'saturn-l2-node',
+    // TODO: find a way how to access logs of individual zinnia modules,
+    // in addition to Zinnia runtime
+    'zinnia'
+  ])
   .command('events', 'Events stream', () => {}, commands.events)
   .version(`${pkg.name}: ${pkg.version}`)
   .alias('v', 'version')
