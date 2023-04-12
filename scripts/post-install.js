@@ -15,6 +15,13 @@ import assert from 'node:assert'
 
 const SATURN_DIST_TAG = 'v0.5.0'
 const ZINNIA_DIST_TAG = 'v0.6.0'
+const ZINNIA_MODULES = [
+  {
+    name: 'peer-checker',
+    repo: 'github.com/filecoin-station/mod-peer-checker',
+    tag: 'v1.0.0'
+  }
+]
 
 const githubToken = process.env.GITHUB_TOKEN
 const authorization = githubToken ? `Bearer ${githubToken}` : undefined
@@ -100,9 +107,9 @@ console.log(' ✓ %s', outFile)
 
 //=== Zinnia runtime ===//
 
-await downloadZinnia();
+await downloadZinniaRuntime();
 
-async function downloadZinnia() {
+async function downloadZinniaRuntime() {
   const targets = [
     { platform: 'darwin', arch: 'arm64', fileSuffix: 'macos-arm64', archive: 'zip' },
     { platform: 'darwin', arch: 'x64', fileSuffix: 'macos-x64', archive: 'zip' },
@@ -164,4 +171,44 @@ async function downloadZinnia() {
   }
 
   console.log(' ✓ %s', outFile)
+}
+
+//=== Zinnia modules ===//
+
+await downloadZinniaModules();
+
+async function downloadZinniaModules() {
+  for (const mod of ZINNIA_MODULES) {
+    await downloadModule(mod)
+  }
+}
+
+async function downloadModule({name, repo, tag}) {
+  console.log(' ⇣ downloading module %s', name)
+
+  const url = `https://${repo}/archive/refs/tags/${tag}.tar.gz`
+  const res = await fetch(url, {
+      headers: {
+        ...(authorization ? { authorization } : {})
+      },
+      redirect: 'follow'
+  })
+
+  if (res.status >= 300) {
+    throw new Error(
+      `Cannot fetch ${name} archive for tag ${tag}: ${res.status}\n` +
+      await res.text()
+    )
+  }
+
+  if (!res.body) {
+    throw new Error(
+      `Cannot fetch ${name} archive for tag ${tag}: no response body`
+    )
+  }
+
+  const outPath = join(outDir, name)
+  // `{ strip: 1}` tells tar to remove the top-level directory (e.g. `mod-peer-checker-v1.0.0`)
+  await pipeline(res.body, gunzip(), tar.extract(outPath, { strip: 1 }))
+  console.log(' ✓ %s', outPath)
 }
