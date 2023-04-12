@@ -14,10 +14,22 @@ import { platform, arch } from 'node:os'
 import assert from 'node:assert'
 
 const SATURN_DIST_TAG = 'v0.5.0'
+const ZINNIA_DIST_TAG = 'v0.6.0'
+
 const githubToken = process.env.GITHUB_TOKEN
 const authorization = githubToken ? `Bearer ${githubToken}` : undefined
 
 console.log('GitHub client:', authorization ? 'authorized' : 'anonymous')
+
+
+const outDir = join(
+  dirname(fileURLToPath(import.meta.url)),
+  '..',
+  'modules'
+)
+await mkdir(outDir, { recursive: true })
+
+//=== Saturn L2 ===//
 
 const targets = [
   { platform: 'darwin', arch: 'x64', url: 'Darwin_x86_64', archive: 'zip' },
@@ -32,14 +44,7 @@ const target = targets.find(target =>
   target.platform === platform() &&
   target.arch === archOverwritten
 )
-assert(target, `Unsupported platform: ${platform} ${arch}`)
-
-const outDir = join(
-  dirname(fileURLToPath(import.meta.url)),
-  '..',
-  'modules'
-)
-await mkdir(outDir, { recursive: true })
+assert(target, `Unsupported Saturn L2 platform: ${platform} ${arch}`)
 
 const outName = `saturn-L2-node-${platform()}-${archOverwritten}`
 const outFile = join(outDir, outName)
@@ -92,3 +97,71 @@ if (target.archive === 'tar.gz') {
 }
 
 console.log(' ✓ %s', outFile)
+
+//=== Zinnia runtime ===//
+
+await downloadZinnia();
+
+async function downloadZinnia() {
+  const targets = [
+    { platform: 'darwin', arch: 'arm64', fileSuffix: 'macos-arm64', archive: 'zip' },
+    { platform: 'darwin', arch: 'x64', fileSuffix: 'macos-x64', archive: 'zip' },
+    { platform: 'linux', arch: 'arm64', fileSuffix: 'linux-arm64', archive: 'tar.gz' },
+    { platform: 'linux', arch: 'x64', fileSuffix: 'linux-x64', archive: 'tar.gz' },
+    { platform: 'win32', arch: 'x64', fileSuffix: 'windows-x64', archive: '.zip' }
+  ]
+
+  const target = targets.find(target =>
+    target.platform === platform() &&
+    target.arch === arch()
+  )
+
+
+  console.log(' ⇣ downloading zinniad-%s', target.fileSuffix)
+  const url = `https://github.com/filecoin-station/zinnia/releases/download/${ZINNIA_DIST_TAG}/zinniad-${target.fileSuffix}.${target.archive}`
+  const res = await fetch(url, {
+    headers: {
+      ...(authorization ? { authorization } : {})
+    },
+    redirect: 'follow'
+  })
+
+  if (res.status >= 300) {
+    throw new Error(
+     `Cannot fetch Zinnia binary for ${target.fileSuffix}: ${res.status}\n` +
+      await res.text()
+    )
+  }
+
+  if (!res.body) {
+    throw new Error(
+     `Cannot fetch Zinnia binary for ${target.fileSuffix}: ${res.status}: no response body`
+    )
+  }
+
+  let outFile;
+  if (target.archive === 'tar.gz') {
+    outFile = join(outDir, 'zinniad')
+    await pipeline(res.body, gunzip(), tar.extract(outDir))
+  } else {
+    const parser = unzip.Parse()
+    await Promise.all([
+      (async () => {
+        while (true) {
+          const [entry] =
+            /** @type {[UnzipStreamEntry]} */
+            (await once(parser, 'entry'))
+          if (entry.path === 'zinniad' || entry.path === 'zinniad.exe') {
+            outFile = join(outDir, entry.path)
+            await pipeline(entry, createWriteStream(outFile))
+            await chmod(outFile, 0o755)
+            return
+          }
+        }
+      })(),
+      pipeline(res.body, parser)
+    ])
+  }
+
+  console.log(' ✓ %s', outFile)
+}
