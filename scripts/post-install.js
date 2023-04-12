@@ -28,7 +28,6 @@ const authorization = githubToken ? `Bearer ${githubToken}` : undefined
 
 console.log('GitHub client:', authorization ? 'authorized' : 'anonymous')
 
-
 const outDir = join(
   dirname(fileURLToPath(import.meta.url)),
   '..',
@@ -36,7 +35,7 @@ const outDir = join(
 )
 await mkdir(outDir, { recursive: true })
 
-//=== Saturn L2 ===//
+//= == Saturn L2 ===//
 
 const targets = [
   { platform: 'darwin', arch: 'x64', url: 'Darwin_x86_64', archive: 'zip' },
@@ -105,11 +104,11 @@ if (target.archive === 'tar.gz') {
 
 console.log(' ✓ %s', outFile)
 
-//=== Zinnia runtime ===//
+//= == Zinnia runtime ===//
 
-await downloadZinniaRuntime();
+await downloadZinniaRuntime()
 
-async function downloadZinniaRuntime() {
+async function downloadZinniaRuntime () {
   const targets = [
     { platform: 'darwin', arch: 'arm64', fileSuffix: 'macos-arm64', archive: 'zip' },
     { platform: 'darwin', arch: 'x64', fileSuffix: 'macos-x64', archive: 'zip' },
@@ -122,7 +121,6 @@ async function downloadZinniaRuntime() {
     target.platform === platform() &&
     target.arch === arch()
   )
-
 
   console.log(' ⇣ downloading zinniad-%s', target.fileSuffix)
   const url = `https://github.com/filecoin-station/zinnia/releases/download/${ZINNIA_DIST_TAG}/zinniad-${target.fileSuffix}.${target.archive}`
@@ -146,7 +144,7 @@ async function downloadZinniaRuntime() {
     )
   }
 
-  let outFile;
+  let outFile
   if (target.archive === 'tar.gz') {
     outFile = join(outDir, 'zinniad')
     await pipeline(res.body, gunzip(), tar.extract(outDir))
@@ -173,25 +171,25 @@ async function downloadZinniaRuntime() {
   console.log(' ✓ %s', outFile)
 }
 
-//=== Zinnia modules ===//
+//= == Zinnia modules ===//
 
-await downloadZinniaModules();
+await downloadZinniaModules()
 
-async function downloadZinniaModules() {
+async function downloadZinniaModules () {
   for (const mod of ZINNIA_MODULES) {
     await downloadModule(mod)
   }
 }
 
-async function downloadModule({name, repo, tag}) {
+async function downloadModule ({ name, repo, tag }) {
   console.log(' ⇣ downloading module %s', name)
 
   const url = `https://${repo}/archive/refs/tags/${tag}.tar.gz`
   const res = await fetch(url, {
-      headers: {
-        ...(authorization ? { authorization } : {})
-      },
-      redirect: 'follow'
+    headers: {
+      ...(authorization ? { authorization } : {})
+    },
+    redirect: 'follow'
   })
 
   if (res.status >= 300) {
