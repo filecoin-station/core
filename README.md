@@ -78,9 +78,9 @@ the configuration options described in
   `f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za`. Please note that any earnings
   sent there will be lost.
 
-### `$ station metrics`
+### `$ station metrics <module>`
 
-Get Station metrics.
+Get combined metrics from all Station Modules:
 
 ```bash
 $ station metrics
@@ -88,7 +88,21 @@ $ station metrics
 	"totalJobsCompleted": 123,
 	"totalEarnings": "0"
 }
+```
 
+Get metrics from a specific Station Module:
+
+```bash
+$ station metrics saturn-l2-node
+{
+	"totalJobsCompleted": 123,
+	"totalEarnings": "0"
+}
+```
+
+Follow metrics:
+
+```bash
 $ station metrics --follow
 {
 	"totalJobsCompleted": 123,
@@ -202,11 +216,11 @@ $ station --help
 Usage: station <command> [options]
 
 Commands:
-  station                Start Station                                 [default]
-  station metrics        Show metrics
-  station activity       Show activity log
-  station logs [module]  Show module logs
-  station events         Events stream
+  station                   Start Station                              [default]
+  station metrics [module]  Show metrics
+  station activity          Show activity log
+  station logs [module]     Show module logs
+  station events            Events stream
 
 Options:
   -v, --version  Show version number                                   [boolean]

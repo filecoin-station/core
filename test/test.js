@@ -107,16 +107,37 @@ describe('Metrics', () => {
     const CACHE_ROOT = join(tmpdir(), randomUUID())
     const STATE_ROOT = join(tmpdir(), randomUUID())
     await fs.mkdir(
-      dirname(getPaths(CACHE_ROOT, STATE_ROOT).metrics),
+      dirname(getPaths(CACHE_ROOT, STATE_ROOT).allMetrics),
       { recursive: true }
     )
     await fs.writeFile(
-      getPaths(CACHE_ROOT, STATE_ROOT).metrics,
+      getPaths(CACHE_ROOT, STATE_ROOT).allMetrics,
       '[date] {"totalJobsCompleted":1,"totalEarnings":"2"}\n'
     )
     const { stdout } = await execa(
       station,
       ['metrics'],
+      { env: { CACHE_ROOT, STATE_ROOT } }
+    )
+    assert.deepStrictEqual(
+      stdout,
+      JSON.stringify({ totalJobsCompleted: 1, totalEarnings: '2' }, 0, 2)
+    )
+  })
+  it('outputs module metrics', async () => {
+    const CACHE_ROOT = join(tmpdir(), randomUUID())
+    const STATE_ROOT = join(tmpdir(), randomUUID())
+    await fs.mkdir(
+      getPaths(CACHE_ROOT, STATE_ROOT).metrics,
+      { recursive: true }
+    )
+    await fs.writeFile(
+      join(getPaths(CACHE_ROOT, STATE_ROOT).metrics, 'saturn-l2-node.log'),
+      '[date] {"totalJobsCompleted":1,"totalEarnings":"2"}\n'
+    )
+    const { stdout } = await execa(
+      station,
+      ['metrics', 'saturn-l2-node'],
       { env: { CACHE_ROOT, STATE_ROOT } }
     )
     assert.deepStrictEqual(

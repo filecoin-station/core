@@ -23,13 +23,15 @@ Sentry.init({
 await fs.mkdir(join(paths.moduleCache, 'saturn-L2-node'), { recursive: true })
 await fs.mkdir(join(paths.moduleState, 'saturn-L2-node'), { recursive: true })
 await fs.mkdir(paths.moduleLogs, { recursive: true })
+await fs.mkdir(paths.metrics, { recursive: true })
 await maybeCreateMetricsFile()
+await maybeCreateMetricsFile('saturn-L2-node')
 await maybeCreateActivityFile()
 
 yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')
   .command('$0', 'Start Station', () => {}, commands.station)
-  .command('metrics', 'Show metrics', () => {}, commands.metrics)
+  .command('metrics [module]', 'Show metrics', () => {}, commands.metrics)
   .commands(
     'activity',
     'Show activity log',
