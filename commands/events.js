@@ -14,7 +14,7 @@ export const events = async () => {
     (async () => {
       for await (const activity of followActivity()) {
         console.log(JSON.stringify({
-          date: activity.date,
+          timestamp: activity.timestamp,
           type: `activity:${activity.type}`,
           module: activity.source,
           message: activity.message
