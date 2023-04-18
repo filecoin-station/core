@@ -57,8 +57,6 @@ The following configuration options are shared by all Station commands:
   - Linux: `${XDG_STATE_HOME:-~/.local/state}/filecoin-station-core`
   - macOS: `~/Library/Application Support/app.filstation.core`
   - Windows: `%LOCALAPPDATA%/Filecoin Station Core`
-- `$MAX_DISK_SPACE`_(number; optional)_: Maximum disk space (in bytes) to use in
-  `$CACHE_ROOT` and `$STATE_ROOT` combined.
 
 ## Commands
 
@@ -77,6 +75,9 @@ the configuration options described in
   If you just want to give `core` a quick spin, you can use the address
   `f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za`. Please note that any earnings
   sent there will be lost.
+
+- `$MAX_DISK_SPACE`_(number; optional)_: Maximum disk space (in bytes) to use in
+  `$CACHE_ROOT` and `$STATE_ROOT` combined.
 
 ### `$ station metrics`
 
