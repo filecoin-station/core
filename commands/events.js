@@ -17,7 +17,8 @@ export const events = async () => {
           timestamp: activity.timestamp,
           type: `activity:${activity.type}`,
           module: activity.source,
-          message: activity.message
+          message: activity.message,
+          id: activity.id
         }))
       }
     })()

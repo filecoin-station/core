@@ -299,7 +299,7 @@ describe('Activity', () => {
     )
     await fs.writeFile(
       getPaths(CACHE_ROOT, STATE_ROOT).activity,
-      '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
+      '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop","id":"uuid"}\n'
     )
     const { stdout } = await execa(
       station,
@@ -312,6 +312,7 @@ describe('Activity', () => {
     assert.equal(activity[0].source, 'Saturn')
     assert.equal(activity[0].type, 'info')
     assert.equal(activity[0].message, 'beep boop')
+    assert.equal(activity[0].id, 'uuid')
   })
 
   describe('Follow', () => {
@@ -358,7 +359,7 @@ describe('Activity', () => {
         once(ps.stdout, 'data'),
         fs.writeFile(
           getPaths(CACHE_ROOT, STATE_ROOT).activity,
-          '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
+          '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop","id":"uuid"}\n'
         )
       ])
       const activity = JSON.parse(data.toString())
@@ -366,6 +367,7 @@ describe('Activity', () => {
       assert.equal(activity.source, 'Saturn')
       assert.equal(activity.type, 'info')
       assert.equal(activity.message, 'beep boop')
+      assert.equal(activity.id, 'uuid')
       ps.kill()
     })
     it('doesn\'t block station from running', async function () {
@@ -418,7 +420,7 @@ describe('Events', () => {
     )
     await fs.writeFile(
       getPaths(CACHE_ROOT, STATE_ROOT).activity,
-      '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
+      '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop","id":"uuid"}\n'
     )
     const ps = execa(
       station,
@@ -435,7 +437,12 @@ describe('Events', () => {
     delete events[1].timestamp
     assert.deepStrictEqual(events, [
       { type: 'jobs-completed', total: 0 },
-      { type: 'activity:info', module: 'Saturn', message: 'beep boop' }
+      {
+        type: 'activity:info',
+        module: 'Saturn',
+        message: 'beep boop',
+        id: 'uuid'
+      }
     ])
   })
   it('can be read while station is running', async () => {

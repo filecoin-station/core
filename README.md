@@ -117,13 +117,15 @@ $ station activity --json
     "timestamp": "2023-04-05T11:26:41.000Z",
     "type": "info",
     "source": "Saturn",
-    "message": "Saturn Node is online and connected to 1 peers"
+    "message": "Saturn Node is online and connected to 1 peers",
+    "id": "b6e922f2-54fb-4d5b-adcb-499391e4a09e"
   },
   {
     "timestamp": "2023-04-05T11:26:46.000Z",
     "type": "info",
     "source": "Saturn",
-    "message": "Saturn Node is online and connected to 9 peers"
+    "message": "Saturn Node is online and connected to 9 peers",
+    "id": "ffb551a0-247f-471d-b4db-0145cc3b1614"
   }
 ]
 ```
@@ -139,8 +141,8 @@ $ station activity --follow
 
 ```bash
 $ station activity --follow --json
-{"timestamp":"2023-04-05T11:26:41.000Z","type":"info","source":"Saturn","message":"Saturn Node is online and connected to 1 peers"}
-{"timestamp":"2023-04-05T11:26:46.000Z","type":"info","source":"Saturn","message":"Saturn Node is online and connected to 9 peers"}
+{"timestamp":"2023-04-05T11:26:41.000Z","type":"info","source":"Saturn","message":"Saturn Node is online and connected to 1 peers""id":"b6e922f2-54fb-4d5b-adcb-499391e4a09e"}
+{"timestamp":"2023-04-05T11:26:46.000Z","type":"info","source":"Saturn","message":"Saturn Node is online and connected to 9 peers""id":"ffb551a0-247f-471d-b4db-0145cc3b1614"}
 ```
 
 ### `$ station logs <module>`
@@ -177,7 +179,7 @@ Get combined real-time events from `$ station metrics` and `$ station activity`.
 ```bash
 $ station events
 {"type":"jobs-completed","total":36}
-{"timestamp":"2023-04-05T11:26:41.000Z","type":"activity:info","module":"Saturn","message":"Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network..."}
+{"timestamp":"2023-04-05T11:26:41.000Z","type":"activity:info","module":"Saturn","message":"Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network...","id":"ffb551a0-247f-471d-b4db-0145cc3b1614"}
 ...
 ```
 
