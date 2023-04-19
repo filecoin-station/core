@@ -57,8 +57,6 @@ The following configuration options are shared by all Station commands:
   - Linux: `${XDG_STATE_HOME:-~/.local/state}/filecoin-station-core`
   - macOS: `~/Library/Application Support/app.filstation.core`
   - Windows: `%LOCALAPPDATA%/Filecoin Station Core`
-- `$MAX_DISK_SPACE`_(number; optional)_: Maximum disk space (in bytes) to use in
-  `$CACHE_ROOT` and `$STATE_ROOT` combined.
 
 ## Commands
 
@@ -77,6 +75,9 @@ the configuration options described in
   If you just want to give `core` a quick spin, you can use the address
   `f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za`. Please note that any earnings
   sent there will be lost.
+
+- `$MAX_DISK_SPACE`_(number; optional)_: Maximum disk space (in bytes) to use in
+  `$CACHE_ROOT` and `$STATE_ROOT` combined.
 
 ### `$ station metrics <module>`
 
@@ -127,16 +128,18 @@ $ station activity
 $ station activity --json
 [
   {
-    "date": "2023-04-05T11:26:41.000Z",
+    "timestamp": "2023-04-05T11:26:41.000Z",
     "type": "info",
     "source": "Saturn",
-    "message": "Saturn Node is online and connected to 1 peers"
+    "message": "Saturn Node is online and connected to 1 peers",
+    "id": "b6e922f2-54fb-4d5b-adcb-499391e4a09e"
   },
   {
-    "date": "2023-04-05T11:26:46.000Z",
+    "timestamp": "2023-04-05T11:26:46.000Z",
     "type": "info",
     "source": "Saturn",
-    "message": "Saturn Node is online and connected to 9 peers"
+    "message": "Saturn Node is online and connected to 9 peers",
+    "id": "ffb551a0-247f-471d-b4db-0145cc3b1614"
   }
 ]
 ```
@@ -152,8 +155,8 @@ $ station activity --follow
 
 ```bash
 $ station activity --follow --json
-{"date":"2023-04-05T11:26:41.000Z","type":"info","source":"Saturn","message":"Saturn Node is online and connected to 1 peers"}
-{"date":"2023-04-05T11:26:46.000Z","type":"info","source":"Saturn","message":"Saturn Node is online and connected to 9 peers"}
+{"timestamp":"2023-04-05T11:26:41.000Z","type":"info","source":"Saturn","message":"Saturn Node is online and connected to 1 peers""id":"b6e922f2-54fb-4d5b-adcb-499391e4a09e"}
+{"timestamp":"2023-04-05T11:26:46.000Z","type":"info","source":"Saturn","message":"Saturn Node is online and connected to 9 peers""id":"ffb551a0-247f-471d-b4db-0145cc3b1614"}
 ```
 
 ### `$ station logs <module>`
@@ -190,7 +193,7 @@ Get combined real-time events from `$ station metrics` and `$ station activity`.
 ```bash
 $ station events
 {"type":"jobs-completed","total":36}
-{"date":"2023-04-05T11:26:41.000Z","type":"activity:info","module":"Saturn","message":"Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network..."}
+{"timestamp":"2023-04-05T11:26:41.000Z","type":"activity:info","module":"Saturn","message":"Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network...","id":"ffb551a0-247f-471d-b4db-0145cc3b1614"}
 ...
 ```
 
