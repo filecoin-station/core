@@ -307,7 +307,7 @@ describe('Activity', () => {
       { env: { CACHE_ROOT, STATE_ROOT } }
     )
     const activity = JSON.parse(stdout)
-    assert(activity[0].date)
+    assert(activity[0].timestamp)
     assert.equal(activity.length, 1)
     assert.equal(activity[0].source, 'Saturn')
     assert.equal(activity[0].type, 'info')
@@ -363,7 +363,7 @@ describe('Activity', () => {
         )
       ])
       const activity = JSON.parse(data.toString())
-      assert(activity.date)
+      assert(activity.timestamp)
       assert.equal(activity.source, 'Saturn')
       assert.equal(activity.type, 'info')
       assert.equal(activity.message, 'beep boop')
@@ -433,8 +433,8 @@ describe('Events', () => {
       if (events.length === 2) break
     }
     ps.kill()
-    assert(events[1].date)
-    delete events[1].date
+    assert(events[1].timestamp)
+    delete events[1].timestamp
     assert.deepStrictEqual(events, [
       { type: 'jobs-completed', total: 0 },
       {
