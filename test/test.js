@@ -77,15 +77,58 @@ describe('Station', () => {
       { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
     )
     assert.strictEqual(
-      (await once(ps.stdout, 'data'))[0].toString(),
-      'Starting Saturn node...\n'
+      (await once(ps.stdout, 'data'))[0].toString().trim(),
+      JSON.stringify({ totalJobsCompleted: 0, totalEarnings: '0' }, 0, 2)
     )
-    ps.stderr.pipe(process.stderr)
-    assert.strictEqual(
-      (await once(ps.stdout, 'data'))[0].toString(),
-      '[SATURN] INFO: Saturn Node will try to connect to the Saturn Orchestrator...\n'
+    assert.match(
+      (await once(ps.stdout, 'data'))[0].toString().trim(),
+      /^\[.+\] INFO {2}Saturn Node will try to connect to the Saturn Orchestrator\.\.\.$/
     )
     ps.kill()
+  })
+  it('outputs events', async () => {
+    const CACHE_ROOT = join(tmpdir(), randomUUID())
+    const STATE_ROOT = join(tmpdir(), randomUUID())
+    const ps = execa(
+      station,
+      [],
+      { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
+    )
+    const events = []
+    for await (const line of ps.stdout) {
+      events.push(line.toString().trim())
+      if (events.length === 2) break
+    }
+    ps.kill()
+    assert.strictEqual(events[0], '{\n  "totalJobsCompleted": 0,\n  "totalEarnings": "0"\n}')
+    assert.match(events[1], /^\[.+\] INFO {2}Saturn Node will try to connect to the Saturn Orchestrator\.\.\.$/)
+  })
+  it('outputs events json', async () => {
+    const CACHE_ROOT = join(tmpdir(), randomUUID())
+    const STATE_ROOT = join(tmpdir(), randomUUID())
+    const ps = execa(
+      station,
+      ['--json'],
+      { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
+    )
+    const events = []
+    for await (const line of ps.stdout) {
+      events.push(JSON.parse(line.toString()))
+      if (events.length === 2) break
+    }
+    ps.kill()
+    assert(events[1].timestamp)
+    delete events[1].timestamp
+    assert(events[1].id)
+    delete events[1].id
+    assert.deepStrictEqual(events, [
+      { type: 'jobs-completed', total: 0 },
+      {
+        type: 'activity:info',
+        module: 'Saturn',
+        message: 'Saturn Node will try to connect to the Saturn Orchestrator...'
+      }
+    ])
   })
 })
 
@@ -428,81 +471,6 @@ describe('Activity', () => {
     )
     assert(stdout)
     ps.kill()
-  })
-})
-
-describe('Events', () => {
-  it('read events', async () => {
-    const CACHE_ROOT = join(tmpdir(), randomUUID())
-    const STATE_ROOT = join(tmpdir(), randomUUID())
-    await fs.mkdir(
-      dirname(getPaths(CACHE_ROOT, STATE_ROOT).activity),
-      { recursive: true }
-    )
-    await fs.writeFile(
-      getPaths(CACHE_ROOT, STATE_ROOT).activity,
-      '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop","id":"uuid"}\n'
-    )
-    const ps = execa(
-      station,
-      ['events'],
-      { env: { CACHE_ROOT, STATE_ROOT } }
-    )
-    const events = []
-    for await (const line of ps.stdout) {
-      events.push(JSON.parse(line.toString()))
-      if (events.length === 2) break
-    }
-    ps.kill()
-    assert(events[1].timestamp)
-    delete events[1].timestamp
-    assert.deepStrictEqual(events, [
-      { type: 'jobs-completed', total: 0 },
-      {
-        type: 'activity:info',
-        module: 'Saturn',
-        message: 'beep boop',
-        id: 'uuid'
-      }
-    ])
-  })
-  it('can be read while station is running', async () => {
-    const CACHE_ROOT = join(tmpdir(), randomUUID())
-    const STATE_ROOT = join(tmpdir(), randomUUID())
-    const stationPs = execa(
-      station,
-      { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
-    )
-    const eventsPs = execa(
-      station,
-      ['events'],
-      { env: { CACHE_ROOT, STATE_ROOT } }
-    )
-    await Promise.all([
-      once(stationPs.stdout, 'data'),
-      once(eventsPs.stdout, 'data')
-    ])
-    stationPs.kill()
-    eventsPs.kill()
-  })
-  it('doesn\'t block station from running', async () => {
-    const CACHE_ROOT = join(tmpdir(), randomUUID())
-    const STATE_ROOT = join(tmpdir(), randomUUID())
-    const eventsPs = execa(
-      station,
-      ['events'],
-      { env: { CACHE_ROOT, STATE_ROOT } }
-    )
-    const stationPs = execa(
-      station,
-      { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
-    )
-    await Promise.all([
-      once(stationPs.stdout, 'data'),
-      once(eventsPs.stdout, 'data')
-    ])
-    eventsPs.kill()
-    stationPs.kill()
   })
 })
 
