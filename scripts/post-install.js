@@ -14,7 +14,7 @@ import { platform, arch } from 'node:os'
 import assert from 'node:assert'
 
 const SATURN_DIST_TAG = 'v0.5.0'
-const ZINNIA_DIST_TAG = 'v0.6.0'
+const ZINNIA_DIST_TAG = 'v0.7.0'
 const ZINNIA_MODULES = [
   {
     name: 'peer-checker',
