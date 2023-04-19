@@ -32,7 +32,7 @@ export const station = async () => {
     MAX_DISK_SPACE,
     storagePath: join(paths.moduleCache, 'saturn-L2-node'),
     binariesPath: paths.moduleBinaries,
-    metricsStream: createMetricsStream(paths.metrics),
+    metricsStream: await createMetricsStream('saturn-L2-node'),
     activityStream: createActivityStream('Saturn'),
     logStream: createLogStream(join(paths.moduleLogs, 'saturn-L2-node.log'))
   })
