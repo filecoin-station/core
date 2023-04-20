@@ -12,6 +12,7 @@
     "node": ">=16"
   },
   "scripts": {
+    "build": "tsc",
     "format": "prettier --write .",
     "test": "npm run test:lint && npm run test:unit",
     "test:lint": "prettier --check . && standard",
@@ -30,7 +31,8 @@
     "mocha": "^10.2.0",
     "np": "^7.6.3",
     "prettier": "^2.8.4",
-    "standard": "^17.0.0"
+    "standard": "^17.0.0",
+    "typescript": "^5.0.4"
   },
   "dependencies": {
     "@influxdata/influxdb-client": "^1.33.2",
