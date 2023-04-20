@@ -1,6 +1,6 @@
 export function createMetricsStream(moduleName: any): Promise<DeduplicateStream>;
 export function maybeCreateMetricsFile(moduleName: any): Promise<void>;
-export function getLatestMetrics(moduleName: any): Promise<any>;
+export function getLatestMetrics(moduleName?: string | undefined): Promise<any>;
 export function followMetrics({ moduleName, signal }?: {
     moduleName: any;
     signal: any;
