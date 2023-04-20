@@ -5,6 +5,7 @@
   "description": "Filecoin Station Core",
   "license": "(Apache-2.0 AND MIT)",
   "repository": "filecoin-station/core",
+  "types": "dist/index.d.ts",
   "bin": {
     "station": "./bin/station.js"
   },
