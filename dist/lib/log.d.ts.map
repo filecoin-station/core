@@ -1,1 +1,1 @@
-{"version":3,"file":"log.d.ts","sourceRoot":"","sources":["../../lib/log.js"],"names":[],"mappings":"AAUO,0DAKe;AAEf;;;EAGN;AAmCM,wDAON;AAED;IACE,cAEC;IAED,kDAEC;CACF;AAWM,sCAFI,MAAM,uBAIhB;AAEM,4EAQN;AAEM,+DACkC;4BAlGF,aAAa;0BAAb,aAAa"}
+{"version":3,"file":"log.d.ts","sourceRoot":"","sources":["../../lib/log.js"],"names":[],"mappings":"AAUO,0DAKe;AAEf;;;EAGN;AAmCM,wDAON;AAED;IACE,cAEC;IAED,kDAEC;CACF;AAWM,uCAFI,MAAM,4BAIhB;AAEM,4EAQN;AAEM,+DACkC;4BAlGF,aAAa;0BAAb,aAAa"}
