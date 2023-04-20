@@ -1,30 +1,11 @@
-import fs from 'node:fs/promises'
-import { Tail } from 'tail'
-import { paths } from '../lib/paths.js'
-import { join } from 'node:path'
-import { maybeCreateFile } from '../lib/util.js'
-import { platform } from 'node:os'
-
-const followLogs = path => {
-  const tail = new Tail(path, {
-    nLines: 10,
-    useWatchFile: platform() === 'win32'
-  })
-  tail.on('line', line => console.log(line))
-}
-
-const getLogs = async path => {
-  process.stdout.write(await fs.readFile(path))
-}
+import { followLogs, getLatestLogs } from '../lib/log.js'
 
 export const logs = async ({ module, follow }) => {
-  const path = module
-    ? join(paths.moduleLogs, `${module}.log`)
-    : paths.allLogs
-  await maybeCreateFile(path)
   if (follow) {
-    followLogs(path)
+    for await (const line of followLogs(module)) {
+      console.log(line)
+    }
   } else {
-    await getLogs(path)
+    process.stdout.write(await getLatestLogs(module))
   }
 }

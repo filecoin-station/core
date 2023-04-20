@@ -9,6 +9,7 @@ import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import { maybeCreateMetricsFile } from '../lib/metrics.js'
 import { maybeCreateActivityFile } from '../lib/activity.js'
+import { maybeCreateLogFile } from '../lib/log.js'
 
 const pkg = JSON.parse(await fs.readFile(join(paths.repoRoot, 'package.json')))
 
@@ -24,9 +25,11 @@ await fs.mkdir(join(paths.moduleCache, 'saturn-L2-node'), { recursive: true })
 await fs.mkdir(join(paths.moduleState, 'saturn-L2-node'), { recursive: true })
 await fs.mkdir(paths.moduleLogs, { recursive: true })
 await fs.mkdir(paths.metrics, { recursive: true })
+await maybeCreateActivityFile()
 await maybeCreateMetricsFile()
 await maybeCreateMetricsFile('saturn-L2-node')
-await maybeCreateActivityFile()
+await maybeCreateLogFile()
+await maybeCreateLogFile('saturn-L2-node')
 
 yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')
