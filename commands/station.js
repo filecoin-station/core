@@ -11,6 +11,7 @@ import {
 import lockfile from 'proper-lockfile'
 import { maybeCreateFile } from '../lib/util.js'
 import { startPingLoop } from '../lib/telemetry.js'
+import * as bacalhau from '../lib/bacalhau.js'
 
 const { FIL_WALLET_ADDRESS, MAX_DISK_SPACE } = process.env
 
@@ -32,14 +33,23 @@ export const station = async ({ json }) => {
   startPingLoop().unref()
 
   await Promise.all([
-    saturnNode.start({
+    // saturnNode.start({
+    //   FIL_WALLET_ADDRESS,
+    //   MAX_DISK_SPACE,
+    //   storagePath: join(paths.moduleCache, 'saturn-L2-node'),
+    //   binariesPath: paths.moduleBinaries,
+    //   metricsStream: await createMetricsStream('saturn-L2-node'),
+    //   activityStream: createActivityStream('Saturn'),
+    //   logStream: createLogStream(join(paths.moduleLogs, 'saturn-L2-node.log'))
+    // }),
+    bacalhau.start({
       FIL_WALLET_ADDRESS,
-      MAX_DISK_SPACE,
-      storagePath: join(paths.moduleCache, 'saturn-L2-node'),
+      storagePath: join(paths.moduleCache, 'bacalhau'),
+      metricsStream: await createMetricsStream('bacalhau'),
+      activityStream: createActivityStream('Bacalhau'),
+      // MAX_DISK_SPACE,
       binariesPath: paths.moduleBinaries,
-      metricsStream: await createMetricsStream('saturn-L2-node'),
-      activityStream: createActivityStream('Saturn'),
-      logStream: createLogStream(join(paths.moduleLogs, 'saturn-L2-node.log'))
+      logStream: createLogStream(join(paths.moduleLogs, 'bacalhau.log'))
     }),
     (async () => {
       for await (const metrics of followMetrics()) {

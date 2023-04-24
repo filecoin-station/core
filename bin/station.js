@@ -21,15 +21,19 @@ Sentry.init({
   ignoreErrors: [/EACCES/, /EPERM/, /ENOSPC/, /EPIPE/]
 })
 
-await fs.mkdir(join(paths.moduleCache, 'saturn-L2-node'), { recursive: true })
-await fs.mkdir(join(paths.moduleState, 'saturn-L2-node'), { recursive: true })
+const modules = ['saturn-L2-node', 'bacalhau']
+
+for (const module of modules) {
+  await fs.mkdir(join(paths.moduleCache, module), { recursive: true })
+  await fs.mkdir(join(paths.moduleState, module), { recursive: true })
+}
 await fs.mkdir(paths.moduleLogs, { recursive: true })
 await fs.mkdir(paths.metrics, { recursive: true })
 await maybeCreateActivityFile()
 await maybeCreateMetricsFile()
-await maybeCreateMetricsFile('saturn-L2-node')
+for (const module of modules) await maybeCreateMetricsFile(module)
 await maybeCreateLogFile()
-await maybeCreateLogFile('saturn-L2-node')
+for (const module of modules) await maybeCreateLogFile(module)
 
 yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')
