@@ -33,7 +33,16 @@ await maybeCreateLogFile('saturn-L2-node')
 
 yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')
-  .command('$0', 'Start Station', () => {}, commands.station)
+  .command(
+    '$0',
+    'Start Station',
+    yargs => yargs.option('json', {
+      alias: 'j',
+      type: 'boolean',
+      description: 'Output JSON'
+    }),
+    commands.station
+  )
   .command('metrics [module]', 'Show metrics', () => {}, commands.metrics)
   .commands(
     'activity',
@@ -47,7 +56,6 @@ yargs(hideBin(process.argv))
   )
   .command('logs [module]', 'Show module logs', () => {}, commands.logs)
   .choices('module', ['saturn-l2-node'])
-  .command('events', 'Events stream', () => {}, commands.events)
   .version(`${pkg.name}: ${pkg.version}`)
   .alias('v', 'version')
   .alias('h', 'help')

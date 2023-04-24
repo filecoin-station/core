@@ -79,6 +79,42 @@ the configuration options described in
 - `$MAX_DISK_SPACE`_(number; optional)_: Maximum disk space (in bytes) to use in
   `$CACHE_ROOT` and `$STATE_ROOT` combined.
 
+This command outputs metrics and activity events:
+
+```bash
+$ station
+{
+  "totalJobsCompleted": 161,
+  "totalEarnings": "0"
+}
+[4/19/2023, 9:26:54 PM] INFO  Saturn Node will try to connect to the Saturn Orchestrator...
+[4/19/2023, 9:26:54 PM] INFO  Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network...
+...
+```
+
+```bash
+$ station --json
+{"type":"jobs-completed","total":161}
+{"type":"activity:info","timestamp":"2023-04-19T19:27:33.000Z","module":"Saturn","message":"Saturn Node will try to connect to the Saturn Orchestrator...","id":"45b62253-ad1e-4e85-ae16-a7bcaae71dce"}
+{"type":"activity:info","timestamp":"2023-04-19T19:27:33.000Z","module":"Saturn","message":"Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network...","id":"b0c14132-98b2-4e4d-b206-0f2f1f3a4c77"}
+...
+```
+
+For the JSON output, the following event types exist:
+
+- `jobs-completed`
+  - `total`
+- `activity:info`
+  - `timestamp`
+  - `module`
+  - `message`
+  - `id`
+- `activity:error`
+  - `timestamp`
+  - `module`
+  - `message`
+  - `id`
+
 ### `$ station metrics <module>`
 
 Get combined metrics from all Station Modules:
@@ -185,30 +221,6 @@ $ station logs --follow
 [3/14/2023, 5:15:26 PM] [saturn-L2-node] ERROR: Saturn Node is not able to connect to the network
 ...
 ```
-
-### `$ station events`
-
-Get combined real-time events from `$ station metrics` and `$ station activity`.
-
-```bash
-$ station events
-{"type":"jobs-completed","total":36}
-{"timestamp":"2023-04-05T11:26:41.000Z","type":"activity:info","module":"Saturn","message":"Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network...","id":"ffb551a0-247f-471d-b4db-0145cc3b1614"}
-...
-```
-
-The following event types exist:
-
-- `jobs-completed`
-  - `total`
-- `activity:info`
-  - `module`
-  - `message`
-  - `date`
-- `activity:error`
-  - `module`
-  - `message`
-  - `date`
 
 ### `$ station --help`
 
