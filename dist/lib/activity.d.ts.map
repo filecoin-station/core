@@ -1,1 +1,1 @@
-{"version":3,"file":"activity.d.ts","sourceRoot":"","sources":["../../lib/activity.js"],"names":[],"mappings":"AAqBO,iEAMN;AAQM;;;;;;;;kBAQN;AAEM,4CAMN;AAEM,yDAAqE;AA3C5E;IACE;;OAGC;IADC,YAAoB;IAGtB,kDAEC;CACF;0BAjByB,aAAa"}
+{"version":3,"file":"activity.d.ts","sourceRoot":"","sources":["../../lib/activity.js"],"names":[],"mappings":"AAqBO,iEAMN;AAQM;;;;;;;;;kBAQN;AAEM,4CAMN;AAEM,yDAAqE;AAErE;;;;WAKN;AAlDD;IACE;;OAGC;IADC,YAAoB;IAGtB,kDAEC;CACF;0BAjByB,aAAa"}

@@ -1,6 +1,7 @@
 export function createActivityStream(source: any): AddMetaStream;
-export function followActivity({ signal }?: {
+export function followActivity({ signal, nLines }?: {
     signal: any;
+    nLines?: number;
 }): AsyncGenerator<{
     timestamp: string;
     type: any;
@@ -10,6 +11,11 @@ export function followActivity({ signal }?: {
 }, void, unknown>;
 export function getActivity(): Promise<any>;
 export function maybeCreateActivityFile(): Promise<void>;
+export function formatActivityObject({ type, message, timestamp }: {
+    type: any;
+    message: any;
+    timestamp: any;
+}): string;
 declare class AddMetaStream extends Transform {
     constructor({ source }: {
         source: any;
