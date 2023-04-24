@@ -12,6 +12,7 @@ import unzip from 'unzip-stream'
 import { once } from 'node:events'
 import { platform, arch } from 'node:os'
 import assert from 'node:assert'
+import { install as installBacalhau } from '../lib/bacalhau.js'
 
 const SATURN_DIST_TAG = 'v0.5.0'
 const githubToken = process.env.GITHUB_TOKEN
@@ -92,3 +93,5 @@ if (target.archive === 'tar.gz') {
 }
 
 console.log(' ✓ %s', outFile)
+
+await installBacalhau()
