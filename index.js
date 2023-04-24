@@ -1,6 +1,6 @@
 import { getActivity, followActivity } from './lib/activity.js'
 import { getLatestLogs, followLogs } from './lib/log.js'
-import { getLatestMetrics, followMetrics } from './lib/metrics'
+import { getLatestMetrics, followMetrics } from './lib/metrics.js'
 
 export const core = {
   activity: {

@@ -16,6 +16,6 @@ import { getActivity } from './lib/activity.js';
 import { followActivity } from './lib/activity.js';
 import { getLatestLogs } from './lib/log.js';
 import { followLogs } from './lib/log.js';
-import { getLatestMetrics } from './lib/metrics';
-import { followMetrics } from './lib/metrics';
+import { getLatestMetrics } from './lib/metrics.js';
+import { followMetrics } from './lib/metrics.js';
 //# sourceMappingURL=index.d.ts.map
