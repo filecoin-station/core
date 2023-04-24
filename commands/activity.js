@@ -1,12 +1,8 @@
-import { formatLog } from '../lib/log.js'
-import { followActivity, getActivity } from '../lib/activity.js'
-
-const formatActivityObject = ({ type, message, timestamp }) => {
-  return formatLog(
-    `${type.toUpperCase().padEnd(5)} ${message}`,
-    new Date(timestamp)
-  )
-}
+import {
+  followActivity,
+  getActivity,
+  formatActivityObject
+} from '../lib/activity.js'
 
 export const activity = async ({ follow, json }) => {
   if (follow) {
