@@ -45,7 +45,7 @@ export const station = async () => {
       CACHE_ROOT: join(paths.moduleCache, 'zinnia'),
       moduleBinaries: paths.moduleBinaries,
       // FIXME(bajtos) We need to merge metrics reported by different modules
-      metricsStream: createMetricsStream(paths.metrics.replace(/\.log$/, '-zinnia.log')),
+      metricsStream: createMetricsStream('zinnia'),
       activityStream: createActivityStream('Runtime'),
       logStream: createLogStream(join(paths.moduleLogs, 'zinnia.log'))
     })
