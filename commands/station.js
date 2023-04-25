@@ -1,7 +1,6 @@
 import { join } from 'node:path'
 import { paths } from '../lib/paths.js'
 import * as saturnNode from '../lib/saturn-node.js'
-import { createLogStream } from '../lib/log.js'
 import { formatActivityObject } from '../lib/activity.js'
 import lockfile from 'proper-lockfile'
 import { maybeCreateFile } from '../lib/util.js'
@@ -34,7 +33,7 @@ export const station = async ({ core, json }) => {
       binariesPath: paths.moduleBinaries,
       metricsStream: await core.metrics.createWriteStream('saturn-L2-node'),
       activityStream: core.activity.createWriteStream('Saturn'),
-      logStream: createLogStream(join(paths.moduleLogs, 'saturn-L2-node.log'))
+      logStream: core.logs.createWriteStream(join(paths.moduleLogs, 'saturn-L2-node.log'))
     }),
     (async () => {
       for await (const metrics of core.metrics.follow()) {
