@@ -1,5 +1,8 @@
 export class Core {
-    constructor(cacheRoot: any, stateRoot: any);
+    constructor({ cacheRoot, stateRoot }: {
+        cacheRoot: any;
+        stateRoot: any;
+    });
     paths: {
         repoRoot: string;
         metrics: string;

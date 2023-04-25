@@ -1,4 +1,7 @@
-export function getPaths(cacheRoot: any, stateRoot: any): {
+export function getPaths({ cacheRoot, stateRoot }: {
+    cacheRoot: any;
+    stateRoot: any;
+}): {
     repoRoot: string;
     metrics: string;
     allMetrics: string;
@@ -10,5 +13,8 @@ export function getPaths(cacheRoot: any, stateRoot: any): {
     moduleBinaries: string;
     lockFile: string;
 };
-export function getDefaultRootDirs(): string[];
+export function getDefaultRootDirs(): {
+    cacheRoot: string;
+    stateRoot: string;
+};
 //# sourceMappingURL=paths.d.ts.map

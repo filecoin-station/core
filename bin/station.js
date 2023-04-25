@@ -9,7 +9,7 @@ import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import { Core } from '../index.js'
 
-const core = new Core(...getDefaultRootDirs())
+const core = new Core(getDefaultRootDirs())
 const pkg = JSON.parse(await fs.readFile(join(core.paths.repoRoot, 'package.json')))
 
 Sentry.init({

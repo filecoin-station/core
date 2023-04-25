@@ -7,6 +7,6 @@ describe('API', () => {
     assert(Core)
   })
   it('can be constructed', () => {
-    assert(new Core(...getDefaultRootDirs()))
+    assert(new Core(getDefaultRootDirs()))
   })
 })
