@@ -1,10 +1,18 @@
-export function createMetricsStream(moduleName: any): Promise<DeduplicateStream>;
-export function maybeCreateMetricsFile(moduleName: any): Promise<void>;
-export function getLatestMetrics(moduleName?: string | undefined): Promise<any>;
-export function followMetrics({ moduleName, signal }?: {
-    moduleName: any;
-    signal: any;
-}): AsyncGenerator<any, void, unknown>;
+export class Metrics {
+    constructor(paths: any);
+    paths: any;
+    getMetricsFilePath(moduleName: any): any;
+    /**
+     * @param {string=} moduleName
+     */
+    getLatest(moduleName?: string | undefined): Promise<any>;
+    follow({ moduleName, signal }?: {
+        moduleName: any;
+        signal: any;
+    }): AsyncGenerator<any, void, unknown>;
+    createWriteStream(moduleName: any): Promise<DeduplicateStream>;
+    maybeCreateMetricsFile(moduleName: any): Promise<void>;
+}
 declare class DeduplicateStream extends Transform {
     constructor();
     last: any;

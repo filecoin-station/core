@@ -1,16 +1,20 @@
-export function createActivityStream(source: any): AddMetaStream;
-export function followActivity({ signal, nLines }?: {
-    signal: any;
-    nLines?: number;
-}): AsyncGenerator<{
-    timestamp: string;
-    type: any;
-    source: any;
-    message: any;
-    id: any;
-}, void, unknown>;
-export function getActivity(): Promise<any>;
-export function maybeCreateActivityFile(): Promise<void>;
+export class Activity {
+    constructor(paths: any);
+    paths: any;
+    get(): Promise<any>;
+    follow({ signal, nLines }?: {
+        signal: any;
+        nLines?: number;
+    }): AsyncGenerator<{
+        timestamp: string;
+        type: any;
+        source: any;
+        message: any;
+        id: any;
+    }, void, unknown>;
+    createWriteStream(source: any): AddMetaStream;
+    maybeCreateActivityFile(): Promise<void>;
+}
 export function formatActivityObject({ type, message, timestamp }: {
     type: any;
     message: any;

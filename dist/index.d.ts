@@ -1,21 +1,10 @@
-export namespace core {
-    namespace activity {
-        export { getActivity as get };
-        export { followActivity as follow };
-    }
-    namespace logs {
-        export { getLatestLogs as get };
-        export { followLogs as follow };
-    }
-    namespace metrics {
-        export { getLatestMetrics as getLatest };
-        export { followMetrics as follow };
-    }
+export class Core {
+    constructor(paths: any);
+    activity: Activity;
+    logs: Logs;
+    metrics: Metrics;
 }
-import { getActivity } from './lib/activity.js';
-import { followActivity } from './lib/activity.js';
-import { getLatestLogs } from './lib/log.js';
-import { followLogs } from './lib/log.js';
-import { getLatestMetrics } from './lib/metrics.js';
-import { followMetrics } from './lib/metrics.js';
+import { Activity } from './lib/activity.js';
+import { Logs } from './lib/log.js';
+import { Metrics } from './lib/metrics.js';
 //# sourceMappingURL=index.d.ts.map

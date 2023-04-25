@@ -1,18 +1,11 @@
-import { getActivity, followActivity } from './lib/activity.js'
-import { getLatestLogs, followLogs } from './lib/log.js'
-import { getLatestMetrics, followMetrics } from './lib/metrics.js'
+import { Activity } from './lib/activity.js'
+import { Logs } from './lib/log.js'
+import { Metrics } from './lib/metrics.js'
 
-export const core = {
-  activity: {
-    get: getActivity,
-    follow: followActivity
-  },
-  logs: {
-    get: getLatestLogs,
-    follow: followLogs
-  },
-  metrics: {
-    getLatest: getLatestMetrics,
-    follow: followMetrics
+export class Core {
+  constructor (paths) {
+    this.activity = new Activity(paths)
+    this.logs = new Logs(paths)
+    this.metrics = new Metrics(paths)
   }
 }

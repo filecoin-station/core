@@ -7,9 +7,7 @@ import { paths } from '../lib/paths.js'
 import * as Sentry from '@sentry/node'
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
-import { maybeCreateMetricsFile } from '../lib/metrics.js'
-import { maybeCreateActivityFile } from '../lib/activity.js'
-import { maybeCreateLogFile } from '../lib/log.js'
+import { Core } from '../index.js'
 
 const pkg = JSON.parse(await fs.readFile(join(paths.repoRoot, 'package.json')))
 
@@ -21,15 +19,17 @@ Sentry.init({
   ignoreErrors: [/EACCES/, /EPERM/, /ENOSPC/, /EPIPE/]
 })
 
+const core = new Core(paths)
+
 await fs.mkdir(join(paths.moduleCache, 'saturn-L2-node'), { recursive: true })
 await fs.mkdir(join(paths.moduleState, 'saturn-L2-node'), { recursive: true })
 await fs.mkdir(paths.moduleLogs, { recursive: true })
 await fs.mkdir(paths.metrics, { recursive: true })
-await maybeCreateActivityFile()
-await maybeCreateMetricsFile()
-await maybeCreateMetricsFile('saturn-L2-node')
-await maybeCreateLogFile()
-await maybeCreateLogFile('saturn-L2-node')
+await core.activity.maybeCreateActivityFile()
+await core.metrics.maybeCreateMetricsFile()
+await core.metrics.maybeCreateMetricsFile('saturn-L2-node')
+await core.logs.maybeCreateLogFile()
+await core.logs.maybeCreateLogFile('saturn-L2-node')
 
 yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')
@@ -41,9 +41,14 @@ yargs(hideBin(process.argv))
       type: 'boolean',
       description: 'Output JSON'
     }),
-    commands.station
+    args => commands.station({ ...args, core })
   )
-  .command('metrics [module]', 'Show metrics', () => {}, commands.metrics)
+  .command(
+    'metrics [module]',
+    'Show metrics',
+    () => {},
+    args => commands.metrics({ ...args, core })
+  )
   .commands(
     'activity',
     'Show activity log',
@@ -52,9 +57,14 @@ yargs(hideBin(process.argv))
       type: 'boolean',
       description: 'Output JSON'
     }),
-    commands.activity
+    args => commands.activity({ ...args, core })
   )
-  .command('logs [module]', 'Show module logs', () => {}, commands.logs)
+  .command(
+    'logs [module]',
+    'Show module logs',
+    () => {},
+    args => commands.logs({ ...args, core })
+  )
   .choices('module', ['saturn-l2-node'])
   .version(`${pkg.name}: ${pkg.version}`)
   .alias('v', 'version')

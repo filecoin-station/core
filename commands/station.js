@@ -2,19 +2,14 @@ import { join } from 'node:path'
 import { paths } from '../lib/paths.js'
 import * as saturnNode from '../lib/saturn-node.js'
 import { createLogStream } from '../lib/log.js'
-import { createMetricsStream, followMetrics } from '../lib/metrics.js'
-import {
-  createActivityStream,
-  followActivity,
-  formatActivityObject
-} from '../lib/activity.js'
+import { formatActivityObject } from '../lib/activity.js'
 import lockfile from 'proper-lockfile'
 import { maybeCreateFile } from '../lib/util.js'
 import { startPingLoop } from '../lib/telemetry.js'
 
 const { FIL_WALLET_ADDRESS, MAX_DISK_SPACE } = process.env
 
-export const station = async ({ json }) => {
+export const station = async ({ core, json }) => {
   if (!FIL_WALLET_ADDRESS) {
     console.error('FIL_WALLET_ADDRESS required')
     process.exit(1)
@@ -37,12 +32,12 @@ export const station = async ({ json }) => {
       MAX_DISK_SPACE,
       storagePath: join(paths.moduleCache, 'saturn-L2-node'),
       binariesPath: paths.moduleBinaries,
-      metricsStream: await createMetricsStream('saturn-L2-node'),
-      activityStream: createActivityStream('Saturn'),
+      metricsStream: await core.metrics.createWriteStream('saturn-L2-node'),
+      activityStream: core.activity.createWriteStream('Saturn'),
       logStream: createLogStream(join(paths.moduleLogs, 'saturn-L2-node.log'))
     }),
     (async () => {
-      for await (const metrics of followMetrics()) {
+      for await (const metrics of core.metrics.follow()) {
         if (json) {
           console.log(JSON.stringify({
             type: 'jobs-completed',
@@ -54,7 +49,7 @@ export const station = async ({ json }) => {
       }
     })(),
     (async () => {
-      for await (const activity of followActivity({ nLines: 0 })) {
+      for await (const activity of core.activity.follow({ nLines: 0 })) {
         if (json) {
           console.log(JSON.stringify({
             type: `activity:${activity.type}`,

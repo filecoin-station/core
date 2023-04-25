@@ -8,9 +8,17 @@ export class SerializeStream extends Transform {
     constructor();
     _transform(obj: any, _: any, callback: any): void;
 }
-export function getLatestLogs(module?: string | undefined): Promise<any>;
-export function followLogs(module: any): AsyncGenerator<any, void, unknown>;
-export function maybeCreateLogFile(module: any): Promise<void>;
+export class Logs {
+    constructor(paths: any);
+    paths: any;
+    getLogFilePath(module: any): any;
+    /**
+     * @param {string=} module
+     */
+    get(module?: string | undefined): Promise<any>;
+    follow(module: any): AsyncGenerator<any, void, unknown>;
+    maybeCreateLogFile(module: any): Promise<void>;
+}
 import { PassThrough } from 'node:stream';
 import { Transform } from 'node:stream';
 //# sourceMappingURL=log.d.ts.map

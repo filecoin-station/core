@@ -1,11 +1,9 @@
-import { followLogs, getLatestLogs } from '../lib/log.js'
-
-export const logs = async ({ module, follow }) => {
+export const logs = async ({ core, module, follow }) => {
   if (follow) {
-    for await (const line of followLogs(module)) {
+    for await (const line of core.logs.follow(module)) {
       console.log(line)
     }
   } else {
-    process.stdout.write(await getLatestLogs(module))
+    process.stdout.write(await core.logs.get(module))
   }
 }
