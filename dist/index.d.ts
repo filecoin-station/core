@@ -1,5 +1,6 @@
 export class Core {
     constructor(paths: any);
+    paths: any;
     logs: Logs;
     activity: Activity;
     metrics: Metrics;

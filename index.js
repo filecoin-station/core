@@ -4,6 +4,7 @@ import { Metrics } from './lib/metrics.js'
 
 export class Core {
   constructor (paths) {
+    this.paths = paths
     const logs = this.logs = new Logs(paths)
     this.activity = new Activity({ paths, logs })
     this.metrics = new Metrics({ paths, logs })

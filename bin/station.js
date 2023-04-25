@@ -3,12 +3,13 @@
 import * as commands from '../commands/index.js'
 import fs from 'node:fs/promises'
 import { join } from 'node:path'
-import { paths } from '../lib/paths.js'
+import { getRootDirs, getPaths } from '../lib/paths.js'
 import * as Sentry from '@sentry/node'
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import { Core } from '../index.js'
 
+const paths = getPaths(...getRootDirs())
 const pkg = JSON.parse(await fs.readFile(join(paths.repoRoot, 'package.json')))
 
 Sentry.init({
