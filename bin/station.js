@@ -3,14 +3,14 @@
 import * as commands from '../commands/index.js'
 import fs from 'node:fs/promises'
 import { join } from 'node:path'
-import { getRootDirs, getPaths } from '../lib/paths.js'
+import { getDefaultRootDirs } from '../lib/paths.js'
 import * as Sentry from '@sentry/node'
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import { Core } from '../index.js'
 
-const paths = getPaths(...getRootDirs())
-const pkg = JSON.parse(await fs.readFile(join(paths.repoRoot, 'package.json')))
+const core = new Core(...getDefaultRootDirs())
+const pkg = JSON.parse(await fs.readFile(join(core.paths.repoRoot, 'package.json')))
 
 Sentry.init({
   dsn: 'https://6c96a5c2ffa5448d9ec8ddda90012bc9@o1408530.ingest.sentry.io/4504792315199488',
@@ -20,12 +20,10 @@ Sentry.init({
   ignoreErrors: [/EACCES/, /EPERM/, /ENOSPC/, /EPIPE/]
 })
 
-const core = new Core(paths)
-
-await fs.mkdir(join(paths.moduleCache, 'saturn-L2-node'), { recursive: true })
-await fs.mkdir(join(paths.moduleState, 'saturn-L2-node'), { recursive: true })
-await fs.mkdir(paths.moduleLogs, { recursive: true })
-await fs.mkdir(paths.metrics, { recursive: true })
+await fs.mkdir(join(core.paths.moduleCache, 'saturn-L2-node'), { recursive: true })
+await fs.mkdir(join(core.paths.moduleState, 'saturn-L2-node'), { recursive: true })
+await fs.mkdir(core.paths.moduleLogs, { recursive: true })
+await fs.mkdir(core.paths.metrics, { recursive: true })
 await core.activity.maybeCreateActivityFile()
 await core.metrics.maybeCreateMetricsFile()
 await core.metrics.maybeCreateMetricsFile('saturn-L2-node')

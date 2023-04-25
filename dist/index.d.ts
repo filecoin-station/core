@@ -1,6 +1,17 @@
 export class Core {
-    constructor(paths: any);
-    paths: any;
+    constructor(cacheRoot: any, stateRoot: any);
+    paths: {
+        repoRoot: string;
+        metrics: string;
+        allMetrics: string;
+        activity: string;
+        moduleCache: string;
+        moduleState: string;
+        moduleLogs: string;
+        allLogs: string;
+        moduleBinaries: string;
+        lockFile: string;
+    };
     logs: Logs;
     activity: Activity;
     metrics: Metrics;

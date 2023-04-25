@@ -10,18 +10,5 @@ export function getPaths(cacheRoot: any, stateRoot: any): {
     moduleBinaries: string;
     lockFile: string;
 };
-export namespace paths {
-    export { repoRoot };
-    export const metrics: string;
-    export const allMetrics: string;
-    export const activity: string;
-    export const moduleCache: string;
-    export const moduleState: string;
-    export const moduleLogs: string;
-    export const allLogs: string;
-    export const moduleBinaries: string;
-    export const lockFile: string;
-}
-declare const repoRoot: string;
-export {};
+export function getDefaultRootDirs(): string[];
 //# sourceMappingURL=paths.d.ts.map
