@@ -51,12 +51,12 @@ describe('Metrics', () => {
       { recursive: true }
     )
     await fs.writeFile(
-      join(getPaths(CACHE_ROOT, STATE_ROOT).metrics, 'saturn-l2-node.log'),
+      join(getPaths(CACHE_ROOT, STATE_ROOT).metrics, 'saturn-L2-node.log'),
       '[date] {"totalJobsCompleted":1,"totalEarnings":"2"}\n'
     )
     const { stdout } = await execa(
       station,
-      ['metrics', 'saturn-l2-node'],
+      ['metrics', 'saturn-L2-node'],
       { env: { CACHE_ROOT, STATE_ROOT } }
     )
     assert.deepStrictEqual(
