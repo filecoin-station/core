@@ -54,13 +54,13 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/filecoin-station/core
           cache-to: type=inline
 
-      - name: Build Docker image for other platforms
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          platforms: linux/arm64
-          cache-from: type=registry,ref=ghcr.io/filecoin-station/core
-          cache-to: type=inline
+      # - name: Build Docker image for other platforms
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     context: .
+      #     platforms: linux/arm64
+      #     cache-from: type=registry,ref=ghcr.io/filecoin-station/core
+      #     cache-to: type=inline
 
       - name: Start Station Core container
         run: |
