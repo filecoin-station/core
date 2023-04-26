@@ -24,6 +24,7 @@ describe('Station', () => {
       messages.push(line.toString().trim())
       if (messages.length === 2) break
     }
+    messages.sort()
 
     assert.match(
       messages[0],
@@ -80,7 +81,7 @@ describe('Station', () => {
     delete events[2].id
     events.sort((a, b) => {
       const left = `${a.type}:${a.module ?? ''}:${a.message}`
-      const right = `${a.type}:${a.module ?? ''}:${a.message}`
+      const right = `${b.type}:${b.module ?? ''}:${b.message}`
       return left > right ? 1 : left < right ? -1 : 0
     })
     assert.deepStrictEqual(events, [
