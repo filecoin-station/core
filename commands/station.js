@@ -1,6 +1,6 @@
 import { join } from 'node:path'
 import { paths } from '../lib/paths.js'
-import * as saturnNode from '../lib/saturn-node.js'
+// import * as saturnNode from '../lib/saturn-node.js'
 import { createLogStream } from '../lib/log.js'
 import { createMetricsStream, followMetrics } from '../lib/metrics.js'
 import {
@@ -46,7 +46,7 @@ export const station = async ({ json }) => {
       storagePath: join(paths.moduleCache, 'bacalhau'),
       metricsStream: await createMetricsStream('bacalhau'),
       activityStream: createActivityStream('Bacalhau'),
-      // MAX_DISK_SPACE,
+      MAX_DISK_SPACE,
       logStream: createLogStream(join(paths.moduleLogs, 'bacalhau.log'))
     }),
     (async () => {
