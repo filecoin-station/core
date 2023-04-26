@@ -28,14 +28,14 @@ describe('Activity', () => {
     )
     await fs.writeFile(
       getPaths(CACHE_ROOT, STATE_ROOT).activity,
-      '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
+      '[2023-04-26T12:26:40.489Z] {"source":"Saturn","type":"info","message":"beep boop"}\n'
     )
     const { stdout } = await execa(
       station,
       ['activity'],
       { env: { CACHE_ROOT, STATE_ROOT } }
     )
-    assert.match(stdout, /3\/14\/2023/)
+    assert.match(stdout, /2023-04-26/)
     assert.match(stdout, /beep boop/)
   })
   it('outputs activity json', async () => {
