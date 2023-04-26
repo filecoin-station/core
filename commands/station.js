@@ -37,7 +37,6 @@ export const station = async ({ json }) => {
     //   FIL_WALLET_ADDRESS,
     //   MAX_DISK_SPACE,
     //   storagePath: join(paths.moduleCache, 'saturn-L2-node'),
-    //   binariesPath: paths.moduleBinaries,
     //   metricsStream: await createMetricsStream('saturn-L2-node'),
     //   activityStream: createActivityStream('Saturn'),
     //   logStream: createLogStream(join(paths.moduleLogs, 'saturn-L2-node.log'))
@@ -48,7 +47,6 @@ export const station = async ({ json }) => {
       metricsStream: await createMetricsStream('bacalhau'),
       activityStream: createActivityStream('Bacalhau'),
       // MAX_DISK_SPACE,
-      binariesPath: paths.moduleBinaries,
       logStream: createLogStream(join(paths.moduleLogs, 'bacalhau.log'))
     }),
     (async () => {
