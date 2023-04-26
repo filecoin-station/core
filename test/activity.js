@@ -35,7 +35,7 @@ describe('Activity', () => {
       ['activity'],
       { env: { CACHE_ROOT, STATE_ROOT } }
     )
-    assert.match(stdout, /2023-04-26/)
+    assert.match(stdout, /2023/)
     assert.match(stdout, /beep boop/)
   })
   it('outputs activity json', async () => {

@@ -1,11 +1,20 @@
-import { followLogs, getLatestLogs } from '../lib/log.js'
+import { followLogs, getLatestLogs, parseLog, formatLog } from '../lib/log.js'
 
 export const logs = async ({ module, follow }) => {
   if (follow) {
     for await (const line of followLogs(module)) {
-      console.log(line)
+      const { text, date } = parseLog(line)
+      process.stdout.write(formatLog(text, { date, isHumanReadable: true }))
     }
   } else {
-    process.stdout.write(await getLatestLogs(module))
+    const lines = (await getLatestLogs(module))
+      .toString()
+      .trim()
+      .split('\n')
+      .filter(Boolean)
+    for (const line of lines) {
+      const { text, date } = parseLog(line)
+      process.stdout.write(formatLog(text, { date, isHumanReadable: true }))
+    }
   }
 }
