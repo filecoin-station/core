@@ -74,6 +74,7 @@ jobs:
 
       - name: Verify container activity
         run: |
+          docker exec station bin/station.js activity
           LOGS=$(docker exec station bin/station.js activity)
           echo $LOGS
           echo $LOGS | grep "Saturn module started"
