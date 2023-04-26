@@ -45,20 +45,20 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/filecoin-station/core
           cache-to: type=inline
 
-      # - name: Start Station Core container
-      #   run: |
-      #     docker run \
-      #       --name station \
-      #       --detach \
-      #       --env FIL_WALLET_ADDRESS=f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za \
-      #       $IMAGEID
-      #   env:
-      #     IMAGEID: ${{ steps.docker_build.outputs.imageid }}
+      - name: Start Station Core container
+        run: |
+          docker run \
+            --name station \
+            --detach \
+            --env FIL_WALLET_ADDRESS=f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za \
+            $IMAGEID
+        env:
+          IMAGEID: ${{ steps.docker_build.outputs.imageid }}
 
-      # - name: Verify container activity
-      #   run: |
-      #     LOGS=$(docker exec station bin/station.js activity)
-      #     echo $LOGS
-      #     echo $LOGS | grep "Saturn module started"
-      #     echo $LOGS | grep "Module Runtime started"
+      - name: Verify container activity
+        run: |
+          LOGS=$(docker exec station bin/station.js activity)
+          echo $LOGS
+          echo $LOGS | grep "Saturn module started"
+          echo $LOGS | grep "Module Runtime started"
 
