@@ -1,6 +1,6 @@
 import { join } from 'node:path'
 import { paths } from '../lib/paths.js'
-// import * as saturnNode from '../lib/saturn-node.js'
+import * as saturnNode from '../lib/saturn-node.js'
 import { createLogStream } from '../lib/log.js'
 import { createMetricsStream, followMetrics } from '../lib/metrics.js'
 import {
@@ -33,20 +33,20 @@ export const station = async ({ json }) => {
   startPingLoop().unref()
 
   await Promise.all([
-    // saturnNode.start({
-    //   FIL_WALLET_ADDRESS,
-    //   MAX_DISK_SPACE,
-    //   storagePath: join(paths.moduleCache, 'saturn-L2-node'),
-    //   metricsStream: await createMetricsStream('saturn-L2-node'),
-    //   activityStream: createActivityStream('Saturn'),
-    //   logStream: createLogStream(join(paths.moduleLogs, 'saturn-L2-node.log'))
-    // }),
+    saturnNode.start({
+      FIL_WALLET_ADDRESS,
+      MAX_DISK_SPACE,
+      storagePath: join(paths.moduleCache, 'saturn-L2-node'),
+      metricsStream: await createMetricsStream('saturn-L2-node'),
+      activityStream: createActivityStream('Saturn'),
+      logStream: createLogStream(join(paths.moduleLogs, 'saturn-L2-node.log'))
+    }),
     bacalhau.start({
       FIL_WALLET_ADDRESS,
+      MAX_DISK_SPACE,
       storagePath: join(paths.moduleCache, 'bacalhau'),
       metricsStream: await createMetricsStream('bacalhau'),
       activityStream: createActivityStream('Bacalhau'),
-      MAX_DISK_SPACE,
       logStream: createLogStream(join(paths.moduleLogs, 'bacalhau.log'))
     }),
     (async () => {
