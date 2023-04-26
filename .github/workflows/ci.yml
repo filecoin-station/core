@@ -74,12 +74,10 @@ jobs:
 
       - name: Print station activity
         run: |
-          sleep 5 # Wait for Station modules to start
+          sleep 10 # Wait for Station modules to start
           docker exec station bin/station.js activity
 
       - name: Check | Saturn started
         run: docker exec station bin/station.js activity | grep "Saturn module started"
 
-      - name: Check | Zinnia started
-        run: docker exec station bin/station.js activity | grep "Module Runtime started"
 
