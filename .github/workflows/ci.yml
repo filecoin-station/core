@@ -79,5 +79,3 @@ jobs:
 
       - name: Check | Saturn started
         run: docker exec station bin/station.js activity | grep "Saturn module started"
-
-
