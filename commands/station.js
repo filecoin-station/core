@@ -43,7 +43,6 @@ export const station = async ({ json }) => {
     }),
     bacalhau.start({
       FIL_WALLET_ADDRESS,
-      MAX_DISK_SPACE,
       storagePath: join(paths.moduleCache, 'bacalhau'),
       metricsStream: await createMetricsStream('bacalhau'),
       activityStream: createActivityStream('Bacalhau'),
