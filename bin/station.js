@@ -62,7 +62,7 @@ yargs(hideBin(process.argv))
     commands.activity
   )
   .command('logs [module]', 'Show module logs', () => {}, commands.logs)
-  .choices('module', ['saturn-l2-node'])
+  .choices('module', modules)
   .version(`${pkg.name}: ${pkg.version}`)
   .alias('v', 'version')
   .alias('h', 'help')
