@@ -17,3 +17,43 @@ jobs:
       - run: npm run test:lint
         if: matrix.os != 'windows-latest'
       - run: npm run test:unit
+
+  test-docker:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      REGISTRY: ghcr.io
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker image for local use
+        id: docker_build
+        run: |
+          docker build --iidfile imageid .
+          IMAGEID=$(cat imageid)
+          echo "imageid=$IMAGEID" >> "$GITHUB_OUTPUT"
+
+      - name: Start Station Core container
+        run: |
+          docker run \
+            --name station \
+            --detach \
+            --env FIL_WALLET_ADDRESS=f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za \
+            $IMAGEID
+        env:
+          IMAGEID: ${{ steps.docker_build.outputs.imageid }}
+
+      - name: Verify container activity
+        run: |
+          LOGS=$(docker exec station bin/station.js activity)
+          echo $LOGS
+          echo $LOGS | grep "Saturn module started"
+          echo $LOGS | grep "Module Runtime started"

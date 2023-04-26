@@ -33,7 +33,6 @@ jobs:
         id: package-version
 
       - name: Build and optionally push Docker image
-        id: docker_build
         uses: docker/build-push-action@v4
         with:
           context: .
@@ -44,21 +43,3 @@ jobs:
           platforms: linux/amd64,linux/arm64
           cache-from: type=registry,ref=ghcr.io/filecoin-station/core
           cache-to: type=inline
-
-      - name: Start Station Core container
-        run: |
-          docker run \
-            --name station \
-            --detach \
-            --env FIL_WALLET_ADDRESS=f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za \
-            $IMAGEID
-        env:
-          IMAGEID: ${{ steps.docker_build.outputs.imageid }}
-
-      - name: Verify container activity
-        run: |
-          LOGS=$(docker exec station bin/station.js activity)
-          echo $LOGS
-          echo $LOGS | grep "Saturn module started"
-          echo $LOGS | grep "Module Runtime started"
-
