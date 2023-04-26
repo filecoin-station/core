@@ -72,11 +72,12 @@ jobs:
         env:
           IMAGEID: ${{ steps.docker_build.outputs.imageid }}
 
-      - name: Verify container activity
-        run: |
-          docker exec station bin/station.js activity
-          LOGS=$(docker exec station bin/station.js activity)
-          echo $LOGS
-          echo $LOGS | grep "Saturn module started"
-          echo $LOGS | grep "Module Runtime started"
+      - name: Print station activity
+        run: docker exec station bin/station.js activity
+
+      - name: Check | Saturn started
+        run: docker exec station bin/station.js activity | grep "Saturn module started"
+
+      - name: Check | Zinnia started
+        run: docker exec station bin/station.js activity | grep "Module Runtime started"
 
