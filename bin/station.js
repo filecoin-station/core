@@ -9,6 +9,7 @@ import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import { maybeCreateMetricsFile } from '../lib/metrics.js'
 import { maybeCreateActivityFile } from '../lib/activity.js'
+import { maybeCreateLogFile } from '../lib/log.js'
 
 const pkg = JSON.parse(await fs.readFile(join(paths.repoRoot, 'package.json')))
 
@@ -22,16 +23,31 @@ Sentry.init({
 
 await fs.mkdir(join(paths.moduleCache, 'saturn-L2-node'), { recursive: true })
 await fs.mkdir(join(paths.moduleState, 'saturn-L2-node'), { recursive: true })
-await fs.mkdir(join(paths.moduleCache, 'zinnia'), { recursive: true })
-await fs.mkdir(join(paths.moduleState, 'zinnia'), { recursive: true })
+await fs.mkdir(join(paths.moduleCache, 'runtime'), { recursive: true })
+await fs.mkdir(join(paths.moduleState, 'runtime'), { recursive: true })
 await fs.mkdir(paths.moduleLogs, { recursive: true })
-await maybeCreateMetricsFile()
+await fs.mkdir(paths.metrics, { recursive: true })
 await maybeCreateActivityFile()
+await maybeCreateMetricsFile()
+await maybeCreateMetricsFile('saturn-L2-node')
+await maybeCreateMetricsFile('runtime')
+await maybeCreateLogFile()
+await maybeCreateLogFile('saturn-L2-node')
+await maybeCreateLogFile('runtime')
 
 yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')
-  .command('$0', 'Start Station', () => {}, commands.station)
-  .command('metrics', 'Show metrics', () => {}, commands.metrics)
+  .command(
+    '$0',
+    'Start Station',
+    yargs => yargs.option('json', {
+      alias: 'j',
+      type: 'boolean',
+      description: 'Output JSON'
+    }),
+    commands.station
+  )
+  .command('metrics [module]', 'Show metrics', () => {}, commands.metrics)
   .commands(
     'activity',
     'Show activity log',
@@ -49,7 +65,6 @@ yargs(hideBin(process.argv))
     // in addition to Zinnia runtime
     'zinnia'
   ])
-  .command('events', 'Events stream', () => {}, commands.events)
   .version(`${pkg.name}: ${pkg.version}`)
   .alias('v', 'version')
   .alias('h', 'help')
