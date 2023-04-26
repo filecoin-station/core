@@ -4,7 +4,7 @@ export const logs = async ({ module, follow }) => {
   if (follow) {
     for await (const line of followLogs(module)) {
       const { text, date } = parseLog(line)
-      process.stdout.write(formatLog(text, { date, isHumanReadable: true }))
+      process.stdout.write(formatLog(text, { date, pretty: true }))
     }
   } else {
     const lines = (await getLatestLogs(module))
@@ -14,7 +14,7 @@ export const logs = async ({ module, follow }) => {
       .filter(Boolean)
     for (const line of lines) {
       const { text, date } = parseLog(line)
-      process.stdout.write(formatLog(text, { date, isHumanReadable: true }))
+      process.stdout.write(formatLog(text, { date, pretty: true }))
     }
   }
 }
