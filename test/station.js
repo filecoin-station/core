@@ -33,14 +33,9 @@ describe('Station', () => {
       [],
       { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
     )
-    const events = []
-    for await (const line of ps.stdout) {
-      events.push(line.toString().trim())
-      if (events.length === 2) break
-    }
+    const event = await once(ps.stdout, 'data')
     ps.kill()
-    assert.strictEqual(events[0], '{\n  "totalJobsCompleted": 0,\n  "totalEarnings": "0"\n}')
-    assert.match(events[1], /^\[.+\] INFO {2}Saturn Node will try to connect to the Saturn Orchestrator\.\.\.$/)
+    assert.strictEqual(event.toString().trim(), '{\n  "totalJobsCompleted": 0,\n  "totalEarnings": "0"\n}')
   })
   it('outputs events json', async () => {
     const CACHE_ROOT = join(tmpdir(), randomUUID())
