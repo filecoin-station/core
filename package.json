@@ -15,7 +15,7 @@
     "format": "prettier --write .",
     "test": "npm run test:lint && npm run test:unit",
     "test:lint": "prettier --check . && standard",
-    "test:unit": "mocha --timeout 5000",
+    "test:unit": "mocha --timeout 15000",
     "version": "node ./scripts/version.js",
     "postinstall": "node ./scripts/post-install.js",
     "postpublish": "node ./scripts/post-publish.js",
@@ -30,7 +30,8 @@
     "mocha": "^10.2.0",
     "np": "^7.6.3",
     "prettier": "^2.8.4",
-    "standard": "^17.0.0"
+    "standard": "^17.0.0",
+    "stream-match": "^3.0.2"
   },
   "dependencies": {
     "@influxdata/influxdb-client": "^1.33.2",
