@@ -317,7 +317,7 @@ Returns `Core`.
 
 Returns `Promise<String>`.
 
-### `Core#logs.follow(module?: String)
+### `Core#logs.follow(module?: String)`
 
 Returns `AsyncGenerator<String>`.
 
