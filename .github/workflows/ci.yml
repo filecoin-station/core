@@ -6,7 +6,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
-        node: ['16', '18', '19']
+        node: ['16', '18', '19', '20']
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
