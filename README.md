@@ -337,6 +337,27 @@ Returns `Promise<MetricsEvent>`.
 
 Returns `AsyncGenerator<MetricsEvent>`.
 
+### `ActivityEvent`
+
+```
+{
+  timestamp: Date
+  type: String
+  source: String
+  message: String
+  id: String
+}
+```
+
+### `MetricsEvent`
+
+```
+{
+  totalJobsCompleted: Number
+  totalEarnings: String
+}
+```
+
 ## Disclaimer
 
 [Sentry](https://sentry.io) is used for error tracking.
