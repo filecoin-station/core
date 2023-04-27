@@ -5,9 +5,9 @@ import { getPaths, getDefaultRootDirs } from './lib/paths.js'
 
 export class Core {
   constructor ({ cacheRoot, stateRoot } = getDefaultRootDirs()) {
-    const paths = this.paths = getPaths({ cacheRoot, stateRoot })
-    const logs = this.logs = new Logs(paths)
-    this.activity = new Activity({ paths, logs })
-    this.metrics = new Metrics({ paths, logs })
+    this.paths = getPaths({ cacheRoot, stateRoot })
+    this.logs = new Logs(this)
+    this.activity = new Activity(this)
+    this.metrics = new Metrics(this)
   }
 }

@@ -1,10 +1,6 @@
 export class Activity {
-    constructor({ paths, logs }: {
-        paths: any;
-        logs: any;
-    });
-    paths: any;
-    logs: any;
+    constructor(core: any);
+    core: any;
     get(): Promise<any>;
     follow({ signal, nLines }?: {
         signal: any;

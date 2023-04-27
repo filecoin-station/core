@@ -1,10 +1,6 @@
 export class Metrics {
-    constructor({ paths, logs }: {
-        paths: any;
-        logs: any;
-    });
-    paths: any;
-    logs: any;
+    constructor(core: any);
+    core: any;
     getMetricsFilePath(moduleName: any): any;
     /**
      * @param {string=} moduleName

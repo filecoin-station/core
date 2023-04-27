@@ -8,8 +8,8 @@ export class SerializeStream extends Transform {
     _transform(obj: any, _: any, callback: any): void;
 }
 export class Logs {
-    constructor(paths: any);
-    paths: any;
+    constructor(core: any);
+    core: any;
     getLogFilePath(module: any): any;
     /**
      * @param {string=} module
