@@ -323,11 +323,11 @@ Returns `AsyncGenerator<String>`.
 
 ### `Core#activity.get()`
 
-Returns `Promise<[Activity]>`.
+Returns `Promise<[ActivityEvent]>`.
 
 ### `Core#activity.follow({ signal?: AbortSignal, nLines = 10?: Number })`
 
-Returns `AsyncGenerator<Activity>`.
+Returns `AsyncGenerator<ActivityEvent>`.
 
 ### `Core#metrics.getLatest(module?: String)`
 
