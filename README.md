@@ -331,11 +331,11 @@ Returns `AsyncGenerator<ActivityEvent>`.
 
 ### `Core#metrics.getLatest(module?: String)`
 
-Returns `Promise<Metrics>`.
+Returns `Promise<MetricsEvent>`.
 
 ### `Core#metrics.follow({ module?: String, signal?: AbortSignal })`
 
-Returns `AsyncGenerator<Metrics>`.
+Returns `AsyncGenerator<MetricsEvent>`.
 
 ## Disclaimer
 
