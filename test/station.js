@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os'
 import assert from 'node:assert'
 import { randomUUID } from 'node:crypto'
 import { join } from 'node:path'
+import streamMatch from 'stream-match'
 
 describe('Station', () => {
   it('runs Saturn', async () => {
@@ -18,12 +19,31 @@ describe('Station', () => {
       (await once(ps.stdout, 'data'))[0].toString().trim(),
       JSON.stringify({ totalJobsCompleted: 0, totalEarnings: '0' }, 0, 2)
     )
-    ps.stderr.pipe(process.stderr)
-    assert.match(
-      (await once(ps.stdout, 'data'))[0].toString().trim(),
-      /^\[.+\] INFO {2}Saturn Node will try to connect to the Saturn Orchestrator\.\.\.$/
+    await streamMatch(
+      ps.stdout,
+      'Saturn Node will try to connect to the Saturn Orchestrator...'
     )
     ps.kill()
+  })
+  it('runs experimental modules', () => {
+    it('runs Bacalhau', async () => {
+      const CACHE_ROOT = join(tmpdir(), randomUUID())
+      const STATE_ROOT = join(tmpdir(), randomUUID())
+      const ps = execa(
+        station,
+        ['--experimental'],
+        { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
+      )
+      assert.strictEqual(
+        (await once(ps.stdout, 'data'))[0].toString().trim(),
+        JSON.stringify({ totalJobsCompleted: 0, totalEarnings: '0' }, 0, 2)
+      )
+      await streamMatch(
+        ps.stdout,
+        'Bacalhau module started.'
+      )
+      ps.kill()
+    })
   })
   it('outputs events', async () => {
     const CACHE_ROOT = join(tmpdir(), randomUUID())
@@ -35,7 +55,10 @@ describe('Station', () => {
     )
     const event = await once(ps.stdout, 'data')
     ps.kill()
-    assert.strictEqual(event.toString().trim(), '{\n  "totalJobsCompleted": 0,\n  "totalEarnings": "0"\n}')
+    assert.strictEqual(
+      event.toString().trim(),
+      '{\n  "totalJobsCompleted": 0,\n  "totalEarnings": "0"\n}'
+    )
   })
   it('outputs events json', async () => {
     const CACHE_ROOT = join(tmpdir(), randomUUID())
