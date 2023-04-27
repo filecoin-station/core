@@ -3,14 +3,13 @@
 import * as commands from '../commands/index.js'
 import fs from 'node:fs/promises'
 import { join } from 'node:path'
-import { getDefaultRootDirs } from '../lib/paths.js'
+import { repoRoot, getDefaultRootDirs } from '../lib/paths.js'
 import * as Sentry from '@sentry/node'
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import { Core } from '../index.js'
 
-const core = new Core(getDefaultRootDirs())
-const pkg = JSON.parse(await fs.readFile(join(core.paths.repoRoot, 'package.json')))
+const pkg = JSON.parse(await fs.readFile(join(repoRoot, 'package.json')))
 
 Sentry.init({
   dsn: 'https://6c96a5c2ffa5448d9ec8ddda90012bc9@o1408530.ingest.sentry.io/4504792315199488',
@@ -20,6 +19,7 @@ Sentry.init({
   ignoreErrors: [/EACCES/, /EPERM/, /ENOSPC/, /EPIPE/]
 })
 
+const core = new Core(getDefaultRootDirs())
 const modules = [
   'saturn-L2-node'
 ]

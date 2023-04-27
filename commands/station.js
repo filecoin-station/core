@@ -22,7 +22,7 @@ export const station = async ({ core, json }) => {
     process.exit(1)
   }
 
-  const id = await startPingLoop(core.paths)
+  const id = await startPingLoop()
   id.unref()
 
   await Promise.all([
