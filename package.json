@@ -30,7 +30,8 @@
     "mocha": "^10.2.0",
     "np": "^7.6.3",
     "prettier": "^2.8.4",
-    "standard": "^17.0.0"
+    "standard": "^17.0.0",
+    "stream-match": "^3.0.2"
   },
   "dependencies": {
     "@influxdata/influxdb-client": "^1.33.2",
