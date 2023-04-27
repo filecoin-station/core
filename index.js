@@ -4,6 +4,11 @@ import { Metrics } from './lib/metrics.js'
 import { getPaths, getDefaultRootDirs } from './lib/paths.js'
 
 export class Core {
+  /**
+   * @param {Object} [options]
+   * @param {String} [options.cacheRoot]
+   * @param {String} [options.stateRoot]
+   */
   constructor ({ cacheRoot, stateRoot } = getDefaultRootDirs()) {
     this.paths = getPaths({ cacheRoot, stateRoot })
     this.logs = new Logs(this)

@@ -307,6 +307,36 @@ $ sudo systemctl start station
 $ sudo systemctl status station
 ```
 
+## API
+
+### `Core({ cacheRoot?: String, stateRoot?: String })`
+
+Returns `Core`.
+
+### `Core#logs.get(module?: String)`
+
+Returns `Promise<String>`.
+
+### `Core#logs.follow(module?: String)
+
+Returns `AsyncGenerator<String>`.
+
+### `Core#activity.get()`
+
+Returns `Promise<[Activity]>`.
+
+### `Core#activity.follow({ signal?: AbortSignal, nLines = 10?: Number })`
+
+Returns `AsyncGenerator<Activity>`.
+
+### `Core#metrics.getLatest(module?: String)`
+
+Returns `Promise<Metrics>`.
+
+### `Core#metrics.follow({ module?: String, signal?: AbortSignal })`
+
+Returns `AsyncGenerator<Metrics>`.
+
 ## Disclaimer
 
 [Sentry](https://sentry.io) is used for error tracking.
