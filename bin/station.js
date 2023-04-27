@@ -20,15 +20,21 @@ Sentry.init({
   ignoreErrors: [/EACCES/, /EPERM/, /ENOSPC/, /EPIPE/]
 })
 
-await fs.mkdir(join(core.paths.moduleCache, 'saturn-L2-node'), { recursive: true })
-await fs.mkdir(join(core.paths.moduleState, 'saturn-L2-node'), { recursive: true })
+const modules = [
+  'saturn-L2-node'
+]
+
 await fs.mkdir(core.paths.moduleLogs, { recursive: true })
 await fs.mkdir(core.paths.metrics, { recursive: true })
 await core.activity.maybeCreateActivityFile()
 await core.metrics.maybeCreateMetricsFile()
-await core.metrics.maybeCreateMetricsFile('saturn-L2-node')
 await core.logs.maybeCreateLogFile()
-await core.logs.maybeCreateLogFile('saturn-L2-node')
+for (const module of modules) {
+  await fs.mkdir(join(core.paths.moduleCache, module), { recursive: true })
+  await fs.mkdir(join(core.paths.moduleState, module), { recursive: true })
+  await core.metrics.maybeCreateMetricsFile(module)
+  await core.logs.maybeCreateLogFile(module)
+}
 
 yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')
@@ -64,7 +70,7 @@ yargs(hideBin(process.argv))
     () => {},
     args => commands.logs({ ...args, core })
   )
-  .choices('module', ['saturn-l2-node'])
+  .choices('module', modules)
   .version(`${pkg.name}: ${pkg.version}`)
   .alias('v', 'version')
   .alias('h', 'help')

@@ -10,9 +10,9 @@ export function getPaths({ cacheRoot, stateRoot }: {
     moduleState: string;
     moduleLogs: string;
     allLogs: string;
-    moduleBinaries: string;
     lockFile: string;
 };
+export const moduleBinaries: string;
 export function getDefaultRootDirs(): {
     cacheRoot: string;
     stateRoot: string;

@@ -30,7 +30,6 @@ export const station = async ({ core, json }) => {
       FIL_WALLET_ADDRESS,
       MAX_DISK_SPACE,
       storagePath: join(core.paths.moduleCache, 'saturn-L2-node'),
-      binariesPath: core.paths.moduleBinaries,
       metricsStream: await core.metrics.createWriteStream('saturn-L2-node'),
       activityStream: core.activity.createWriteStream('Saturn'),
       logStream: core.logs.createWriteStream(join(core.paths.moduleLogs, 'saturn-L2-node.log'))

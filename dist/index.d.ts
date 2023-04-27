@@ -12,7 +12,6 @@ export class Core {
         moduleState: string;
         moduleLogs: string;
         allLogs: string;
-        moduleBinaries: string;
         lockFile: string;
     };
     logs: Logs;
