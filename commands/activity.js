@@ -1,12 +1,8 @@
-import {
-  followActivity,
-  getActivity,
-  formatActivityObject
-} from '../lib/activity.js'
+import { formatActivityObject } from '../lib/activity.js'
 
-export const activity = async ({ follow, json }) => {
+export const activity = async ({ core, follow, json }) => {
   if (follow) {
-    for await (const obj of followActivity()) {
+    for await (const obj of core.activity.follow()) {
       if (json) {
         process.stdout.write(JSON.stringify(obj) + '\n')
       } else {
@@ -14,7 +10,7 @@ export const activity = async ({ follow, json }) => {
       }
     }
   } else {
-    const activity = await getActivity()
+    const activity = await core.activity.get()
     if (json) {
       console.log(JSON.stringify(activity, 0, 2))
     } else {

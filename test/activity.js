@@ -10,49 +10,49 @@ import fs from 'node:fs/promises'
 
 describe('Activity', () => {
   it('handles no activity', async () => {
-    const CACHE_ROOT = join(tmpdir(), randomUUID())
-    const STATE_ROOT = join(tmpdir(), randomUUID())
+    const cacheRoot = join(tmpdir(), randomUUID())
+    const stateRoot = join(tmpdir(), randomUUID())
     const { stdout } = await execa(
       station,
       ['activity'],
-      { env: { CACHE_ROOT, STATE_ROOT } }
+      { env: { CACHE_ROOT: cacheRoot, STATE_ROOT: stateRoot } }
     )
     assert.strictEqual(stdout, '')
   })
   it('outputs activity', async () => {
-    const CACHE_ROOT = join(tmpdir(), randomUUID())
-    const STATE_ROOT = join(tmpdir(), randomUUID())
+    const cacheRoot = join(tmpdir(), randomUUID())
+    const stateRoot = join(tmpdir(), randomUUID())
     await fs.mkdir(
-      dirname(getPaths(CACHE_ROOT, STATE_ROOT).activity),
+      dirname(getPaths({ cacheRoot, stateRoot }).activity),
       { recursive: true }
     )
     await fs.writeFile(
-      getPaths(CACHE_ROOT, STATE_ROOT).activity,
-      '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
+      getPaths({ cacheRoot, stateRoot }).activity,
+      '[2023-04-26T12:26:40.489Z] {"source":"Saturn","type":"info","message":"beep boop"}\n'
     )
     const { stdout } = await execa(
       station,
       ['activity'],
-      { env: { CACHE_ROOT, STATE_ROOT } }
+      { env: { CACHE_ROOT: cacheRoot, STATE_ROOT: stateRoot } }
     )
-    assert.match(stdout, /3\/14\/2023/)
+    assert.match(stdout, /2023/)
     assert.match(stdout, /beep boop/)
   })
   it('outputs activity json', async () => {
-    const CACHE_ROOT = join(tmpdir(), randomUUID())
-    const STATE_ROOT = join(tmpdir(), randomUUID())
+    const cacheRoot = join(tmpdir(), randomUUID())
+    const stateRoot = join(tmpdir(), randomUUID())
     await fs.mkdir(
-      dirname(getPaths(CACHE_ROOT, STATE_ROOT).activity),
+      dirname(getPaths({ cacheRoot, stateRoot }).activity),
       { recursive: true }
     )
     await fs.writeFile(
-      getPaths(CACHE_ROOT, STATE_ROOT).activity,
+      getPaths({ cacheRoot, stateRoot }).activity,
       '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop","id":"uuid"}\n'
     )
     const { stdout } = await execa(
       station,
       ['activity', '--json'],
-      { env: { CACHE_ROOT, STATE_ROOT } }
+      { env: { CACHE_ROOT: cacheRoot, STATE_ROOT: stateRoot } }
     )
     const activity = JSON.parse(stdout)
     assert(activity[0].timestamp)
@@ -67,21 +67,21 @@ describe('Activity', () => {
     it('reads activity', async () => {
       for (const flag of ['-f', '--follow']) {
         it(flag, async () => {
-          const CACHE_ROOT = join(tmpdir(), randomUUID())
-          const STATE_ROOT = join(tmpdir(), randomUUID())
+          const cacheRoot = join(tmpdir(), randomUUID())
+          const stateRoot = join(tmpdir(), randomUUID())
           await fs.mkdir(
-            dirname(getPaths(CACHE_ROOT, STATE_ROOT).activity),
+            dirname(getPaths({ cacheRoot, stateRoot }).activity),
             { recursive: true }
           )
           const ps = execa(
             station,
             ['activity', flag],
-            { env: { CACHE_ROOT, STATE_ROOT } }
+            { env: { CACHE_ROOT: cacheRoot, STATE_ROOT: stateRoot } }
           )
           const [data] = await Promise.all([
             once(ps.stdout, 'data'),
             fs.writeFile(
-              getPaths(CACHE_ROOT, STATE_ROOT).activity,
+              getPaths({ cacheRoot, stateRoot }).activity,
               '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop"}\n'
             )
           ])
@@ -92,21 +92,21 @@ describe('Activity', () => {
       }
     })
     it('outputs json', async () => {
-      const CACHE_ROOT = join(tmpdir(), randomUUID())
-      const STATE_ROOT = join(tmpdir(), randomUUID())
+      const cacheRoot = join(tmpdir(), randomUUID())
+      const stateRoot = join(tmpdir(), randomUUID())
       await fs.mkdir(
-        dirname(getPaths(CACHE_ROOT, STATE_ROOT).activity),
+        dirname(getPaths({ cacheRoot, stateRoot }).activity),
         { recursive: true }
       )
       const ps = execa(
         station,
         ['activity', '--follow', '--json'],
-        { env: { CACHE_ROOT, STATE_ROOT } }
+        { env: { CACHE_ROOT: cacheRoot, STATE_ROOT: stateRoot } }
       )
       const [data] = await Promise.all([
         once(ps.stdout, 'data'),
         fs.writeFile(
-          getPaths(CACHE_ROOT, STATE_ROOT).activity,
+          getPaths({ cacheRoot, stateRoot }).activity,
           '[3/14/2023, 10:38:14 AM] {"source":"Saturn","type":"info","message":"beep boop","id":"uuid"}\n'
         )
       ])
@@ -120,16 +120,16 @@ describe('Activity', () => {
     })
     it('doesn\'t block station from running', async function () {
       this.timeout(20_000)
-      const CACHE_ROOT = join(tmpdir(), randomUUID())
-      const STATE_ROOT = join(tmpdir(), randomUUID())
+      const cacheRoot = join(tmpdir(), randomUUID())
+      const stateRoot = join(tmpdir(), randomUUID())
       const activityPs = execa(
         station,
         ['activity', '--follow'],
-        { env: { CACHE_ROOT, STATE_ROOT } }
+        { env: { CACHE_ROOT: cacheRoot, STATE_ROOT: stateRoot } }
       )
       const stationPs = execa(
         station,
-        { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
+        { env: { CACHE_ROOT: cacheRoot, STATE_ROOT: stateRoot, FIL_WALLET_ADDRESS } }
       )
       await Promise.all([
         once(stationPs.stdout, 'data'),
@@ -141,17 +141,17 @@ describe('Activity', () => {
   })
 
   it('can be read while station is running', async () => {
-    const CACHE_ROOT = join(tmpdir(), randomUUID())
-    const STATE_ROOT = join(tmpdir(), randomUUID())
+    const cacheRoot = join(tmpdir(), randomUUID())
+    const stateRoot = join(tmpdir(), randomUUID())
     const ps = execa(
       station,
-      { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
+      { env: { CACHE_ROOT: cacheRoot, STATE_ROOT: stateRoot, FIL_WALLET_ADDRESS } }
     )
     await once(ps.stdout, 'data')
     const { stdout } = await execa(
       station,
       ['activity'],
-      { env: { CACHE_ROOT, STATE_ROOT } }
+      { env: { CACHE_ROOT: cacheRoot, STATE_ROOT: stateRoot } }
     )
     assert(stdout)
     ps.kill()

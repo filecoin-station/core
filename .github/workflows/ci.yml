@@ -6,7 +6,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
-        node: ['16', '18', '19']
+        node: ['16', '18', '19', '20']
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -18,10 +18,26 @@ jobs:
         if: matrix.os != 'windows-latest'
       - run: npm run test:unit
 
-  test-docker:
+  test-locales:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        lang:
+          - en_GB.UTF-8
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm ci
+      - run: npm run test:unit
+        env:
+          LANG: ${{ matrix.lang }}
+
+  docker:
+    name: Build and test Docker
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      packages: read
     env:
       REGISTRY: ghcr.io
 
@@ -34,26 +50,49 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Docker image for local use
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: "arm64"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and load Docker image
         id: docker_build
-        run: |
-          docker build --iidfile imageid .
-          IMAGEID=$(cat imageid)
-          echo "imageid=$IMAGEID" >> "$GITHUB_OUTPUT"
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          load: true
+          tags: core-test
+          cache-from: type=registry,ref=ghcr.io/filecoin-station/core
+          cache-to: type=inline
+
+      - name: Build Docker image for other platforms
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          platforms: linux/arm64
+          cache-from: type=registry,ref=ghcr.io/filecoin-station/core
+          cache-to: type=inline
 
       - name: Start Station Core container
         run: |
-          docker run \
-            --name station \
-            --detach \
-            --env FIL_WALLET_ADDRESS=f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za \
-            $IMAGEID
+         docker run \
+           --name station \
+           --detach \
+           --env FIL_WALLET_ADDRESS=f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za \
+           $IMAGEID
         env:
           IMAGEID: ${{ steps.docker_build.outputs.imageid }}
 
-      - name: Verify container activity
+      - name: Print station activity
         run: |
-          LOGS=$(docker exec station bin/station.js activity)
-          echo $LOGS
-          echo $LOGS | grep "Saturn module started"
-          echo $LOGS | grep "Module Runtime started"
+          sleep 10 # Wait for Station modules to start
+          docker exec station bin/station.js activity
+
+      - name: Check | Saturn started
+        run: docker exec station bin/station.js activity | grep "Saturn module started"
+
+      - name: Check | Zinnia started
+        run: docker exec station bin/station.js activity | grep "Module Runtime started"

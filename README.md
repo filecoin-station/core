@@ -115,6 +115,13 @@ For the JSON output, the following event types exist:
   - `message`
   - `id`
 
+Set the flag `--experimental` to run modules not yet considered safe for
+production use. _Run this at your own risk!_
+
+Modules currently in experimental mode:
+
+- [Bacalhau](https://github.com/bacalhau-project/bacalhau)
+
 ### `$ station metrics <module>`
 
 Get combined metrics from all Station Modules:
@@ -238,8 +245,10 @@ Commands:
   station events            Events stream
 
 Options:
-  -v, --version  Show version number                                   [boolean]
-  -h, --help     Show help                                             [boolean]
+  -j, --json          Output JSON                                      [boolean]
+      --experimental  Also run experimental modules                    [boolean]
+  -v, --version       Show version number                              [boolean]
+  -h, --help          Show help                                        [boolean]
 ```
 
 ### `$ station --version`
@@ -307,9 +316,60 @@ $ sudo systemctl start station
 $ sudo systemctl status station
 ```
 
+## API
+
+### `new Core({ cacheRoot?: String, stateRoot?: String })`
+
+Creates a new instance of `Core`.
+
+### `Core#logs.get(module?: String)`
+
+Returns `Promise<String>`.
+
+### `Core#logs.follow(module?: String)`
+
+Returns `AsyncGenerator<String>`.
+
+### `Core#activity.get()`
+
+Returns `Promise<ActivityEvent[]>`.
+
+### `Core#activity.follow({ signal?: AbortSignal, nLines = 10?: Number })`
+
+Returns `AsyncGenerator<ActivityEvent>`.
+
+### `Core#metrics.getLatest(module?: String)`
+
+Returns `Promise<MetricsEvent>`.
+
+### `Core#metrics.follow(module?: String, { signal?: AbortSignal })`
+
+Returns `AsyncGenerator<MetricsEvent>`.
+
+### `ActivityEvent`
+
+```
+{
+  timestamp: Date
+  type: ("info"|"error")
+  source: String
+  message: String
+  id: String
+}
+```
+
+### `MetricsEvent`
+
+```
+{
+  totalJobsCompleted: Number
+  totalEarnings: String
+}
+```
+
 ## Disclaimer
 
-[Sentry](https://sentry.io) is used for error tracking.
+The CLI uses [Sentry](https://sentry.io) for error tracking.
 [InfluxDB](https://www.influxdata.com/) is used for stats.
 
 ## Development
