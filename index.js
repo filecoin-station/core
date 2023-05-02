@@ -3,6 +3,9 @@ import { Logs } from './lib/log.js'
 import { Metrics } from './lib/metrics.js'
 import { getPaths, getDefaultRootDirs } from './lib/paths.js'
 
+export { ActivityEvent } from './lib/activity.js'
+export { MetricsEvent } from './lib/metrics.js'
+
 export class Core {
   /**
    * @param {Object} [options]
