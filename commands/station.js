@@ -47,7 +47,7 @@ export const station = async ({ core, json, experimental }) => {
       logStream: core.logs.createWriteStream(
         join(core.paths.moduleLogs, 'runtime.log')
       )
-    }),
+    })
   ]
 
   if (experimental) {
