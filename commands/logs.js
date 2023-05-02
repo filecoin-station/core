@@ -7,7 +7,6 @@ export const logs = async ({ core, module, follow }) => {
       process.stdout.write(formatLog(text, { timestamp, pretty: true }))
     }
   } else {
-    process.stdout.write(await core.logs.get(module))
     const lines = (await core.logs.get(module))
       .toString()
       .trim()
