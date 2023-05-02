@@ -369,7 +369,7 @@ Returns `AsyncGenerator<MetricsEvent>`.
 
 ## Disclaimer
 
-[Sentry](https://sentry.io) is used for error tracking.
+The CLI uses [Sentry](https://sentry.io) for error tracking.
 [InfluxDB](https://www.influxdata.com/) is used for stats.
 
 ## Development
