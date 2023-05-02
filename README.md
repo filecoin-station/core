@@ -115,6 +115,13 @@ For the JSON output, the following event types exist:
   - `message`
   - `id`
 
+Set the flag `--experimental` to run modules not yet considered safe for
+production use. _Run this at your own risk!_.
+
+Modules currently in experimental mode:
+
+- [Bacalhau](https://github.com/bacalhau-project/bacalhau)
+
 ### `$ station metrics <module>`
 
 Get combined metrics from all Station Modules:
@@ -238,8 +245,10 @@ Commands:
   station events            Events stream
 
 Options:
-  -v, --version  Show version number                                   [boolean]
-  -h, --help     Show help                                             [boolean]
+  -j, --json          Output JSON                                      [boolean]
+      --experimental  Also run experimental modules                    [boolean]
+  -v, --version       Show version number                              [boolean]
+  -h, --help          Show help                                        [boolean]
 ```
 
 ### `$ station --version`

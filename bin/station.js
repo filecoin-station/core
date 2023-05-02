@@ -22,7 +22,8 @@ Sentry.init({
 })
 
 const modules = [
-  'saturn-L2-node'
+  'saturn-L2-node',
+  'bacalhau'
 ]
 
 await fs.mkdir(paths.moduleLogs, { recursive: true })
@@ -42,11 +43,16 @@ yargs(hideBin(process.argv))
   .command(
     '$0',
     'Start Station',
-    yargs => yargs.option('json', {
-      alias: 'j',
-      type: 'boolean',
-      description: 'Output JSON'
-    }),
+    yargs => yargs
+      .option('json', {
+        alias: 'j',
+        type: 'boolean',
+        description: 'Output JSON'
+      })
+      .option('experimental', {
+        type: 'boolean',
+        description: 'Also run experimental modules'
+      }),
     commands.station
   )
   .command('metrics [module]', 'Show metrics', () => {}, commands.metrics)

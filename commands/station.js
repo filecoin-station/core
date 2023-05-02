@@ -11,10 +11,11 @@ import {
 import lockfile from 'proper-lockfile'
 import { maybeCreateFile } from '../lib/util.js'
 import { startPingLoop } from '../lib/telemetry.js'
+import * as bacalhau from '../lib/bacalhau.js'
 
 const { FIL_WALLET_ADDRESS, MAX_DISK_SPACE } = process.env
 
-export const station = async ({ json }) => {
+export const station = async ({ json, experimental }) => {
   if (!FIL_WALLET_ADDRESS) {
     console.error('FIL_WALLET_ADDRESS required')
     process.exit(1)
@@ -31,7 +32,7 @@ export const station = async ({ json }) => {
 
   startPingLoop().unref()
 
-  await Promise.all([
+  const modules = [
     saturnNode.start({
       FIL_WALLET_ADDRESS,
       MAX_DISK_SPACE,
@@ -39,7 +40,21 @@ export const station = async ({ json }) => {
       metricsStream: await createMetricsStream('saturn-L2-node'),
       activityStream: createActivityStream('Saturn'),
       logStream: createLogStream(join(paths.moduleLogs, 'saturn-L2-node.log'))
-    }),
+    })
+  ]
+
+  if (experimental) {
+    modules.push(bacalhau.start({
+      FIL_WALLET_ADDRESS,
+      storagePath: join(paths.moduleCache, 'bacalhau'),
+      metricsStream: await createMetricsStream('bacalhau'),
+      activityStream: createActivityStream('Bacalhau'),
+      logStream: createLogStream(join(paths.moduleLogs, 'bacalhau.log'))
+    }))
+  }
+
+  await Promise.all([
+    ...modules,
     (async () => {
       for await (const metrics of followMetrics()) {
         if (json) {
