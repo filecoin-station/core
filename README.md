@@ -309,9 +309,9 @@ $ sudo systemctl status station
 
 ## API
 
-### `Core({ cacheRoot?: String, stateRoot?: String })`
+### `new Core({ cacheRoot?: String, stateRoot?: String })`
 
-Returns `Core`.
+Creates a new instance of `Core`.
 
 ### `Core#logs.get(module?: String)`
 
