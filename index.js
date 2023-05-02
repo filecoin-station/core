@@ -11,8 +11,12 @@ export class Core {
    */
   constructor ({ cacheRoot, stateRoot } = getDefaultRootDirs()) {
     this.paths = getPaths({ cacheRoot, stateRoot })
-    this.logs = new Logs(this)
-    this.activity = new Activity(this)
-    this.metrics = new Metrics(this)
+    this.logs = new Logs(this.paths.moduleLogs, this.paths.allLogs)
+    this.activity = new Activity(this.paths.activity, this.logs)
+    this.metrics = new Metrics(
+      this.paths.metrics,
+      this.paths.allMetrics,
+      this.logs
+    )
   }
 }
