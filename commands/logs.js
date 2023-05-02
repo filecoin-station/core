@@ -11,7 +11,7 @@ export const logs = async ({ module, follow }) => {
       .toString()
       .trim()
       .split('\n')
-      .filter(Boolean)
+      .filter(line => line !== '')
     for (const line of lines) {
       const { text, timestamp } = parseLog(line)
       process.stdout.write(formatLog(text, { timestamp, pretty: true }))
