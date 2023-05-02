@@ -1,13 +1,6 @@
 import { join } from 'node:path'
-import { paths } from '../lib/paths.js'
 import * as saturnNode from '../lib/saturn-node.js'
-import { createLogStream } from '../lib/log.js'
-import { createMetricsStream, followMetrics } from '../lib/metrics.js'
-import {
-  createActivityStream,
-  followActivity,
-  formatActivityObject
-} from '../lib/activity.js'
+import { formatActivityObject } from '../lib/activity.js'
 import lockfile from 'proper-lockfile'
 import { maybeCreateFile } from '../lib/util.js'
 import { startPingLoop } from '../lib/telemetry.js'
@@ -15,48 +8,53 @@ import * as bacalhau from '../lib/bacalhau.js'
 
 const { FIL_WALLET_ADDRESS, MAX_DISK_SPACE } = process.env
 
-export const station = async ({ json, experimental }) => {
+export const station = async ({ core, json, experimental }) => {
   if (!FIL_WALLET_ADDRESS) {
     console.error('FIL_WALLET_ADDRESS required')
     process.exit(1)
   }
 
-  await maybeCreateFile(paths.lockFile)
+  await maybeCreateFile(core.paths.lockFile)
   try {
-    await lockfile.lock(paths.lockFile)
+    await lockfile.lock(core.paths.lockFile)
   } catch (err) {
     console.error('Another Station is already running on this machine.')
-    console.error(`If you are sure this is not the case, please delete the lock file at "${paths.lockFile}" and try again.`)
+    console.error(`If you are sure this is not the case, please delete the lock file at "${core.paths.lockFile}" and try again.`)
     process.exit(1)
   }
 
-  startPingLoop().unref()
+  const id = await startPingLoop()
+  id.unref()
 
   const modules = [
     saturnNode.start({
       FIL_WALLET_ADDRESS,
       MAX_DISK_SPACE,
-      storagePath: join(paths.moduleCache, 'saturn-L2-node'),
-      metricsStream: await createMetricsStream('saturn-L2-node'),
-      activityStream: createActivityStream('Saturn'),
-      logStream: createLogStream(join(paths.moduleLogs, 'saturn-L2-node.log'))
+      storagePath: join(core.paths.moduleCache, 'saturn-L2-node'),
+      metricsStream: await core.metrics.createWriteStream('saturn-L2-node'),
+      activityStream: core.activity.createWriteStream('Saturn'),
+      logStream: core.logs.createWriteStream(
+        join(core.paths.moduleLogs, 'saturn-L2-node.log')
+      )
     })
   ]
 
   if (experimental) {
     modules.push(bacalhau.start({
       FIL_WALLET_ADDRESS,
-      storagePath: join(paths.moduleCache, 'bacalhau'),
-      metricsStream: await createMetricsStream('bacalhau'),
-      activityStream: createActivityStream('Bacalhau'),
-      logStream: createLogStream(join(paths.moduleLogs, 'bacalhau.log'))
+      storagePath: join(core.paths.moduleCache, 'bacalhau'),
+      metricsStream: await core.metrics.createWriteStream('bacalhau'),
+      activityStream: core.activity.createWriteStream('Bacalhau'),
+      logStream: core.logs.createWriteStream(
+        join(core.paths.moduleLogs, 'bacalhau.log')
+      )
     }))
   }
 
   await Promise.all([
     ...modules,
     (async () => {
-      for await (const metrics of followMetrics()) {
+      for await (const metrics of core.metrics.follow()) {
         if (json) {
           console.log(JSON.stringify({
             type: 'jobs-completed',
@@ -68,7 +66,7 @@ export const station = async ({ json, experimental }) => {
       }
     })(),
     (async () => {
-      for await (const activity of followActivity({ nLines: 0 })) {
+      for await (const activity of core.activity.follow({ nLines: 0 })) {
         if (json) {
           console.log(JSON.stringify({
             type: `activity:${activity.type}`,

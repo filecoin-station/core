@@ -1,0 +1,21 @@
+{
+  "include": ["index.js"],
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "skipLibCheck": true,
+    "lib": ["es2021"],
+    "target": "es2021",
+    "module": "Node16",
+    "moduleResolution": "node16",
+
+    // TODO
+    // "strict": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "dist",
+    "declarationMap": true
+  }
+}

@@ -10,12 +10,12 @@ import fs from 'node:fs/promises'
 
 describe('Metrics', () => {
   it('handles empty metrics', async () => {
-    const CACHE_ROOT = join(tmpdir(), randomUUID())
-    const STATE_ROOT = join(tmpdir(), randomUUID())
+    const cacheRoot = join(tmpdir(), randomUUID())
+    const stateRoot = join(tmpdir(), randomUUID())
     const { stdout } = await execa(
       station,
       ['metrics'],
-      { env: { CACHE_ROOT, STATE_ROOT } }
+      { env: { CACHE_ROOT: cacheRoot, STATE_ROOT: stateRoot } }
     )
     assert.deepStrictEqual(
       stdout,
@@ -23,20 +23,20 @@ describe('Metrics', () => {
     )
   })
   it('outputs metrics', async () => {
-    const CACHE_ROOT = join(tmpdir(), randomUUID())
-    const STATE_ROOT = join(tmpdir(), randomUUID())
+    const cacheRoot = join(tmpdir(), randomUUID())
+    const stateRoot = join(tmpdir(), randomUUID())
     await fs.mkdir(
-      dirname(getPaths(CACHE_ROOT, STATE_ROOT).allMetrics),
+      dirname(getPaths({ cacheRoot, stateRoot }).allMetrics),
       { recursive: true }
     )
     await fs.writeFile(
-      getPaths(CACHE_ROOT, STATE_ROOT).allMetrics,
+      getPaths({ cacheRoot, stateRoot }).allMetrics,
       '[date] {"totalJobsCompleted":1,"totalEarnings":"2"}\n'
     )
     const { stdout } = await execa(
       station,
       ['metrics'],
-      { env: { CACHE_ROOT, STATE_ROOT } }
+      { env: { CACHE_ROOT: cacheRoot, STATE_ROOT: stateRoot } }
     )
     assert.deepStrictEqual(
       stdout,
@@ -44,20 +44,20 @@ describe('Metrics', () => {
     )
   })
   it('outputs module metrics', async () => {
-    const CACHE_ROOT = join(tmpdir(), randomUUID())
-    const STATE_ROOT = join(tmpdir(), randomUUID())
+    const cacheRoot = join(tmpdir(), randomUUID())
+    const stateRoot = join(tmpdir(), randomUUID())
     await fs.mkdir(
-      getPaths(CACHE_ROOT, STATE_ROOT).metrics,
+      getPaths({ cacheRoot, stateRoot }).metrics,
       { recursive: true }
     )
     await fs.writeFile(
-      join(getPaths(CACHE_ROOT, STATE_ROOT).metrics, 'saturn-L2-node.log'),
+      join(getPaths({ cacheRoot, stateRoot }).metrics, 'saturn-L2-node.log'),
       '[date] {"totalJobsCompleted":1,"totalEarnings":"2"}\n'
     )
     const { stdout } = await execa(
       station,
       ['metrics', 'saturn-L2-node'],
-      { env: { CACHE_ROOT, STATE_ROOT } }
+      { env: { CACHE_ROOT: cacheRoot, STATE_ROOT: stateRoot } }
     )
     assert.deepStrictEqual(
       stdout,
@@ -68,12 +68,12 @@ describe('Metrics', () => {
   describe('Follow', async () => {
     for (const flag of ['-f', '--follow']) {
       it(flag, async () => {
-        const CACHE_ROOT = join(tmpdir(), randomUUID())
-        const STATE_ROOT = join(tmpdir(), randomUUID())
+        const cacheRoot = join(tmpdir(), randomUUID())
+        const stateRoot = join(tmpdir(), randomUUID())
         const ps = execa(
           station,
           ['metrics', flag],
-          { env: { CACHE_ROOT, STATE_ROOT } }
+          { env: { CACHE_ROOT: cacheRoot, STATE_ROOT: stateRoot } }
         )
         await once(ps.stdout, 'data')
         ps.kill()
@@ -82,17 +82,17 @@ describe('Metrics', () => {
   })
 
   it('can be read while station is running', async () => {
-    const CACHE_ROOT = join(tmpdir(), randomUUID())
-    const STATE_ROOT = join(tmpdir(), randomUUID())
+    const cacheRoot = join(tmpdir(), randomUUID())
+    const stateRoot = join(tmpdir(), randomUUID())
     const ps = execa(
       station,
-      { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
+      { env: { CACHE_ROOT: cacheRoot, STATE_ROOT: stateRoot, FIL_WALLET_ADDRESS } }
     )
     await once(ps.stdout, 'data')
     const { stdout } = await execa(
       station,
       ['metrics'],
-      { env: { CACHE_ROOT, STATE_ROOT } }
+      { env: { CACHE_ROOT: cacheRoot, STATE_ROOT: stateRoot } }
     )
     assert.deepStrictEqual(
       stdout,

@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 
-import { join, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join } from 'node:path'
 import fs from 'node:fs/promises'
 import { execa } from 'execa'
+import { repoRoot } from '../lib/paths'
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
 const pkg = JSON.parse(await fs.readFile(join(repoRoot, 'package.json')))
 pkg.sentryEnvironment = 'production'
 await fs.writeFile(
