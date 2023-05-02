@@ -323,7 +323,7 @@ Returns `AsyncGenerator<String>`.
 
 ### `Core#activity.get()`
 
-Returns `Promise<[ActivityEvent]>`.
+Returns `Promise<ActivityEvent[]>`.
 
 ### `Core#activity.follow({ signal?: AbortSignal, nLines = 10?: Number })`
 
