@@ -28,14 +28,15 @@ describe('Logs', () => {
     )
     await fs.writeFile(
       getPaths(CACHE_ROOT, STATE_ROOT).allLogs,
-      '[date] beep boop\n'
+      '[2023-04-26T12:42:23.562Z] beep boop\n'
     )
     const { stdout } = await execa(
       station,
       ['logs'],
       { env: { CACHE_ROOT, STATE_ROOT } }
     )
-    assert.strictEqual(stdout, '[date] beep boop')
+    assert.match(stdout, /2023/)
+    assert.match(stdout, /beep boop/)
   })
 
   describe('Follow', () => {
@@ -57,10 +58,11 @@ describe('Logs', () => {
             once(ps.stdout, 'data'),
             fs.writeFile(
               getPaths(CACHE_ROOT, STATE_ROOT).allLogs,
-              '[date] beep boop\n'
+              '[2023-04-26T12:42:23.562Z] beep boop\n'
             )
           ])
-          assert.strictEqual(data.toString(), '[date] beep boop\n')
+          assert.match(data.toString(), /2023/)
+          assert.match(data.toString(), /beep boop/)
           ps.kill()
         })
       }

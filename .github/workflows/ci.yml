@@ -18,6 +18,20 @@ jobs:
         if: matrix.os != 'windows-latest'
       - run: npm run test:unit
 
+  test-locales:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        lang:
+          - en_GB.UTF-8
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm ci
+      - run: npm run test:unit
+        env:
+          LANG: ${{ matrix.lang }}
+
   docker:
     name: Build and test Docker
     runs-on: ubuntu-latest
