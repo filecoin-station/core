@@ -116,7 +116,7 @@ For the JSON output, the following event types exist:
   - `id`
 
 Set the flag `--experimental` to run modules not yet considered safe for
-production use. _Run this at your own risk!_.
+production use. _Run this at your own risk!_
 
 Modules currently in experimental mode:
 
