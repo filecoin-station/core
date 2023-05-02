@@ -3,7 +3,7 @@
 import { join } from 'node:path'
 import { execa } from 'execa'
 import fs from 'node:fs/promises'
-import { repoRoot } from '../lib/paths'
+import { repoRoot } from '../lib/paths.js'
 
 const pkg = JSON.parse(await fs.readFile(join(repoRoot, 'package.json')))
 pkg.sentryEnvironment = 'development'
