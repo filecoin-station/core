@@ -351,7 +351,7 @@ Returns `AsyncGenerator<MetricsEvent>`.
 ```
 {
   timestamp: Date
-  type: String
+  type: ("info"|"error")
   source: String
   message: String
   id: String
