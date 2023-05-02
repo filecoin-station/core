@@ -19,6 +19,19 @@ describe('Station', () => {
     ])
     ps.kill()
   })
+  it('runs experimental modules', () => {
+    it('runs Bacalhau', async () => {
+      const CACHE_ROOT = join(tmpdir(), randomUUID())
+      const STATE_ROOT = join(tmpdir(), randomUUID())
+      const ps = execa(
+        station,
+        ['--experimental'],
+        { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
+      )
+      await streamMatch(ps.stdout, 'Bacalhau module started.')
+      ps.kill()
+    })
+  })
   it('outputs events', async () => {
     const CACHE_ROOT = join(tmpdir(), randomUUID())
     const STATE_ROOT = join(tmpdir(), randomUUID())

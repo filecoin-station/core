@@ -21,7 +21,8 @@ Sentry.init({
 
 const core = new Core(getDefaultRootDirs())
 const modules = [
-  'saturn-L2-node'
+  'saturn-L2-node',
+  'bacalhau'
 ]
 
 await fs.mkdir(core.paths.moduleLogs, { recursive: true })
@@ -41,11 +42,16 @@ yargs(hideBin(process.argv))
   .command(
     '$0',
     'Start Station',
-    yargs => yargs.option('json', {
-      alias: 'j',
-      type: 'boolean',
-      description: 'Output JSON'
-    }),
+    yargs => yargs
+      .option('json', {
+        alias: 'j',
+        type: 'boolean',
+        description: 'Output JSON'
+      })
+      .option('experimental', {
+        type: 'boolean',
+        description: 'Also run experimental modules'
+      }),
     args => commands.station({ ...args, core })
   )
   .command(
