@@ -24,7 +24,7 @@ describe('Storage', async () => {
         )
         await fs.stat(
           join(
-            STATE_ROOT, 'logs', 'modules', 'runtime.log'
+            STATE_ROOT, 'logs', 'modules', 'zinnia.log'
           )
         )
         break

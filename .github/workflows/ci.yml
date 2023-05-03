@@ -95,4 +95,4 @@ jobs:
         run: docker exec station bin/station.js activity | grep "Saturn module started"
 
       - name: Check | Zinnia started
-        run: docker exec station bin/station.js activity | grep "Module Runtime started"
+        run: docker exec station bin/station.js activity | grep "Zinnia started"

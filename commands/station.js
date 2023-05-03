@@ -40,12 +40,12 @@ export const station = async ({ core, json, experimental }) => {
     }),
     zinniaRuntime.start({
       FIL_WALLET_ADDRESS,
-      STATE_ROOT: join(core.paths.moduleState, 'runtime'),
-      CACHE_ROOT: join(core.paths.moduleCache, 'runtime'),
-      metricsStream: await core.metrics.createWriteStream('runtime'),
-      activityStream: core.activity.createWriteStream('Runtime'),
+      STATE_ROOT: join(core.paths.moduleState, 'zinnia'),
+      CACHE_ROOT: join(core.paths.moduleCache, 'zinnia'),
+      metricsStream: await core.metrics.createWriteStream('zinnia'),
+      activityStream: core.activity.createWriteStream('Zinnia'),
       logStream: core.logs.createWriteStream(
-        join(core.paths.moduleLogs, 'runtime.log')
+        join(core.paths.moduleLogs, 'zinnia.log')
       )
     })
   ]
