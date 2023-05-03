@@ -342,7 +342,7 @@ Returns `AsyncGenerator<ActivityEvent>`.
 
 Returns `Promise<MetricsEvent>`.
 
-### `Core#metrics.follow(module?: String, { signal?: AbortSignal })`
+### `Core#metrics.follow({ module?: String, signal?: AbortSignal })`
 
 Returns `AsyncGenerator<MetricsEvent>`.
 
