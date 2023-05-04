@@ -3,7 +3,7 @@
 import * as commands from '../commands/index.js'
 import fs from 'node:fs/promises'
 import { join } from 'node:path'
-import { repoRoot, getDefaultRootDirs } from '../lib/paths.js'
+import { repoRoot } from '../lib/paths.js'
 import * as Sentry from '@sentry/node'
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
@@ -19,7 +19,7 @@ Sentry.init({
   ignoreErrors: [/EACCES/, /EPERM/, /ENOSPC/, /EPIPE/]
 })
 
-const core = await Core.create(getDefaultRootDirs())
+const core = await Core.create()
 
 yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')
