@@ -318,7 +318,7 @@ $ sudo systemctl status station
 
 ## API
 
-### `new Core({ cacheRoot?: String, stateRoot?: String })`
+### `new Core({ cacheRoot?: String, stateRoot?: String }?)`
 
 Creates a new instance of `Core`.
 
@@ -334,7 +334,7 @@ Returns `AsyncGenerator<String>`.
 
 Returns `Promise<ActivityEvent[]>`.
 
-### `Core#activity.follow({ signal?: AbortSignal, nLines = 10?: Number })`
+### `Core#activity.follow({ signal?: AbortSignal, nLines = 10?: Number }?)`
 
 Returns `AsyncGenerator<ActivityEvent>`.
 
@@ -342,7 +342,7 @@ Returns `AsyncGenerator<ActivityEvent>`.
 
 Returns `Promise<MetricsEvent>`.
 
-### `Core#metrics.follow({ module?: String, signal?: AbortSignal })`
+### `Core#metrics.follow({ module?: String, signal?: AbortSignal }?)`
 
 Returns `AsyncGenerator<MetricsEvent>`.
 
