@@ -1,6 +1,6 @@
 {
   "name": "@filecoin-station/core",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "type": "module",
   "description": "Filecoin Station Core",
   "license": "(Apache-2.0 AND MIT)",
@@ -49,5 +49,5 @@
     "unzip-stream": "^0.3.1",
     "yargs": "^17.7.1"
   },
-  "sentryEnvironment": "development"
+  "sentryEnvironment": "production"
 }
