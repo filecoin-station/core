@@ -13,7 +13,7 @@ describe('Station', () => {
     await Promise.all([
       streamMatch(ps.stdout, 'totalJobsCompleted'),
       streamMatch(ps.stdout, 'Zinnia started'),
-      streamMatch(ps.stdout, 'Saturn Node will try to connect')
+      streamMatch(ps.stdout, 'Saturn module started')
     ])
     stopStation()
   })
@@ -29,7 +29,7 @@ describe('Station', () => {
     await Promise.all([
       streamMatch(ps.stdout, 'totalJobsCompleted'),
       streamMatch(ps.stdout, 'Zinnia started'),
-      streamMatch(ps.stdout, 'Saturn Node will try to connect')
+      streamMatch(ps.stdout, 'Saturn module started')
     ])
     stopStation()
   })
@@ -39,7 +39,7 @@ describe('Station', () => {
     await Promise.all([
       streamMatch(ps.stdout, 'jobs-completed'),
       streamMatch(ps.stdout, /activity:info.*(Zinnia started)/),
-      streamMatch(ps.stdout, /activity:info.*(Saturn Node will try to connect)/)
+      streamMatch(ps.stdout, /activity:info.*(Saturn module started)/)
     ])
 
     stopStation()
