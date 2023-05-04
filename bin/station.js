@@ -3,7 +3,7 @@
 import * as commands from '../commands/index.js'
 import fs from 'node:fs/promises'
 import { join } from 'node:path'
-import { repoRoot, getDefaultRootDirs } from '../lib/paths.js'
+import { repoRoot } from '../lib/paths.js'
 import * as Sentry from '@sentry/node'
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
@@ -19,24 +19,7 @@ Sentry.init({
   ignoreErrors: [/EACCES/, /EPERM/, /ENOSPC/, /EPIPE/]
 })
 
-const core = new Core(getDefaultRootDirs())
-const modules = [
-  'zinnia',
-  'saturn-L2-node',
-  'bacalhau'
-]
-
-await fs.mkdir(core.paths.moduleLogs, { recursive: true })
-await fs.mkdir(core.paths.metrics, { recursive: true })
-await core.activity.maybeCreateActivityFile()
-await core.metrics.maybeCreateMetricsFile()
-await core.logs.maybeCreateLogFile()
-for (const module of modules) {
-  await fs.mkdir(join(core.paths.moduleCache, module), { recursive: true })
-  await fs.mkdir(join(core.paths.moduleState, module), { recursive: true })
-  await core.metrics.maybeCreateMetricsFile(module)
-  await core.logs.maybeCreateLogFile(module)
-}
+const core = await Core.create()
 
 yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')
@@ -77,7 +60,7 @@ yargs(hideBin(process.argv))
     () => {},
     args => commands.logs({ ...args, core })
   )
-  .choices('module', modules)
+  .choices('module', core.modules)
   .version(`${pkg.name}: ${pkg.version}`)
   .alias('v', 'version')
   .alias('h', 'help')
