@@ -4,6 +4,13 @@ import { tmpdir } from 'node:os'
 import { randomUUID } from 'node:crypto'
 import { join } from 'node:path'
 import streamMatch from 'stream-match'
+import { PassThrough } from 'node:stream'
+
+const clone = stream => {
+  const clone = new PassThrough()
+  stream.pipe(clone)
+  return clone
+}
 
 describe('Station', () => {
   it('runs Saturn', async () => {
@@ -14,8 +21,8 @@ describe('Station', () => {
       { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
     )
     await Promise.all([
-      streamMatch(ps.stdout, 'totalJobsCompleted'),
-      streamMatch(ps.stdout, 'Saturn Node will try to connect')
+      streamMatch(clone(ps.stdout), 'totalJobsCompleted'),
+      streamMatch(clone(ps.stdout), 'Saturn Node will try to connect')
     ])
     ps.kill()
   })
@@ -41,8 +48,8 @@ describe('Station', () => {
       { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
     )
     await Promise.all([
-      streamMatch(ps.stdout, 'totalJobsCompleted'),
-      streamMatch(ps.stdout, 'Saturn Node will try to connect')
+      streamMatch(clone(ps.stdout), 'totalJobsCompleted'),
+      streamMatch(clone(ps.stdout), 'Saturn Node will try to connect')
     ])
     ps.kill()
   })
@@ -55,8 +62,8 @@ describe('Station', () => {
       { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
     )
     await Promise.all([
-      streamMatch(ps.stdout, 'jobs-completed'),
-      streamMatch(ps.stdout, 'activity:info')
+      streamMatch(clone(ps.stdout), 'jobs-completed'),
+      streamMatch(clone(ps.stdout), 'activity:info')
     ])
     ps.kill()
   })
