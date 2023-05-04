@@ -322,6 +322,12 @@ $ sudo systemctl status station
 
 Creates a new instance of `Core`.
 
+### `Core#setup()`
+
+Returns `Promise`.
+
+You _have_ to call this before any other `Core` method.
+
 ### `Core#logs.get(module?: String)`
 
 Returns `Promise<String>`.
