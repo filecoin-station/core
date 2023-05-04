@@ -318,15 +318,9 @@ $ sudo systemctl status station
 
 ## API
 
-### `new Core({ cacheRoot?: String, stateRoot?: String }?)`
+### `Core.create({ cacheRoot?: String, stateRoot?: String }?)`
 
-Creates a new instance of `Core`.
-
-### `Core#setup()`
-
-Returns `Promise`.
-
-You _have_ to call this before any other `Core` method.
+Returns `Promise<Core>`.
 
 ### `Core#logs.get(module?: String)`
 

@@ -19,8 +19,7 @@ Sentry.init({
   ignoreErrors: [/EACCES/, /EPERM/, /ENOSPC/, /EPIPE/]
 })
 
-const core = new Core(getDefaultRootDirs())
-await core.setup()
+const core = await Core.create(getDefaultRootDirs())
 
 yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')

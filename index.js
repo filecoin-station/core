@@ -15,12 +15,7 @@ export class Core {
     'bacalhau'
   ]
 
-  /**
-   * @param {Object} [options]
-   * @param {String} [options.cacheRoot]
-   * @param {String} [options.stateRoot]
-   */
-  constructor ({ cacheRoot, stateRoot } = getDefaultRootDirs()) {
+  constructor ({ cacheRoot, stateRoot }) {
     this.paths = getPaths({ cacheRoot, stateRoot })
     this.logs = new Logs(this.paths.moduleLogs, this.paths.allLogs)
     this.activity = new Activity(this.paths.activity, this.logs)
@@ -43,5 +38,17 @@ export class Core {
       await this.metrics.maybeCreateMetricsFile(module)
       await this.logs.maybeCreateLogFile(module)
     }
+  }
+
+  /**
+   * @param {Object} [options]
+   * @param {String} [options.cacheRoot]
+   * @param {String} [options.stateRoot]
+   * @returns {Promise<Core>}
+   */
+  static async create ({ cacheRoot, stateRoot } = getDefaultRootDirs()) {
+    const core = new Core({ cacheRoot, stateRoot })
+    await core.setup()
+    return core
   }
 }
