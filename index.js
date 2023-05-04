@@ -26,7 +26,7 @@ export class Core {
     )
   }
 
-  async setup () {
+  async #setup () {
     await fs.mkdir(this.paths.moduleLogs, { recursive: true })
     await fs.mkdir(this.paths.metrics, { recursive: true })
     await this.activity.maybeCreateActivityFile()
@@ -48,7 +48,7 @@ export class Core {
    */
   static async create ({ cacheRoot, stateRoot } = getDefaultRootDirs()) {
     const core = new Core({ cacheRoot, stateRoot })
-    await core.setup()
+    await core.#setup()
     return core
   }
 }
