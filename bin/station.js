@@ -21,6 +21,7 @@ Sentry.init({
 
 const core = new Core(getDefaultRootDirs())
 const modules = [
+  'zinnia',
   'saturn-L2-node',
   'bacalhau'
 ]

@@ -1,5 +1,6 @@
 import { join } from 'node:path'
 import * as saturnNode from '../lib/saturn-node.js'
+import * as zinniaRuntime from '../lib/zinnia.js'
 import { formatActivityObject } from '../lib/activity.js'
 import lockfile from 'proper-lockfile'
 import { maybeCreateFile } from '../lib/util.js'
@@ -35,6 +36,16 @@ export const station = async ({ core, json, experimental }) => {
       activityStream: core.activity.createWriteStream('Saturn'),
       logStream: core.logs.createWriteStream(
         join(core.paths.moduleLogs, 'saturn-L2-node.log')
+      )
+    }),
+    zinniaRuntime.start({
+      FIL_WALLET_ADDRESS,
+      STATE_ROOT: join(core.paths.moduleState, 'zinnia'),
+      CACHE_ROOT: join(core.paths.moduleCache, 'zinnia'),
+      metricsStream: await core.metrics.createWriteStream('zinnia'),
+      activityStream: core.activity.createWriteStream('Zinnia'),
+      logStream: core.logs.createWriteStream(
+        join(core.paths.moduleLogs, 'zinnia.log')
       )
     })
   ]

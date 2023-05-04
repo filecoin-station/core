@@ -22,6 +22,11 @@ describe('Storage', async () => {
             STATE_ROOT, 'logs', 'modules', 'saturn-L2-node.log'
           )
         )
+        await fs.stat(
+          join(
+            STATE_ROOT, 'logs', 'modules', 'zinnia.log'
+          )
+        )
         break
       } catch {}
     }

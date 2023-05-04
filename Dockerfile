@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:18
 LABEL org.opencontainers.image.source https://github.com/filecoin-station/core
 USER node
 WORKDIR /usr/src/app
