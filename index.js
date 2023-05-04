@@ -15,6 +15,7 @@ export class Core {
     'bacalhau'
   ]
 
+  /** @private */
   constructor ({ cacheRoot, stateRoot }) {
     this.paths = getPaths({ cacheRoot, stateRoot })
     this.logs = new Logs(this.paths.moduleLogs, this.paths.allLogs)
