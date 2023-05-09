@@ -1,10 +1,12 @@
-import { execa } from 'execa'
-import { tmpdir } from 'node:os'
-import { randomUUID } from 'node:crypto'
-import { once } from 'node:events'
-import assert from 'node:assert'
-import { station, FIL_WALLET_ADDRESS } from './util.js'
-import { join } from 'node:path'
+'use strict'
+
+const execa = require('execa')
+const { tmpdir } = require('node:os')
+const { randomUUID } = require('node:crypto')
+const { once } = require('node:events')
+const assert = require('node:assert')
+const { station, FIL_WALLET_ADDRESS } = require('./util')
+const { join } = require('node:path')
 
 describe('Lockfile', () => {
   it('prevents multiple instances from running', async () => {

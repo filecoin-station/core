@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
-import { join } from 'node:path'
-import fs from 'node:fs/promises'
-import { execa } from 'execa'
-import { repoRoot } from '../lib/paths.js'
+'use strict'
 
-const pkg = JSON.parse(await fs.readFile(join(repoRoot, 'package.json')))
+const { join } = require('node:path')
+const fs = require('node:fs/promises')
+const execa = require('execa')
+const pkg = require('../package.json')
+
 pkg.sentryEnvironment = 'production'
 await fs.writeFile(
-  join(repoRoot, 'package.json'),
+  join(__dirname, '..', 'package.json'),
   JSON.stringify(pkg, 0, 2) + '\n'
 )
 await execa('git', ['add', 'package.json'])

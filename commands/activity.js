@@ -1,6 +1,8 @@
-import { formatActivityObject } from '../lib/activity.js'
+'use strict'
 
-export const activity = async ({ core, follow, json }) => {
+const { formatActivityObject } = require('../lib/activity')
+
+const activity = async ({ core, follow, json }) => {
   if (follow) {
     for await (const obj of core.activity.follow()) {
       if (json) {
@@ -21,4 +23,8 @@ export const activity = async ({ core, follow, json }) => {
       )
     }
   }
+}
+
+module.exports = {
+  activity
 }

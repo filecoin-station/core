@@ -1,4 +1,13 @@
-export { station } from './station.js'
-export { metrics } from './metrics.js'
-export { logs } from './logs.js'
-export { activity } from './activity.js'
+'use strict'
+
+const { station } = require('./station')
+const { metrics } = require('./metrics')
+const { logs } = require('./logs')
+const { activity } = require('./activity')
+
+module.exports = {
+  station,
+  metrics,
+  logs,
+  activity
+}

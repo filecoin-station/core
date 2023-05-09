@@ -1,7 +1,9 @@
-import assert from 'node:assert'
-import { execa } from 'execa'
-import { station, FIL_WALLET_ADDRESS } from './util.js'
-import { once } from 'node:events'
+'use strict'
+
+const assert = require('node:assert')
+const execa = require('execa')
+const { station, FIL_WALLET_ADDRESS } = require('./util')
+const { once } = require('node:events')
 
 describe('CLI', () => {
   describe('FIL_WALLET_ADDRESS', () => {

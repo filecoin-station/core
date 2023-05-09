@@ -1,6 +1,8 @@
-import { Core } from '../index.js'
-import assert from 'node:assert'
-import { getDefaultRootDirs } from '../lib/paths.js'
+'use strict'
+
+const { Core } = require('..')
+const assert = require('node:assert')
+const { getDefaultRootDirs } = require('../lib/paths')
 
 describe('API', () => {
   describe('Core', () => {

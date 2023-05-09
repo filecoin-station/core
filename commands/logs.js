@@ -1,6 +1,8 @@
-import { parseLog, formatLog } from '../lib/log.js'
+'use strict'
 
-export const logs = async ({ core, module, follow }) => {
+const { parseLog, formatLog } = require('../lib/log')
+
+const logs = async ({ core, module, follow }) => {
   if (follow) {
     for await (const line of core.logs.follow(module)) {
       const { text, timestamp } = parseLog(line)
@@ -17,4 +19,8 @@ export const logs = async ({ core, module, follow }) => {
       process.stdout.write(formatLog(text, { timestamp, pretty: true }))
     }
   }
+}
+
+module.exports = {
+  logs
 }

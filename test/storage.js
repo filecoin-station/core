@@ -1,10 +1,12 @@
-import { execa } from 'execa'
-import { station, FIL_WALLET_ADDRESS } from './util.js'
-import { once } from 'node:events'
-import { tmpdir } from 'node:os'
-import fs from 'node:fs/promises'
-import { randomUUID } from 'node:crypto'
-import { join } from 'node:path'
+'use strict'
+
+const execa = require('execa')
+const { station, FIL_WALLET_ADDRESS } = require('./util')
+const { once } = require('node:events')
+const { tmpdir } = require('node:os')
+const fs = require('node:fs/promises')
+const { randomUUID } = require('node:crypto')
+const { join } = require('node:path')
 
 describe('Storage', async () => {
   it('creates files', async () => {
