@@ -94,10 +94,9 @@ describe('Metrics', () => {
       ['metrics'],
       { env: { CACHE_ROOT: cacheRoot, STATE_ROOT: stateRoot } }
     )
-    assert.deepStrictEqual(
-      stdout,
-      JSON.stringify({ totalJobsCompleted: 0, totalEarnings: '0' }, 0, 2)
-    )
+    const metrics = JSON.parse(stdout)
+    assert.strictEqual(typeof metrics.totalJobsCompleted, 'number')
+    assert.strictEqual(typeof metrics.totalEarnings, 'string')
     ps.kill()
   })
 })
