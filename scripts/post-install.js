@@ -6,8 +6,15 @@ const saturnNode = require('../lib/saturn-node')
 const bacalhau = require('../lib/bacalhau')
 const zinnia = require('../lib/zinnia')
 
-await Promise.all([
-  saturnNode.instal(),
-  bacalhau.install(),
-  zinnia.install()
-])
+const main = async () => {
+  await Promise.all([
+    saturnNode.install(),
+    bacalhau.install(),
+    zinnia.install()
+  ])
+}
+
+main().catch(err => {
+  console.error(err)
+  process.exit(1)
+})
