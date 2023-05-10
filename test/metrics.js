@@ -1,12 +1,14 @@
-import { execa } from 'execa'
-import { station, FIL_WALLET_ADDRESS } from './util.js'
-import { once } from 'node:events'
-import { tmpdir } from 'node:os'
-import assert from 'node:assert'
-import { getPaths } from '../lib/paths.js'
-import { randomUUID } from 'node:crypto'
-import { join, dirname } from 'node:path'
-import fs from 'node:fs/promises'
+'use strict'
+
+const execa = require('execa')
+const { station, FIL_WALLET_ADDRESS } = require('./util')
+const { once } = require('node:events')
+const { tmpdir } = require('node:os')
+const assert = require('node:assert')
+const { getPaths } = require('../lib/paths')
+const { randomUUID } = require('node:crypto')
+const { join, dirname } = require('node:path')
+const fs = require('node:fs/promises')
 
 describe('Metrics', () => {
   it('handles empty metrics', async () => {

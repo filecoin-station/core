@@ -1,14 +1,15 @@
-import { Activity } from './lib/activity.js'
-import { Logs } from './lib/log.js'
-import { Metrics } from './lib/metrics.js'
-import { getPaths, getDefaultRootDirs } from './lib/paths.js'
-import fs from 'node:fs/promises'
-import { join } from 'node:path'
+'use strict'
 
-export { ActivityEvent } from './lib/activity.js'
-export { MetricsEvent } from './lib/metrics.js'
+const { Activity } = require('./lib/activity')
+const { Logs } = require('./lib/log')
+const { Metrics } = require('./lib/metrics')
+const { getPaths, getDefaultRootDirs } = require('./lib/paths')
+const fs = require('node:fs/promises')
+const { join } = require('node:path')
+const { ActivityEvent } = require('./lib/activity.js')
+const { MetricsEvent } = require('./lib/metrics.js')
 
-export class Core {
+class Core {
   modules = [
     'zinnia',
     'saturn-L2-node',
@@ -52,4 +53,10 @@ export class Core {
     await core.#setup()
     return core
   }
+}
+
+module.exports = {
+  Core,
+  ActivityEvent,
+  MetricsEvent
 }

@@ -1,15 +1,17 @@
-import { join } from 'node:path'
-import * as saturnNode from '../lib/saturn-node.js'
-import * as zinniaRuntime from '../lib/zinnia.js'
-import { formatActivityObject } from '../lib/activity.js'
-import lockfile from 'proper-lockfile'
-import { maybeCreateFile } from '../lib/util.js'
-import { startPingLoop } from '../lib/telemetry.js'
-import * as bacalhau from '../lib/bacalhau.js'
+'use strict'
+
+const { join } = require('node:path')
+const saturnNode = require('../lib/saturn-node')
+const zinniaRuntime = require('../lib/zinnia')
+const { formatActivityObject } = require('../lib/activity')
+const lockfile = require('proper-lockfile')
+const { maybeCreateFile } = require('../lib/util')
+const { startPingLoop } = require('../lib/telemetry')
+const bacalhau = require('../lib/bacalhau')
 
 const { FIL_WALLET_ADDRESS, MAX_DISK_SPACE } = process.env
 
-export const station = async ({ core, json, experimental }) => {
+const station = async ({ core, json, experimental }) => {
   if (!FIL_WALLET_ADDRESS) {
     console.error('FIL_WALLET_ADDRESS required')
     process.exit(1)
@@ -92,4 +94,8 @@ export const station = async ({ core, json, experimental }) => {
       }
     })()
   ])
+}
+
+module.exports = {
+  station
 }

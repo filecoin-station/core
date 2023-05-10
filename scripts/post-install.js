@@ -1,11 +1,20 @@
 #!/usr/bin/env node
 
-import { install as installSaturn } from '../lib/saturn-node.js'
-import { install as installBacalhau } from '../lib/bacalhau.js'
-import { install as installZinnia } from '../lib/zinnia.js'
+'use strict'
 
-await Promise.all([
-  installSaturn(),
-  installBacalhau(),
-  installZinnia()
-])
+const saturnNode = require('../lib/saturn-node')
+const bacalhau = require('../lib/bacalhau')
+const zinnia = require('../lib/zinnia')
+
+const main = async () => {
+  await Promise.all([
+    saturnNode.install(),
+    bacalhau.install(),
+    zinnia.install()
+  ])
+}
+
+main().catch(err => {
+  console.error(err)
+  process.exit(1)
+})
