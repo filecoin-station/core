@@ -11,7 +11,7 @@ const main = async () => {
   pkg.sentryEnvironment = 'production'
   await fs.writeFile(
     join(__dirname, '..', 'package.json'),
-    JSON.stringify(pkg, 0, 2) + '\n'
+    JSON.stringify(pkg, null, 2) + '\n'
   )
   await execa('git', ['add', 'package.json'])
 }

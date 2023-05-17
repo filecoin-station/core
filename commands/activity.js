@@ -14,7 +14,7 @@ const activity = async ({ core, follow, json }) => {
   } else {
     const activity = await core.activity.get()
     if (json) {
-      console.log(JSON.stringify(activity, 0, 2))
+      console.log(JSON.stringify(activity, null, 2))
     } else {
       process.stdout.write(
         activity
