@@ -44,7 +44,7 @@ const main = async () => {
       'metrics [module]',
       'Show metrics',
       () => {},
-      args => commands.metrics({ ...args, core })
+      ({ follow, module }) => commands.metrics({ core, follow, module })
     )
     .command(
       'activity',
@@ -54,13 +54,13 @@ const main = async () => {
         type: 'boolean',
         description: 'Output JSON'
       }),
-      args => commands.activity({ ...args, core })
+      ({ follow, json }) => commands.activity({ core, follow, json })
     )
     .command(
       'logs [module]',
       'Show module logs',
       () => {},
-      args => commands.logs({ ...args, core })
+      ({ module, follow }) => commands.logs({ core, module, follow })
     )
     .choices('module', core.modules)
     .version(`${pkg.name}: ${pkg.version}`)
