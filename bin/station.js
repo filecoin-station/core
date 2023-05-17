@@ -6,7 +6,10 @@ const commands = require('../commands')
 const Sentry = require('@sentry/node')
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
-const { Core } = require('..')
+// We must not require('..') as that confuses TypeScript compiler.
+// The compiler will look at our package.json, find that the types are in `dist/index.d.ts`
+// and load that output file instead of the actual input `index.js`.
+const { Core } = require('../index')
 const pkg = require('../package.json')
 
 Sentry.init({
@@ -41,9 +44,9 @@ const main = async () => {
       'metrics [module]',
       'Show metrics',
       () => {},
-      args => commands.metrics({ ...args, core })
+      ({ follow, module }) => commands.metrics({ core, follow, module })
     )
-    .commands(
+    .command(
       'activity',
       'Show activity log',
       yargs => yargs.option('json', {
@@ -51,13 +54,13 @@ const main = async () => {
         type: 'boolean',
         description: 'Output JSON'
       }),
-      args => commands.activity({ ...args, core })
+      ({ follow, json }) => commands.activity({ core, follow, json })
     )
     .command(
       'logs [module]',
       'Show module logs',
       () => {},
-      args => commands.logs({ ...args, core })
+      ({ module, follow }) => commands.logs({ core, module, follow })
     )
     .choices('module', core.modules)
     .version(`${pkg.name}: ${pkg.version}`)

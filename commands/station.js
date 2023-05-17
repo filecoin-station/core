@@ -74,7 +74,7 @@ const station = async ({ core, json, experimental }) => {
             total: metrics.totalJobsCompleted
           }))
         } else {
-          console.log(JSON.stringify(metrics, 0, 2))
+          console.log(JSON.stringify(metrics, null, 2))
         }
       }
     })(),

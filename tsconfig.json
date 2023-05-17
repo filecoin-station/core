@@ -1,5 +1,4 @@
 {
-  "include": ["index.js"],
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
@@ -18,5 +17,16 @@
     "outDir": "dist",
     "declarationMap": true,
     "resolveJsonModule": true
-  }
+  },
+  "include": [
+    "index.js",
+    "bin",
+    "commands",
+    "lib",
+    "scripts",
+    "tests"
+  ],
+  "exclude": [
+    "dist/**/*"
+  ]
 }
