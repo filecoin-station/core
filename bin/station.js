@@ -46,7 +46,7 @@ const main = async () => {
       () => {},
       args => commands.metrics({ ...args, core })
     )
-    .commands(
+    .command(
       'activity',
       'Show activity log',
       yargs => yargs.option('json', {
