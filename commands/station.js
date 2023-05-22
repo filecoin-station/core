@@ -26,8 +26,7 @@ const station = async ({ core, json, experimental }) => {
     process.exit(1)
   }
 
-  const id = await startPingLoop()
-  id.unref()
+  startPingLoop().unref()
 
   const modules = [
     saturnNode.start({
