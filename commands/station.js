@@ -30,21 +30,19 @@ const station = async ({ json, experimental }) => {
     await fs.mkdir(join(paths.moduleState, moduleName), { recursive: true })
   }
 
-  activities.on('activity', activity => {
+  activities.onActivity(activity => {
     if (json) {
       console.log(JSON.stringify({
         type: `activity:${activity.type}`,
-        timestamp: activity.timestamp,
         module: activity.source,
-        message: activity.message,
-        id: activity.id
+        message: activity.message
       }))
     } else {
       process.stdout.write(formatActivityObject(activity))
     }
   })
 
-  metrics.on('update', metrics => {
+  metrics.onUpdate(metrics => {
     if (json) {
       console.log(JSON.stringify({
         type: 'jobs-completed',
