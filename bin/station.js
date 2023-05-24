@@ -2,14 +2,10 @@
 
 'use strict'
 
-const commands = require('../commands')
+const { station } = require('../commands/station')
 const Sentry = require('@sentry/node')
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
-// We must not require('..') as that confuses TypeScript compiler.
-// The compiler will look at our package.json, find that the types are in `dist/index.d.ts`
-// and load that output file instead of the actual input `index.js`.
-const { Core } = require('../index')
 const pkg = require('../package.json')
 
 Sentry.init({
@@ -20,57 +16,24 @@ Sentry.init({
   ignoreErrors: [/EACCES/, /EPERM/, /ENOSPC/, /EPIPE/]
 })
 
-const main = async () => {
-  const core = await Core.create()
-
-  yargs(hideBin(process.argv))
-    .usage('Usage: $0 <command> [options]')
-    .command(
-      '$0',
-      'Start Station',
-      yargs => yargs
-        .option('json', {
-          alias: 'j',
-          type: 'boolean',
-          description: 'Output JSON'
-        })
-        .option('experimental', {
-          type: 'boolean',
-          description: 'Also run experimental modules'
-        }),
-      args => commands.station({ ...args, core })
-    )
-    .command(
-      'metrics [module]',
-      'Show metrics',
-      () => {},
-      ({ follow, module }) => commands.metrics({ core, follow, module })
-    )
-    .command(
-      'activity',
-      'Show activity log',
-      yargs => yargs.option('json', {
+yargs(hideBin(process.argv))
+  .usage('Usage: $0 <command> [options]')
+  .command(
+    '$0',
+    'Start Station',
+    yargs => yargs
+      .option('json', {
         alias: 'j',
         type: 'boolean',
         description: 'Output JSON'
+      })
+      .option('experimental', {
+        type: 'boolean',
+        description: 'Also run experimental modules'
       }),
-      ({ follow, json }) => commands.activity({ core, follow, json })
-    )
-    .command(
-      'logs [module]',
-      'Show module logs',
-      () => {},
-      ({ module, follow }) => commands.logs({ core, module, follow })
-    )
-    .choices('module', core.modules)
-    .version(`${pkg.name}: ${pkg.version}`)
-    .alias('v', 'version')
-    .alias('h', 'help')
-    .alias('f', 'follow')
-    .parse()
-}
-
-main().catch(err => {
-  console.error(err)
-  process.exit(1)
-})
+    ({ json, experimental }) => station({ json, experimental })
+  )
+  .version(`${pkg.name}: ${pkg.version}`)
+  .alias('v', 'version')
+  .alias('h', 'help')
+  .parse()

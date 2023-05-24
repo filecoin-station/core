@@ -122,113 +122,6 @@ Modules currently in experimental mode:
 
 - [Bacalhau](https://github.com/bacalhau-project/bacalhau)
 
-### `$ station metrics <module>`
-
-Get combined metrics from all Station Modules:
-
-```bash
-$ station metrics
-{
-	"totalJobsCompleted": 123,
-	"totalEarnings": "0"
-}
-```
-
-Get metrics from a specific Station Module:
-
-```bash
-$ station metrics saturn-l2-node
-{
-	"totalJobsCompleted": 123,
-	"totalEarnings": "0"
-}
-```
-
-Follow metrics:
-
-```bash
-$ station metrics --follow
-{
-	"totalJobsCompleted": 123,
-	"totalEarnings": "0"
-}
-...
-```
-
-### `$ station activity`
-
-Get Station activity logs.
-
-Get all activity:
-
-```bash
-$ station activity
-[3/14/2023, 10:23:14 AM] INFO  Saturn Node is online and connected to 1 peers
-[3/14/2023, 10:23:18 AM] INFO  Saturn Node is online and connected to 9 peers
-```
-
-```bash
-$ station activity --json
-[
-  {
-    "timestamp": "2023-04-05T11:26:41.000Z",
-    "type": "info",
-    "source": "Saturn",
-    "message": "Saturn Node is online and connected to 1 peers",
-    "id": "b6e922f2-54fb-4d5b-adcb-499391e4a09e"
-  },
-  {
-    "timestamp": "2023-04-05T11:26:46.000Z",
-    "type": "info",
-    "source": "Saturn",
-    "message": "Saturn Node is online and connected to 9 peers",
-    "id": "ffb551a0-247f-471d-b4db-0145cc3b1614"
-  }
-]
-```
-
-Follow activity:
-
-```bash
-$ station activity --follow
-[3/14/2023, 10:23:14 AM] INFO  Saturn Node is online and connected to 1 peers
-[3/14/2023, 10:23:18 AM] INFO  Saturn Node is online and connected to 9 peers
-...
-```
-
-```bash
-$ station activity --follow --json
-{"timestamp":"2023-04-05T11:26:41.000Z","type":"info","source":"Saturn","message":"Saturn Node is online and connected to 1 peers""id":"b6e922f2-54fb-4d5b-adcb-499391e4a09e"}
-{"timestamp":"2023-04-05T11:26:46.000Z","type":"info","source":"Saturn","message":"Saturn Node is online and connected to 9 peers""id":"ffb551a0-247f-471d-b4db-0145cc3b1614"}
-```
-
-### `$ station logs <module>`
-
-Get combined logs from Station Core and all Station Modules:
-
-```bash
-$ station logs
-[3/14/2023, 5:15:26 PM] [saturn-L2-node] INFO: Saturn Node is online and connected to 9 peers
-[3/14/2023, 5:15:26 PM] [saturn-L2-node] ERROR: Saturn Node is not able to connect to the network
-```
-
-Get logs from a specific Station Module:
-
-```bash
-$ station logs saturn-l2-node
-[3/14/2023, 5:15:26 PM] INFO: Saturn Node is online and connected to 9 peers
-[3/14/2023, 5:15:26 PM] ERROR: Saturn Node is not able to connect to the network
-```
-
-Follow logs:
-
-```bash
-$ station logs --follow
-[3/14/2023, 5:15:26 PM] [saturn-L2-node] INFO: Saturn Node is online and connected to 9 peers
-[3/14/2023, 5:15:26 PM] [saturn-L2-node] ERROR: Saturn Node is not able to connect to the network
-...
-```
-
 ### `$ station --help`
 
 Show help.
@@ -273,12 +166,6 @@ $ docker run \
 	ghcr.io/filecoin-station/core
 ```
 
-Inspect logs:
-
-```bash
-$ docker exec station ./bin/station.js logs
-```
-
 ## Manual Deployment (Ubuntu)
 
 On a fresh [Ubuntu](https://ubuntu.com/) machine:
@@ -314,57 +201,6 @@ EOF
 $ sudo systemctl daemon-reload
 $ sudo systemctl start station
 $ sudo systemctl status station
-```
-
-## API
-
-### `Core.create({ cacheRoot?: String, stateRoot?: String }?)`
-
-Returns `Promise<Core>`.
-
-### `Core#logs.get(module?: String)`
-
-Returns `Promise<String>`.
-
-### `Core#logs.follow(module?: String)`
-
-Returns `AsyncGenerator<String>`.
-
-### `Core#activity.get()`
-
-Returns `Promise<ActivityEvent[]>`.
-
-### `Core#activity.follow({ signal?: AbortSignal, nLines = 10?: Number }?)`
-
-Returns `AsyncGenerator<ActivityEvent>`.
-
-### `Core#metrics.getLatest(module?: String)`
-
-Returns `Promise<MetricsEvent>`.
-
-### `Core#metrics.follow({ module?: String, signal?: AbortSignal }?)`
-
-Returns `AsyncGenerator<MetricsEvent>`.
-
-### `ActivityEvent`
-
-```
-{
-  timestamp: Date
-  type: ("info"|"error")
-  source: String
-  message: String
-  id: String
-}
-```
-
-### `MetricsEvent`
-
-```
-{
-  totalJobsCompleted: Number
-  totalEarnings: String
-}
 ```
 
 ## Disclaimer

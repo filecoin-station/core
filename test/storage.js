@@ -19,25 +19,13 @@ describe('Storage', async () => {
     while (true) {
       await once(ps.stdout, 'data')
       try {
-        await fs.stat(
-          join(
-            STATE_ROOT, 'logs', 'modules', 'saturn-L2-node.log'
-          )
-        )
-        await fs.stat(
-          join(
-            STATE_ROOT, 'logs', 'modules', 'zinnia.log'
-          )
-        )
+        await fs.stat(CACHE_ROOT)
         break
       } catch {}
     }
     ps.kill()
-    await fs.stat(CACHE_ROOT)
     await fs.stat(join(CACHE_ROOT, 'modules'))
     await fs.stat(STATE_ROOT)
     await fs.stat(join(STATE_ROOT, 'modules'))
-    await fs.stat(join(STATE_ROOT, 'logs'))
-    await fs.stat(join(STATE_ROOT, 'logs', 'modules'))
   })
 })

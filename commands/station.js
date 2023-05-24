@@ -3,96 +3,79 @@
 const { join } = require('node:path')
 const saturnNode = require('../lib/saturn-node')
 const zinniaRuntime = require('../lib/zinnia')
-const { formatActivityObject } = require('../lib/activity')
-const lockfile = require('proper-lockfile')
-const { maybeCreateFile } = require('../lib/util')
+const { formatActivityObject, activities } = require('../lib/activity')
 const { startPingLoop } = require('../lib/telemetry')
 const bacalhau = require('../lib/bacalhau')
+const fs = require('node:fs/promises')
+const { metrics } = require('../lib/metrics')
+const { paths } = require('../lib/paths')
 
 const { FIL_WALLET_ADDRESS, MAX_DISK_SPACE } = process.env
 
-const station = async ({ core, json, experimental }) => {
+const moduleNames = [
+  'zinnia',
+  'saturn-L2-node',
+  'bacalhau'
+]
+
+const station = async ({ json, experimental }) => {
   if (!FIL_WALLET_ADDRESS) {
     console.error('FIL_WALLET_ADDRESS required')
     process.exit(1)
   }
 
-  await maybeCreateFile(core.paths.lockFile)
-  try {
-    await lockfile.lock(core.paths.lockFile)
-  } catch (err) {
-    console.error('Another Station is already running on this machine.')
-    console.error(`If you are sure this is not the case, please delete the lock file at "${core.paths.lockFile}" and try again.`)
-    process.exit(1)
+  startPingLoop().unref()
+  for (const moduleName of moduleNames) {
+    await fs.mkdir(join(paths.moduleCache, moduleName), { recursive: true })
+    await fs.mkdir(join(paths.moduleState, moduleName), { recursive: true })
   }
 
-  startPingLoop().unref()
+  activities.on('activity', activity => {
+    if (json) {
+      console.log(JSON.stringify({
+        type: `activity:${activity.type}`,
+        timestamp: activity.timestamp,
+        module: activity.source,
+        message: activity.message,
+        id: activity.id
+      }))
+    } else {
+      process.stdout.write(formatActivityObject(activity))
+    }
+  })
+
+  metrics.on('update', metrics => {
+    if (json) {
+      console.log(JSON.stringify({
+        type: 'jobs-completed',
+        total: metrics.totalJobsCompleted
+      }))
+    } else {
+      console.log(JSON.stringify(metrics, null, 2))
+    }
+  })
 
   const modules = [
     saturnNode.start({
       FIL_WALLET_ADDRESS,
       MAX_DISK_SPACE,
-      storagePath: join(core.paths.moduleCache, 'saturn-L2-node'),
-      metricsStream: await core.metrics.createWriteStream('saturn-L2-node'),
-      activityStream: core.activity.createWriteStream('Saturn'),
-      logStream: core.logs.createWriteStream(
-        join(core.paths.moduleLogs, 'saturn-L2-node.log')
-      )
+      storagePath: join(paths.moduleCache, 'saturn-L2-node')
     }),
     zinniaRuntime.start({
       FIL_WALLET_ADDRESS,
-      STATE_ROOT: join(core.paths.moduleState, 'zinnia'),
-      CACHE_ROOT: join(core.paths.moduleCache, 'zinnia'),
-      metricsStream: await core.metrics.createWriteStream('zinnia'),
-      activityStream: core.activity.createWriteStream('Zinnia'),
-      logStream: core.logs.createWriteStream(
-        join(core.paths.moduleLogs, 'zinnia.log')
-      )
+      STATE_ROOT: join(paths.moduleState, 'zinnia'),
+      CACHE_ROOT: join(paths.moduleCache, 'zinnia')
     })
   ]
 
   if (experimental) {
     modules.push(bacalhau.start({
       FIL_WALLET_ADDRESS,
-      storagePath: join(core.paths.moduleCache, 'bacalhau'),
-      metricsStream: await core.metrics.createWriteStream('bacalhau'),
-      activityStream: core.activity.createWriteStream('Bacalhau'),
-      logStream: core.logs.createWriteStream(
-        join(core.paths.moduleLogs, 'bacalhau.log')
-      )
+      storagePath: join(paths.moduleCache, 'bacalhau')
     }))
   }
 
-  await Promise.all([
-    ...modules,
-    (async () => {
-      for await (const metrics of core.metrics.follow()) {
-        if (json) {
-          console.log(JSON.stringify({
-            type: 'jobs-completed',
-            total: metrics.totalJobsCompleted
-          }))
-        } else {
-          console.log(JSON.stringify(metrics, null, 2))
-        }
-      }
-    })(),
-    (async () => {
-      for await (const activity of core.activity.follow({ nLines: 0 })) {
-        if (json) {
-          console.log(JSON.stringify({
-            type: `activity:${activity.type}`,
-            timestamp: activity.timestamp,
-            module: activity.source,
-            message: activity.message,
-            id: activity.id
-          }))
-        } else {
-          process.stdout.write(formatActivityObject(activity))
-        }
-      }
-    })()
-  ])
+  await Promise.all(modules)
 }
 
 module.exports = {
