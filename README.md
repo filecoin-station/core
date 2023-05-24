@@ -194,6 +194,9 @@ EOF
 $ sudo systemctl daemon-reload
 $ sudo systemctl start station
 $ sudo systemctl status station
+
+# Read logs
+$ journalctl -u station.service
 ```
 
 ## Disclaimer
