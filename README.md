@@ -128,14 +128,7 @@ Show help.
 
 ```bash
 $ station --help
-Usage: station <command> [options]
-
-Commands:
-  station                   Start Station                              [default]
-  station metrics [module]  Show metrics
-  station activity          Show activity log
-  station logs [module]     Show module logs
-  station events            Events stream
+Usage: station [options]
 
 Options:
   -j, --json          Output JSON                                      [boolean]

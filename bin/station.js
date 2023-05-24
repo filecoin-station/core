@@ -17,7 +17,7 @@ Sentry.init({
 })
 
 yargs(hideBin(process.argv))
-  .usage('Usage: $0 <command> [options]')
+  .usage('Usage: $0 [options]')
   .command(
     '$0',
     'Start Station',
