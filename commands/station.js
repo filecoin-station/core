@@ -60,7 +60,8 @@ const station = async ({ json, experimental }) => {
       storagePath: join(paths.moduleCache, 'saturn-L2-node'),
       onActivity: activity => {
         activities.submit({ source: 'Saturn', ...activity })
-      }
+      },
+      onMetrics: m => metrics.submit('saturn-L2-node', m)
     }),
     zinniaRuntime.start({
       FIL_WALLET_ADDRESS,
@@ -68,7 +69,8 @@ const station = async ({ json, experimental }) => {
       CACHE_ROOT: join(paths.moduleCache, 'zinnia'),
       onActivity: activity => {
         activities.submit({ ...activity, source: activity.source || 'Zinnia' })
-      }
+      },
+      onMetrics: m => metrics.submit('zinnia', m)
     })
   ]
 
@@ -78,7 +80,8 @@ const station = async ({ json, experimental }) => {
       storagePath: join(paths.moduleCache, 'bacalhau'),
       onActivity: activity => {
         activities.submit({ source: 'Bacalhau', ...activity })
-      }
+      },
+      onMetrics: m => metrics.submit('bacalhau', m)
     }))
   }
 
