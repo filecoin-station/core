@@ -57,19 +57,28 @@ const station = async ({ json, experimental }) => {
     saturnNode.start({
       FIL_WALLET_ADDRESS,
       MAX_DISK_SPACE,
-      storagePath: join(paths.moduleCache, 'saturn-L2-node')
+      storagePath: join(paths.moduleCache, 'saturn-L2-node'),
+      onActivity: activity => {
+        activities.submit({ source: 'Saturn', ...activity })
+      }
     }),
     zinniaRuntime.start({
       FIL_WALLET_ADDRESS,
       STATE_ROOT: join(paths.moduleState, 'zinnia'),
-      CACHE_ROOT: join(paths.moduleCache, 'zinnia')
+      CACHE_ROOT: join(paths.moduleCache, 'zinnia'),
+      onActivity: activity => {
+        activities.submit({ ...activity, source: activity.source || 'Zinnia' })
+      }
     })
   ]
 
   if (experimental) {
     modules.push(bacalhau.start({
       FIL_WALLET_ADDRESS,
-      storagePath: join(paths.moduleCache, 'bacalhau')
+      storagePath: join(paths.moduleCache, 'bacalhau'),
+      onActivity: activity => {
+        activities.submit({ source: 'Bacalhau', ...activity })
+      }
     }))
   }
 
