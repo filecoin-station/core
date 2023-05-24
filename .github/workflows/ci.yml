@@ -89,7 +89,7 @@ jobs:
       - name: Print station activity
         run: |
           sleep 10 # Wait for Station modules to start
-          docker logs
+          docker logs station
 
       - name: Check | Saturn started
         run: docker logs station | grep "Saturn module started"
