@@ -68,7 +68,13 @@ const station = async ({ json, experimental }) => {
       STATE_ROOT: join(paths.moduleState, 'zinnia'),
       CACHE_ROOT: join(paths.moduleCache, 'zinnia'),
       onActivity: activity => {
-        activities.submit({ ...activity, source: activity.source || 'Zinnia' })
+        activities.submit({
+          ...activity,
+          // Zinnia will try to overwrite `source` if a module created the
+          // activity. Using the spread syntax won't work because a
+          // `source: null` would overwrite the default value.
+          source: activity.source || 'Zinnia'
+        })
       },
       onMetrics: m => metrics.submit('zinnia', m)
     })
