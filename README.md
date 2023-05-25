@@ -95,8 +95,8 @@ $ station
 ```bash
 $ station --json
 {"type":"jobs-completed","total":161}
-{"type":"activity:info","timestamp":"2023-04-19T19:27:33.000Z","module":"Saturn","message":"Saturn Node will try to connect to the Saturn Orchestrator...","id":"45b62253-ad1e-4e85-ae16-a7bcaae71dce"}
-{"type":"activity:info","timestamp":"2023-04-19T19:27:33.000Z","module":"Saturn","message":"Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network...","id":"b0c14132-98b2-4e4d-b206-0f2f1f3a4c77"}
+{"type":"activity:info","module":"Saturn","message":"Saturn Node will try to connect to the Saturn Orchestrator..."}
+{"type":"activity:info","module":"Saturn","message":"Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network..."}
 ...
 ```
 
@@ -105,15 +105,11 @@ For the JSON output, the following event types exist:
 - `jobs-completed`
   - `total`
 - `activity:info`
-  - `timestamp`
   - `module`
   - `message`
-  - `id`
 - `activity:error`
-  - `timestamp`
   - `module`
   - `message`
-  - `id`
 
 Set the flag `--experimental` to run modules not yet considered safe for
 production use. _Run this at your own risk!_
