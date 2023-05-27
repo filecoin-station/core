@@ -1,16 +1,19 @@
 #!/usr/bin/env node
 
-'use strict'
+import execa from 'execa'
+import fs from 'node:fs/promises'
 
-const { join } = require('node:path')
-const execa = require('execa')
-const fs = require('node:fs/promises')
-const pkg = require('../package.json')
+const pkg = JSON.parse(
+  await fs.readFile(
+    new URL('../package.json', import.meta.url),
+    'utf8'
+  )
+)
 
 const main = async () => {
   pkg.sentryEnvironment = 'development'
   await fs.writeFile(
-    join(__dirname, '..', 'package.json'),
+    new URL('../package.json', import.meta.url),
     JSON.stringify(pkg, null, 2) + '\n'
   )
   await execa('git', ['add', 'package.json'])

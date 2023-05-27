@@ -1,12 +1,17 @@
 #!/usr/bin/env node
 
-'use strict'
+import { station } from '../commands/station.js'
+import Sentry from '@sentry/node'
+import yargs from 'yargs/yargs'
+import { hideBin } from 'yargs/helpers'
+import fs from 'node:fs/promises'
 
-const { station } = require('../commands/station')
-const Sentry = require('@sentry/node')
-const yargs = require('yargs/yargs')
-const { hideBin } = require('yargs/helpers')
-const pkg = require('../package.json')
+const pkg = JSON.parse(
+  await fs.readFile(
+    new URL('../package.json', import.meta.url),
+    'utf8'
+  )
+)
 
 Sentry.init({
   dsn: 'https://6c96a5c2ffa5448d9ec8ddda90012bc9@o1408530.ingest.sentry.io/4504792315199488',

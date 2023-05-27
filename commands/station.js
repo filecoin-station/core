@@ -1,14 +1,12 @@
-'use strict'
-
-const { join } = require('node:path')
-const saturnNode = require('../lib/saturn-node')
-const zinniaRuntime = require('../lib/zinnia')
-const { formatActivityObject, activities } = require('../lib/activity')
-const { startPingLoop } = require('../lib/telemetry')
-const bacalhau = require('../lib/bacalhau')
-const fs = require('node:fs/promises')
-const { metrics } = require('../lib/metrics')
-const { paths } = require('../lib/paths')
+import { join } from 'node:path'
+import * as saturnNode from '../lib/saturn-node.js'
+import * as zinniaRuntime from '../lib/zinnia.js'
+import { formatActivityObject, activities } from '../lib/activity.js'
+import { startPingLoop } from '../lib/telemetry.js'
+import * as bacalhau from '../lib/bacalhau.js'
+import fs from 'node:fs/promises'
+import { metrics } from '../lib/metrics.js'
+import { paths } from '../lib/paths.js'
 
 const { FIL_WALLET_ADDRESS, MAX_DISK_SPACE } = process.env
 
@@ -18,7 +16,7 @@ const moduleNames = [
   'bacalhau'
 ]
 
-const station = async ({ json, experimental }) => {
+export const station = async ({ json, experimental }) => {
   if (!FIL_WALLET_ADDRESS) {
     console.error('FIL_WALLET_ADDRESS required')
     process.exit(1)
@@ -92,8 +90,4 @@ const station = async ({ json, experimental }) => {
   }
 
   await Promise.all(modules)
-}
-
-module.exports = {
-  station
 }

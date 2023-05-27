@@ -1,10 +1,8 @@
 #!/usr/bin/env node
 
-'use strict'
-
-const saturnNode = require('../lib/saturn-node')
-const bacalhau = require('../lib/bacalhau')
-const zinnia = require('../lib/zinnia')
+import * as saturnNode from '../lib/saturn-node.js'
+import * as bacalhau from '../lib/bacalhau.js'
+import * as zinnia from '../lib/zinnia.js'
 
 const main = async () => {
   await Promise.all([
