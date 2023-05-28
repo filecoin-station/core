@@ -5,13 +5,9 @@ import Sentry from '@sentry/node'
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import fs from 'node:fs/promises'
+import * as paths from '../lib/paths.js'
 
-const pkg = JSON.parse(
-  await fs.readFile(
-    new URL('../package.json', import.meta.url),
-    'utf8'
-  )
-)
+const pkg = JSON.parse(await fs.readFile(paths.packageJSON, 'utf8'))
 
 Sentry.init({
   dsn: 'https://6c96a5c2ffa5448d9ec8ddda90012bc9@o1408530.ingest.sentry.io/4504792315199488',
