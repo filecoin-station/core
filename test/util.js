@@ -1,8 +1,8 @@
-'use strict'
-
-const { join } = require('node:path')
+import { fileURLToPath } from 'node:url'
 
 // From https://lotus.filecoin.io/lotus/manage/manage-fil/
-exports.FIL_WALLET_ADDRESS = 'f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za'
+export const FIL_WALLET_ADDRESS = 'f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za'
 
-exports.station = join(__dirname, '..', 'bin', 'station.js')
+export const station = fileURLToPath(
+  new URL('../bin/station.js', import.meta.url)
+)

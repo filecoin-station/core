@@ -6,6 +6,7 @@
   "repository": "filecoin-station/core",
   "main": "index.js",
   "types": "dist/index.d.ts",
+  "type": "module",
   "bin": {
     "station": "./bin/station.js"
   },

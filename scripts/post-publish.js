@@ -1,24 +1,12 @@
 #!/usr/bin/env node
 
-'use strict'
+import execa from 'execa'
+import fs from 'node:fs/promises'
+import * as paths from '../lib/paths.js'
 
-const { join } = require('node:path')
-const execa = require('execa')
-const fs = require('node:fs/promises')
-const pkg = require('../package.json')
-
-const main = async () => {
-  pkg.sentryEnvironment = 'development'
-  await fs.writeFile(
-    join(__dirname, '..', 'package.json'),
-    JSON.stringify(pkg, null, 2) + '\n'
-  )
-  await execa('git', ['add', 'package.json'])
-  await execa('git', ['commit', '-m', 'chore: set sentry environment to development'])
-  await execa('git', ['push'])
-}
-
-main().catch(err => {
-  console.error(err)
-  process.exit(1)
-})
+const pkg = JSON.parse(await fs.readFile(paths.packageJSON, 'utf8'))
+pkg.sentryEnvironment = 'development'
+await fs.writeFile(paths.packageJSON, JSON.stringify(pkg, null, 2) + '\n')
+await execa('git', ['add', 'package.json'])
+await execa('git', ['commit', '-m', 'chore: set sentry environment to development'])
+await execa('git', ['push'])

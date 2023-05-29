@@ -1,7 +1,5 @@
-'use strict'
-
-const assert = require('node:assert')
-const { Metrics } = require('../lib/metrics')
+import assert from 'node:assert'
+import { Metrics } from '../lib/metrics.js'
 
 describe('Metrics', () => {
   describe('submit', () => {

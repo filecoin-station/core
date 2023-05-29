@@ -1,13 +1,11 @@
-'use strict'
-
-const assert = require('node:assert')
-const execa = require('execa')
-const { station, FIL_WALLET_ADDRESS } = require('./util')
-const { tmpdir } = require('node:os')
-const { randomUUID } = require('node:crypto')
-const { join } = require('node:path')
-const streamMatch = require('stream-match')
-const getStream = require('get-stream')
+import assert from 'node:assert'
+import execa from 'execa'
+import { station, FIL_WALLET_ADDRESS } from './util.js'
+import { tmpdir } from 'node:os'
+import { randomUUID } from 'node:crypto'
+import { join } from 'node:path'
+import streamMatch from 'stream-match'
+import getStream from 'get-stream'
 
 describe('Station', () => {
   it('runs Saturn and Zinnia', async () => {
