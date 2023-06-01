@@ -76,9 +76,6 @@ the configuration options described in
   `f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za`. Please note that any earnings
   sent there will be lost.
 
-- `$MAX_DISK_SPACE`_(number; optional)_: Maximum disk space (in bytes) to use in
-  `$CACHE_ROOT` and `$STATE_ROOT` combined.
-
 This command outputs metrics and activity events:
 
 ```bash
