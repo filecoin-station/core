@@ -8,12 +8,11 @@ import streamMatch from 'stream-match'
 import getStream from 'get-stream'
 
 describe('Station', () => {
-  it('runs Saturn and Zinnia', async () => {
+  it('runs Zinnia', async () => {
     const ps = startStation()
     await Promise.all([
       streamMatch(ps.stdout, 'totalJobsCompleted'),
-      streamMatch(ps.stdout, 'Zinnia started'),
-      streamMatch(ps.stdout, 'Saturn module started')
+      streamMatch(ps.stdout, 'Zinnia started')
     ])
     stopStation()
   })
@@ -28,8 +27,7 @@ describe('Station', () => {
     const ps = startStation()
     await Promise.all([
       streamMatch(ps.stdout, 'totalJobsCompleted'),
-      streamMatch(ps.stdout, 'Zinnia started'),
-      streamMatch(ps.stdout, 'Saturn module started')
+      streamMatch(ps.stdout, 'Zinnia started')
     ])
     stopStation()
   })
@@ -38,8 +36,7 @@ describe('Station', () => {
 
     await Promise.all([
       streamMatch(ps.stdout, 'jobs-completed'),
-      streamMatch(ps.stdout, /activity:info.*(Zinnia started)/),
-      streamMatch(ps.stdout, /activity:info.*(Saturn module started)/)
+      streamMatch(ps.stdout, /activity:info.*(Zinnia started)/)
     ])
 
     stopStation()
