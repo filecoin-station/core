@@ -16,6 +16,7 @@
   "scripts": {
     "build": "tsc -p .",
     "format": "prettier --write .",
+    "lint": "npm run test:lint",
     "start": "node ./bin/station.js",
     "test": "npm run build && npm run test:lint && npm run test:unit",
     "test:lint": "prettier --check . && standard",
