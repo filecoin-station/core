@@ -51,7 +51,7 @@ export const station = async ({ json, experimental }) => {
   })
 
   const modules = [
-    pRetry(() => zinniaRuntime.start({
+    pRetry(() => zinniaRuntime.run({
       FIL_WALLET_ADDRESS,
       STATE_ROOT: join(paths.moduleState, 'zinnia'),
       CACHE_ROOT: join(paths.moduleCache, 'zinnia'),
