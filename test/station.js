@@ -1,5 +1,5 @@
 import assert from 'node:assert'
-import execa from 'execa'
+import { execa } from 'execa'
 import { station, FIL_WALLET_ADDRESS } from './util.js'
 import { tmpdir } from 'node:os'
 import { randomUUID } from 'node:crypto'
