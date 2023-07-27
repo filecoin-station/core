@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import execa from 'execa'
+import { execa } from 'execa'
 import fs from 'node:fs/promises'
 import * as paths from '../lib/paths.js'
 

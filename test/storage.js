@@ -1,4 +1,4 @@
-import execa from 'execa'
+import { execa } from 'execa'
 import { station, FIL_WALLET_ADDRESS } from './util.js'
 import { once } from 'node:events'
 import { tmpdir } from 'node:os'
