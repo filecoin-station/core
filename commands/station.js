@@ -6,6 +6,7 @@ import * as bacalhau from '../lib/bacalhau.js'
 import fs from 'node:fs/promises'
 import { metrics } from '../lib/metrics.js'
 import { paths } from '../lib/paths.js'
+import pRetry from 'p-retry'
 
 const { FIL_WALLET_ADDRESS } = process.env
 
@@ -50,7 +51,7 @@ export const station = async ({ json, experimental }) => {
   })
 
   const modules = [
-    zinniaRuntime.start({
+    pRetry(() => zinniaRuntime.run({
       FIL_WALLET_ADDRESS,
       STATE_ROOT: join(paths.moduleState, 'zinnia'),
       CACHE_ROOT: join(paths.moduleCache, 'zinnia'),
@@ -64,18 +65,18 @@ export const station = async ({ json, experimental }) => {
         })
       },
       onMetrics: m => metrics.submit('zinnia', m)
-    })
+    }), { retries: 1000 })
   ]
 
   if (experimental) {
-    modules.push(bacalhau.start({
+    modules.push(pRetry(() => bacalhau.run({
       FIL_WALLET_ADDRESS,
       storagePath: join(paths.moduleCache, 'bacalhau'),
       onActivity: activity => {
         activities.submit({ source: 'Bacalhau', ...activity })
       },
       onMetrics: m => metrics.submit('bacalhau', m)
-    }))
+    }), { retries: 1000 }))
   }
 
   await Promise.all(modules)

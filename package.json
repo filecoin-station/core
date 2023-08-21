@@ -46,6 +46,7 @@
     "@sentry/node": "^7.41.0",
     "execa": "^8.0.1",
     "gunzip-maybe": "^1.4.2",
+    "p-retry": "^5.1.2",
     "tar-fs": "^3.0.3",
     "undici": "^5.20.0",
     "unzip-stream": "^0.3.1",
