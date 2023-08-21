@@ -69,14 +69,14 @@ export const station = async ({ json, experimental }) => {
   ]
 
   if (experimental) {
-    modules.push(bacalhau.start({
+    modules.push(pRetry(() => bacalhau.run({
       FIL_WALLET_ADDRESS,
       storagePath: join(paths.moduleCache, 'bacalhau'),
       onActivity: activity => {
         activities.submit({ source: 'Bacalhau', ...activity })
       },
       onMetrics: m => metrics.submit('bacalhau', m)
-    }))
+    }), { retries: 1000 }))
   }
 
   await Promise.all(modules)
