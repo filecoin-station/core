@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import fs from 'node:fs/promises'
-import execa from 'execa'
+import { execa } from 'execa'
 import * as paths from '../lib/paths.js'
 
 const pkg = JSON.parse(await fs.readFile(paths.packageJSON, 'utf8'))
