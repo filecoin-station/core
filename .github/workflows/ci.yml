@@ -81,7 +81,7 @@ jobs:
          docker run \
            --name station \
            --detach \
-           --env FIL_WALLET_ADDRESS=f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za \
+           --env FIL_WALLET_ADDRESS=f410fhgyuvi4k35wnqkvtdpewptt2oihbchvy5bdlmxy \
            $IMAGEID
         env:
           IMAGEID: ${{ steps.docker_build.outputs.imageid }}

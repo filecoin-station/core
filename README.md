@@ -37,7 +37,7 @@ $ npm install -g @filecoin-station/core
 ## Usage
 
 ```bash
-$ FIL_WALLET_ADDRESS=f1... station
+$ FIL_WALLET_ADDRESS=f410/0x... station
 ```
 
 ## Common Configuration
@@ -70,10 +70,12 @@ the configuration options described in
 [Common Configuration](#common-configuration):
 
 - `FIL_WALLET_ADDRESS` _(string; required)_: Address of the Filecoin wallet that
-  will receive rewards. The value must be a mainnet address starting with `f1`.
+  will receive rewards. The value must be a mainnet address starting with `f410`
+  or `0x`.
 
   If you just want to give `core` a quick spin, you can use the address
-  `f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za`. Please note that any earnings
+  `f410fhgyuvi4k35wnqkvtdpewptt2oihbchvy5bdlmxy` or respectively
+  `0x39b14aa38adf6cd82aB31BC967Ce7a720E111Eb8`. Please note that any earnings
   sent there will be lost.
 
 This command outputs metrics and activity events:
@@ -148,7 +150,7 @@ Deploy Station with [Docker](https://www.docker.com/). Please replace
 $ docker run \
 	--name station \
 	--detach \
-	--env FIL_WALLET_ADDRESS=f1abjxfbp274xpdqcpuaykwkfb43omjotacm2p3za \
+	--env FIL_WALLET_ADDRESS=f410fhgyuvi4k35wnqkvtdpewptt2oihbchvy5bdlmxy \
 	ghcr.io/filecoin-station/core
 ```
 
