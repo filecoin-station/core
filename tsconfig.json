@@ -3,7 +3,7 @@
     "allowJs": true,
     "checkJs": true,
     "skipLibCheck": true,
-    "lib": ["es2021", "DOM"],
+    "lib": ["es2021"],
     "target": "es2021",
     "module": "Node16",
     "moduleResolution": "node16",
@@ -24,7 +24,8 @@
     "commands",
     "lib",
     "scripts",
-    "tests"
+    "tests",
+    "fetch.d.ts"
   ],
   "exclude": [
     "dist/**/*"

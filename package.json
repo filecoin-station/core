@@ -32,6 +32,7 @@
     ]
   },
   "devDependencies": {
+    "@types/node": "^20.8.0",
     "@types/yargs": "^17.0.24",
     "get-stream": "^8.0.1",
     "mocha": "^10.2.0",
@@ -39,7 +40,8 @@
     "prettier": "^3.0.0",
     "standard": "^17.0.0",
     "stream-match": "^1.2.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "undici": "^5.25.3"
   },
   "dependencies": {
     "@influxdata/influxdb-client": "^1.33.2",
