@@ -3,7 +3,7 @@
     "allowJs": true,
     "checkJs": true,
     "skipLibCheck": true,
-    "lib": ["es2021"],
+    "lib": ["es2021", "DOM"],
     "target": "es2021",
     "module": "Node16",
     "moduleResolution": "node16",
