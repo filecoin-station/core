@@ -20,6 +20,10 @@ export const station = async ({ json, experimental }) => {
     console.error('FIL_WALLET_ADDRESS required')
     process.exit(1)
   }
+  if (!FIL_WALLET_ADDRESS.startsWith('f410') && !FIL_WALLET_ADDRESS.startsWith('0x')) {
+    console.error('FIL_WALLET_ADDRESS must start with f410 or 0x')
+    process.exit(1)
+  }
 
   startPingLoop().unref()
   for (const moduleName of moduleNames) {
