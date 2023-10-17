@@ -21,7 +21,8 @@ export const station = async ({ json, experimental }) => {
     process.exit(1)
   }
   if (FIL_WALLET_ADDRESS.startsWith('f1')) {
-    console.error('Warning: f1... addresses are deprecated')
+    console.error('Warning: f1... addresses are deprecated and will not receive any rewards.')
+    console.error('Please use an address starting with f410 or 0x')
   } else if (
     !FIL_WALLET_ADDRESS.startsWith('f410') &&
     !FIL_WALLET_ADDRESS.startsWith('0x')
