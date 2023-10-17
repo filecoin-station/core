@@ -71,7 +71,10 @@ the configuration options described in
 
 - `FIL_WALLET_ADDRESS` _(string; required)_: Address of the Filecoin wallet that
   will receive rewards. The value must be a mainnet address starting with
-  `f410`, `0x` (or `f1`, deprecated).
+  `f410`, `0x`. 
+  
+  Addresses starting with `f1` are deprecated. We allow them
+  for now but will start rejecting them in an upcoming version.
 
   If you just want to give `core` a quick spin, you can use the address
   `0x000000000000000000000000000000000000dEaD`. Please note that any earnings
