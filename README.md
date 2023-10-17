@@ -47,12 +47,12 @@ Station Core is configured using environment variables (see
 
 The following configuration options are shared by all Station commands:
 
-- `$CACHE_ROOT`_(string; optional)_: Station stores temporary files (e.g. cached
-  data) in this directory. Defaults to
+- `$CACHE_ROOT` _(string; optional)_: Station stores temporary files (e.g.
+  cached data) in this directory. Defaults to
   - Linux: `${XDG_CACHE_HOME:-~/.cache}/filecoin-station-core`
   - macOS: `~/Library/Caches/app.filstation.core`
   - Windows: `%TEMP%/Filecoin Station Core`
-- `$STATE_ROOT`_(string; optional)_: Station stores logs and module state in
+- `$STATE_ROOT` _(string; optional)_: Station stores logs and module state in
   this directory. Defaults to
   - Linux: `${XDG_STATE_HOME:-~/.local/state}/filecoin-station-core`
   - macOS: `~/Library/Application Support/app.filstation.core`
@@ -71,10 +71,10 @@ the configuration options described in
 
 - `FIL_WALLET_ADDRESS` _(string; required)_: Address of the Filecoin wallet that
   will receive rewards. The value must be a mainnet address starting with
-  `f410`, `0x`. 
-  
-  Addresses starting with `f1` are deprecated. We allow them
-  for now but will start rejecting them in an upcoming version.
+  `f410`, `0x`.
+
+  Addresses starting with `f1` are deprecated. We allow them for now but will
+  start rejecting them in an upcoming version.
 
   If you just want to give `core` a quick spin, you can use the address
   `0x000000000000000000000000000000000000dEaD`. Please note that any earnings
