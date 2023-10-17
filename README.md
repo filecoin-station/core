@@ -37,7 +37,7 @@ $ npm install -g @filecoin-station/core
 ## Usage
 
 ```bash
-$ FIL_WALLET_ADDRESS=f410/0x... station
+$ FIL_WALLET_ADDRESS=... station
 ```
 
 ## Common Configuration
@@ -47,12 +47,12 @@ Station Core is configured using environment variables (see
 
 The following configuration options are shared by all Station commands:
 
-- `$CACHE_ROOT`_(string; optional)_: Station stores temporary files (e.g. cached
-  data) in this directory. Defaults to
+- `$CACHE_ROOT` _(string; optional)_: Station stores temporary files (e.g.
+  cached data) in this directory. Defaults to
   - Linux: `${XDG_CACHE_HOME:-~/.cache}/filecoin-station-core`
   - macOS: `~/Library/Caches/app.filstation.core`
   - Windows: `%TEMP%/Filecoin Station Core`
-- `$STATE_ROOT`_(string; optional)_: Station stores logs and module state in
+- `$STATE_ROOT` _(string; optional)_: Station stores logs and module state in
   this directory. Defaults to
   - Linux: `${XDG_STATE_HOME:-~/.local/state}/filecoin-station-core`
   - macOS: `~/Library/Application Support/app.filstation.core`
@@ -70,12 +70,14 @@ the configuration options described in
 [Common Configuration](#common-configuration):
 
 - `FIL_WALLET_ADDRESS` _(string; required)_: Address of the Filecoin wallet that
-  will receive rewards. The value must be a mainnet address starting with `f410`
-  or `0x`.
+  will receive rewards. The value must be a mainnet address starting with
+  `f410`, `0x`.
+
+  Addresses starting with `f1` are deprecated. We allow them for now but will
+  start rejecting them in an upcoming version.
 
   If you just want to give `core` a quick spin, you can use the address
-  `f410fhgyuvi4k35wnqkvtdpewptt2oihbchvy5bdlmxy` or respectively
-  `0x39b14aa38adf6cd82aB31BC967Ce7a720E111Eb8`. Please note that any earnings
+  `0x000000000000000000000000000000000000dEaD`. Please note that any earnings
   sent there will be lost.
 
 This command outputs metrics and activity events:
@@ -150,7 +152,7 @@ Deploy Station with [Docker](https://www.docker.com/). Please replace
 $ docker run \
 	--name station \
 	--detach \
-	--env FIL_WALLET_ADDRESS=f410fhgyuvi4k35wnqkvtdpewptt2oihbchvy5bdlmxy \
+	--env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD \
 	ghcr.io/filecoin-station/core
 ```
 
