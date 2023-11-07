@@ -7,6 +7,7 @@ import fs from 'node:fs/promises'
 import { metrics } from '../lib/metrics.js'
 import { paths } from '../lib/paths.js'
 import pRetry from 'p-retry'
+import { fetch } from 'undici'
 
 const { FIL_WALLET_ADDRESS } = process.env
 
@@ -15,11 +16,13 @@ const moduleNames = [
   'bacalhau'
 ]
 
+const panic = msg => {
+  console.error(msg)
+  process.exit(1)
+}
+
 export const station = async ({ json, experimental }) => {
-  if (!FIL_WALLET_ADDRESS) {
-    console.error('FIL_WALLET_ADDRESS required')
-    process.exit(1)
-  }
+  if (!FIL_WALLET_ADDRESS) panic('FIL_WALLET_ADDRESS required')
   if (FIL_WALLET_ADDRESS.startsWith('f1')) {
     console.error('Warning: f1... addresses are deprecated and will not receive any rewards.')
     console.error('Please use an address starting with f410 or 0x')
@@ -27,9 +30,13 @@ export const station = async ({ json, experimental }) => {
     !FIL_WALLET_ADDRESS.startsWith('f410') &&
     !FIL_WALLET_ADDRESS.startsWith('0x')
   ) {
-    console.error('FIL_WALLET_ADDRESS must start with f410 or 0x')
-    process.exit(1)
+    panic('FIL_WALLET_ADDRESS must start with f410 or 0x')
   }
+  const fetchRes = await fetch(
+    `https://station-wallet-screening.fly.dev/${FIL_WALLET_ADDRESS}`
+  )
+  if (fetchRes.status === 403) panic('Invalid FIL_WALLET_ADDRESS address')
+  if (!fetchRes.ok) panic('Failed to check FIL_WALLET_ADDRESS address')
 
   startPingLoop().unref()
   for (const moduleName of moduleNames) {

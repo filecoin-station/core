@@ -8,6 +8,13 @@ describe('CLI', () => {
     it('fails without address', async () => {
       await assert.rejects(execa(station))
     })
+    it('fails with sanctioned address', async () => {
+      await assert.rejects(execa(station, {
+        env: {
+          FIL_WALLET_ADDRESS: '0x1da5821544e25c636c1417ba96ade4cf6d2f9b5a'
+        }
+      }))
+    })
     it('works with address', async () => {
       const ps = execa(station, { env: { FIL_WALLET_ADDRESS } })
       await once(ps.stdout, 'data')
