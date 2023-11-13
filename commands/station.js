@@ -23,6 +23,9 @@ const panic = msg => {
 
 export const station = async ({ json, experimental }) => {
   if (!FIL_WALLET_ADDRESS) panic('FIL_WALLET_ADDRESS required')
+  if (FIL_WALLET_ADDRESS.startsWith('f1')) {
+    panic('f1 addresses are currently not supported. Please use an f4 or 0x address')
+  }
   if (
     !FIL_WALLET_ADDRESS.startsWith('f410') &&
     !FIL_WALLET_ADDRESS.startsWith('0x')
