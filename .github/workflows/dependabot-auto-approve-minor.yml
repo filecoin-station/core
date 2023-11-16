@@ -12,6 +12,7 @@ jobs:
       matrix:
         dependencyStartsWith:
           - '@sentry/'
+          - undici
     steps:
       - name: Dependabot metadata
         id: metadata
