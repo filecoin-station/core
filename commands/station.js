@@ -8,6 +8,7 @@ import { metrics } from '../lib/metrics.js'
 import { paths } from '../lib/paths.js'
 import pRetry from 'p-retry'
 import { fetch } from 'undici'
+import { ethAddressFromDelegated } from '@glif/filecoin-address'
 
 const { FIL_WALLET_ADDRESS } = process.env
 
@@ -42,6 +43,9 @@ export const station = async ({ json, experimental }) => {
   )
   if (fetchRes.status === 403) panic('Invalid FIL_WALLET_ADDRESS address')
   if (!fetchRes.ok) panic('Failed to check FIL_WALLET_ADDRESS address')
+  const ethAddress = FIL_WALLET_ADDRESS.startsWith('0x')
+    ? FIL_WALLET_ADDRESS
+    : ethAddressFromDelegated(FIL_WALLET_ADDRESS)
 
   startPingLoop().unref()
   for (const moduleName of moduleNames) {
@@ -75,6 +79,7 @@ export const station = async ({ json, experimental }) => {
   const modules = [
     pRetry(() => zinniaRuntime.run({
       FIL_WALLET_ADDRESS,
+      ethAddress,
       STATE_ROOT: join(paths.moduleState, 'zinnia'),
       CACHE_ROOT: join(paths.moduleCache, 'zinnia'),
       onActivity: activity => {
