@@ -86,7 +86,7 @@ This command outputs metrics and activity events:
 $ station
 {
   "totalJobsCompleted": 161,
-  "scheduledRewards": "0"
+  "rewardsScheduledForAddress": "0"
 }
 [4/19/2023, 9:26:54 PM] INFO  Saturn Node will try to connect to the Saturn Orchestrator...
 [4/19/2023, 9:26:54 PM] INFO  Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network...
