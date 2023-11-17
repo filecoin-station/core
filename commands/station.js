@@ -32,8 +32,13 @@ export const station = async ({ json, experimental }) => {
   ) {
     panic('FIL_WALLET_ADDRESS must start with f410 or 0x')
   }
-  const fetchRes = await fetch(
-    `https://station-wallet-screening.fly.dev/${FIL_WALLET_ADDRESS}`
+  const fetchRes = await pRetry(
+    () => fetch(`https://station-wallet-screening.fly.dev/${FIL_WALLET_ADDRESS}`),
+    {
+      retries: 1000,
+      onFailedAttempt: () =>
+        console.error('Failed to check FIL_WALLET_ADDRESS address. Retrying...')
+    }
   )
   if (fetchRes.status === 403) panic('Invalid FIL_WALLET_ADDRESS address')
   if (!fetchRes.ok) panic('Failed to check FIL_WALLET_ADDRESS address')
