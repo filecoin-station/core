@@ -24,16 +24,21 @@ const panic = msg => {
 export const station = async ({ json, experimental }) => {
   if (!FIL_WALLET_ADDRESS) panic('FIL_WALLET_ADDRESS required')
   if (FIL_WALLET_ADDRESS.startsWith('f1')) {
-    console.error('Warning: f1... addresses are deprecated and will not receive any rewards.')
-    console.error('Please use an address starting with f410 or 0x')
-  } else if (
+    panic('f1 addresses are currently not supported. Please use an f4 or 0x address')
+  }
+  if (
     !FIL_WALLET_ADDRESS.startsWith('f410') &&
     !FIL_WALLET_ADDRESS.startsWith('0x')
   ) {
     panic('FIL_WALLET_ADDRESS must start with f410 or 0x')
   }
-  const fetchRes = await fetch(
-    `https://station-wallet-screening.fly.dev/${FIL_WALLET_ADDRESS}`
+  const fetchRes = await pRetry(
+    () => fetch(`https://station-wallet-screening.fly.dev/${FIL_WALLET_ADDRESS}`),
+    {
+      retries: 1000,
+      onFailedAttempt: () =>
+        console.error('Failed to check FIL_WALLET_ADDRESS address. Retrying...')
+    }
   )
   if (fetchRes.status === 403) panic('Invalid FIL_WALLET_ADDRESS address')
   if (!fetchRes.ok) panic('Failed to check FIL_WALLET_ADDRESS address')
