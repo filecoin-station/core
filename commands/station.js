@@ -9,6 +9,7 @@ import { paths } from '../lib/paths.js'
 import pRetry from 'p-retry'
 import { fetch } from 'undici'
 import { ethAddressFromDelegated } from '@glif/filecoin-address'
+import { formatEther } from 'ethers'
 
 const { FIL_WALLET_ADDRESS } = process.env
 
@@ -72,7 +73,11 @@ export const station = async ({ json, experimental }) => {
         total: metrics.totalJobsCompleted
       }))
     } else {
-      console.log(JSON.stringify(metrics, null, 2))
+      console.log(JSON.stringify({
+        totalJobsCompleted: metrics.totalJobsCompleted,
+        rewardsScheduledForAddress:
+          formatEther(metrics.rewardsScheduledForAddress)
+      }, null, 2))
     }
   })
 
