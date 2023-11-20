@@ -7,15 +7,15 @@ describe('Metrics', () => {
       const metrics = new Metrics()
       metrics.submit('module1', {
         totalJobsCompleted: 1,
-        rewardsScheduledForAddress: '0'
+        rewardsScheduledForAddress: 1n
       })
       metrics.submit('module2', {
         totalJobsCompleted: 2,
-        rewardsScheduledForAddress: '0'
+        rewardsScheduledForAddress: 2n
       })
       assert.deepStrictEqual(metrics.mergedMetrics, {
         totalJobsCompleted: 3,
-        rewardsScheduledForAddress: '0'
+        rewardsScheduledForAddress: 3n
       })
     })
     it('should filter duplicate entries', () => {
@@ -25,12 +25,12 @@ describe('Metrics', () => {
         if (i === 0) {
           assert.deepStrictEqual(metrics, {
             totalJobsCompleted: 1,
-            rewardsScheduledForAddress: '0'
+            rewardsScheduledForAddress: 0n
           })
         } else if (i === 1) {
           assert.deepStrictEqual(metrics, {
             totalJobsCompleted: 2,
-            rewardsScheduledForAddress: '0'
+            rewardsScheduledForAddress: 0n
           })
         } else {
           throw new Error('should not be called')
@@ -39,15 +39,15 @@ describe('Metrics', () => {
       })
       metrics.submit('module1', {
         totalJobsCompleted: 1,
-        rewardsScheduledForAddress: '0'
+        rewardsScheduledForAddress: 0n
       })
       metrics.submit('module1', {
         totalJobsCompleted: 1,
-        rewardsScheduledForAddress: '0'
+        rewardsScheduledForAddress: 0n
       })
       metrics.submit('module2', {
         totalJobsCompleted: 1,
-        rewardsScheduledForAddress: '0'
+        rewardsScheduledForAddress: 0n
       })
     })
   })
