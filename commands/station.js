@@ -39,11 +39,11 @@ export const station = async ({ json, experimental }) => {
     {
       retries: 1000,
       onFailedAttempt: () =>
-        console.error('Failed to check FIL_WALLET_ADDRESS address. Retrying...')
+        console.error('Failed to validate FIL_WALLET_ADDRESS address. Retrying...')
     }
   )
   if (fetchRes.status === 403) panic('Invalid FIL_WALLET_ADDRESS address')
-  if (!fetchRes.ok) panic('Failed to check FIL_WALLET_ADDRESS address')
+  if (!fetchRes.ok) panic('Failed to validate FIL_WALLET_ADDRESS address')
   const ethAddress = FIL_WALLET_ADDRESS.startsWith('0x')
     ? FIL_WALLET_ADDRESS
     : ethAddressFromDelegated(FIL_WALLET_ADDRESS)
