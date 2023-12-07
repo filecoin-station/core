@@ -70,7 +70,8 @@ export const station = async ({ json, experimental }) => {
     if (json) {
       console.log(JSON.stringify({
         type: 'jobs-completed',
-        total: metrics.totalJobsCompleted
+        total: metrics.totalJobsCompleted,
+        rewardsScheduledForAddress: formatEther(metrics.rewardsScheduledForAddress)
       }))
     } else {
       console.log(JSON.stringify({
