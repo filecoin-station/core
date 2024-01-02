@@ -15,6 +15,7 @@ jobs:
           - undici
           - '@types/'
           - typescript
+          - prettier
     steps:
       - name: Dependabot metadata
         id: metadata
