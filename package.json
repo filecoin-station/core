@@ -42,7 +42,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@glif/filecoin-address": "^2.0.43",
+    "@glif/filecoin-address": "^3.0.0",
     "@influxdata/influxdb-client": "^1.33.2",
     "@sentry/node": "^7.41.0",
     "ethers": "^6.8.1",
