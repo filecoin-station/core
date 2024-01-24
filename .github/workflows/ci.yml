@@ -31,6 +31,7 @@ jobs:
       - run: npm run test:unit
         env:
           LANG: ${{ matrix.lang }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   docker:
     name: Build and test Docker
