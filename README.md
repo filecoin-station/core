@@ -81,6 +81,10 @@ the configuration options described in
   `0x000000000000000000000000000000000000dEaD`. Please note that any earnings
   sent there will be lost.
 
+- `MODULE_FILTER` _(string; optional)_: Filter Zinnia modules by name. Eg:
+  - `spark`
+  - `voyager`
+
 This command outputs metrics and activity events:
 
 ```bash
