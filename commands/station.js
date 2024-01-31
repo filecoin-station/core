@@ -101,7 +101,7 @@ export const station = async ({ json, experimental }) => {
   ]
 
   if (experimental) {
-    // No experimental module available at this point
+    console.error('No experimental modules available at this point')
   }
 
   await Promise.all(modules)
