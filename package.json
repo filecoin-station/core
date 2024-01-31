@@ -1,6 +1,6 @@
 {
   "name": "@filecoin-station/core",
-  "version": "17.0.2",
+  "version": "17.0.3",
   "description": "Filecoin Station Core",
   "license": "(Apache-2.0 AND MIT)",
   "repository": "filecoin-station/core",
