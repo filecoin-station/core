@@ -88,6 +88,7 @@ export const station = async ({ json, experimental }) => {
       ethAddress,
       STATE_ROOT: join(paths.moduleState, 'zinnia'),
       CACHE_ROOT: join(paths.moduleCache, 'zinnia'),
+      moduleVersionsDir: paths.moduleVersionsDir,
       onActivity: activity => {
         activities.submit({
           ...activity,
