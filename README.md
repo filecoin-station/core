@@ -81,6 +81,11 @@ the configuration options described in
   `0x000000000000000000000000000000000000dEaD`. Please note that any earnings
   sent there will be lost.
 
+- `MODULE_FILTER` _(string; optional)_: Run only the Zinnia module with the
+  given name. Eg:
+  - `MODULE_FILTER=spark`
+  - `MODULE_FILTER=voyager`
+
 This command outputs metrics and activity events:
 
 ```bash
