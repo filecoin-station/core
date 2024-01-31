@@ -2,7 +2,6 @@ import { join } from 'node:path'
 import * as zinniaRuntime from '../lib/zinnia.js'
 import { formatActivityObject, activities } from '../lib/activity.js'
 import { startPingLoop } from '../lib/telemetry.js'
-import * as bacalhau from '../lib/bacalhau.js'
 import fs from 'node:fs/promises'
 import { metrics } from '../lib/metrics.js'
 import { paths } from '../lib/paths.js'
@@ -14,8 +13,7 @@ import { formatEther } from 'ethers'
 const { FIL_WALLET_ADDRESS } = process.env
 
 const moduleNames = [
-  'zinnia',
-  'bacalhau'
+  'zinnia'
 ]
 
 const panic = msg => {
@@ -103,14 +101,7 @@ export const station = async ({ json, experimental }) => {
   ]
 
   if (experimental) {
-    modules.push(pRetry(() => bacalhau.run({
-      FIL_WALLET_ADDRESS,
-      storagePath: join(paths.moduleCache, 'bacalhau'),
-      onActivity: activity => {
-        activities.submit({ source: 'Bacalhau', ...activity })
-      },
-      onMetrics: m => metrics.submit('bacalhau', m)
-    }), { retries: 1000 }))
+    // No experimental module available at this point
   }
 
   await Promise.all(modules)
