@@ -16,13 +16,14 @@ describe('Station', () => {
     ])
     stopStation()
   })
-  it('runs experimental modules', () => {
-    it('runs Bacalhau', async () => {
-      const ps = startStation(['--experimental'])
-      await streamMatch(ps.stdout, 'Bacalhau module started.')
-      stopStation()
-    })
-  })
+  // No experimental modules available at this point
+  // it('runs experimental modules', () => {
+  //   it('runs Bacalhau', async () => {
+  //     const ps = startStation(['--experimental'])
+  //     await streamMatch(ps.stdout, 'Bacalhau module started.')
+  //     stopStation()
+  //   })
+  // })
   it('outputs events', async () => {
     const ps = startStation()
     await Promise.all([

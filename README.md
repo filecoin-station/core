@@ -121,9 +121,7 @@ For the JSON output, the following event types exist:
 Set the flag `--experimental` to run modules not yet considered safe for
 production use. _Run this at your own risk!_
 
-Modules currently in experimental mode:
-
-- [Bacalhau](https://github.com/bacalhau-project/bacalhau)
+No modules currently in experimental mode.
 
 ### `$ station --help`
 
