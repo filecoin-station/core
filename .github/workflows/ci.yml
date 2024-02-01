@@ -92,5 +92,8 @@ jobs:
           sleep 10 # Wait for Station modules to start
           docker logs station
 
-      - name: Check | Zinnia started
-        run: docker logs station | grep "Zinnia started"
+      - name: Check | Spark started
+        run: docker logs station | grep "Spark started"
+      
+      - name: Check | Voyager started
+        run: docker logs station | grep "Voyager started"
