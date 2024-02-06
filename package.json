@@ -11,7 +11,7 @@
     "station": "./bin/station.js"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "scripts": {
     "build": "tsc -p .",
