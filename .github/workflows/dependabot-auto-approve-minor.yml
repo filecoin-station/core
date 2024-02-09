@@ -16,6 +16,7 @@ jobs:
           - '@types/'
           - typescript
           - prettier
+          - mocha
     steps:
       - name: Dependabot metadata
         id: metadata
