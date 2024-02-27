@@ -35,7 +35,7 @@
     "@types/yargs": "^17.0.24",
     "get-stream": "^8.0.1",
     "mocha": "^10.2.0",
-    "np": "^9.0.0",
+    "np": "^10.0.0",
     "prettier": "^3.0.0",
     "standard": "^17.0.0",
     "stream-match": "^1.2.1",
