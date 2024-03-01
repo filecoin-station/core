@@ -17,6 +17,7 @@ jobs:
           - typescript
           - prettier
           - mocha
+          - '@glif/'
     steps:
       - name: Dependabot metadata
         id: metadata
