@@ -18,6 +18,7 @@ jobs:
           - prettier
           - mocha
           - '@glif/'
+          - tar
     steps:
       - name: Dependabot metadata
         id: metadata
