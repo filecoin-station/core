@@ -19,6 +19,7 @@ jobs:
           - mocha
           - '@glif/'
           - tar
+          - np
     steps:
       - name: Dependabot metadata
         id: metadata
