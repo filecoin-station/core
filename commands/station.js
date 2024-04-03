@@ -81,7 +81,7 @@ export const station = async ({ json, experimental }) => {
   })
 
   const modules = [
-    pRetry(() => zinniaRuntime.run({
+    zinniaRuntime.run({
       FIL_WALLET_ADDRESS,
       ethAddress,
       STATE_ROOT: join(paths.moduleState, 'zinnia'),
@@ -98,7 +98,7 @@ export const station = async ({ json, experimental }) => {
         })
       },
       onMetrics: m => metrics.submit('zinnia', m)
-    }), { retries: 1000 })
+    })
   ]
 
   if (experimental) {
