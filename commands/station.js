@@ -5,6 +5,7 @@ import { startPingLoop } from '../lib/telemetry.js'
 import fs from 'node:fs/promises'
 import { metrics } from '../lib/metrics.js'
 import { paths } from '../lib/paths.js'
+import { getStationId } from '../lib/cryptoOperations.js'
 import pRetry from 'p-retry'
 import { fetch } from 'undici'
 import { ethAddressFromDelegated } from '@glif/filecoin-address'
@@ -82,6 +83,7 @@ export const station = async ({ json, experimental }) => {
 
   const modules = [
     zinniaRuntime.run({
+      STATION_ID: (await getStationId()).publicKey,
       FIL_WALLET_ADDRESS,
       ethAddress,
       STATE_ROOT: join(paths.moduleState, 'zinnia'),
