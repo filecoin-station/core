@@ -1,7 +1,7 @@
 import { join } from 'node:path'
 import * as zinniaRuntime from '../lib/zinnia.js'
 import { formatActivityObject, activities } from '../lib/activity.js'
-import { startPingLoop } from '../lib/telemetry.js'
+import { startPingLoop, runMachinesLoop } from '../lib/telemetry.js'
 import fs from 'node:fs/promises'
 import { metrics } from '../lib/metrics.js'
 import { paths } from '../lib/paths.js'
@@ -47,6 +47,7 @@ export const station = async ({ json, experimental }) => {
     : ethAddressFromDelegated(FIL_WALLET_ADDRESS)
 
   startPingLoop().unref()
+  runMachinesLoop().catch(console.error)
   for (const moduleName of moduleNames) {
     await fs.mkdir(join(paths.moduleCache, moduleName), { recursive: true })
     await fs.mkdir(join(paths.moduleState, moduleName), { recursive: true })
