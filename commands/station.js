@@ -23,6 +23,8 @@ const panic = msg => {
 }
 
 export const station = async ({ json, experimental }) => {
+  const STATION_ID = (await getStationId()).publicKey
+
   if (!FIL_WALLET_ADDRESS) panic('FIL_WALLET_ADDRESS required')
   if (FIL_WALLET_ADDRESS.startsWith('f1')) {
     panic('f1 addresses are currently not supported. Please use an f4 or 0x address')
@@ -83,7 +85,7 @@ export const station = async ({ json, experimental }) => {
 
   const modules = [
     zinniaRuntime.run({
-      STATION_ID: (await getStationId()).publicKey,
+      STATION_ID,
       FIL_WALLET_ADDRESS,
       ethAddress,
       STATE_ROOT: join(paths.moduleState, 'zinnia'),
