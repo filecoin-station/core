@@ -49,7 +49,7 @@ export const station = async ({ json, experimental }) => {
     ? FIL_WALLET_ADDRESS
     : ethAddressFromDelegated(FIL_WALLET_ADDRESS)
 
-  startPingLoop().unref()
+  startPingLoop({ STATION_ID }).unref()
   for (const moduleName of moduleNames) {
     await fs.mkdir(join(paths.moduleCache, moduleName), { recursive: true })
     await fs.mkdir(join(paths.moduleState, moduleName), { recursive: true })
