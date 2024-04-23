@@ -37,7 +37,7 @@ $ npm install -g @filecoin-station/core
 ## Usage
 
 ```bash
-$ FIL_WALLET_ADDRESS=... station
+$ FIL_WALLET_ADDRESS=... PASSPHRASE=... station
 ```
 
 ## Common Configuration
@@ -80,6 +80,9 @@ the configuration options described in
   If you just want to give `core` a quick spin, you can use the address
   `0x000000000000000000000000000000000000dEaD`. Please note that any earnings
   sent there will be lost.
+
+- `PASSPHRASE` _(string; required)_: a passphrase to protect the Station
+  instance private key stored in a file inside `STATE_ROOT` directory.
 
 - `MODULE_FILTER` _(string; optional)_: Run only the Zinnia module with the
   given name. Eg:
