@@ -19,9 +19,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - name: Setup libsecret for node-keytar
-        run: |
-          sudo apt install gnome-keyring
-          sudo dbus-launch /usr/bin/gnome-keyring-daemon --unlock
+        run: sudo apt install gnome-keyring
         if: startsWith(matrix.os, 'ubuntu-')
       - run: npm ci --omit=dev
       - run: npm ci
