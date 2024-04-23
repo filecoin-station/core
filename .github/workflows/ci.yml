@@ -90,6 +90,7 @@ jobs:
            --name station \
            --detach \
            --env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD \
+           --env PASSPHRASE=secret \
            $IMAGEID
         env:
           IMAGEID: ${{ steps.docker_build.outputs.imageid }}
