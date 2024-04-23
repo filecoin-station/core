@@ -1,20 +1,23 @@
 import assert from 'node:assert'
 import { execa } from 'execa'
-import { station, FIL_WALLET_ADDRESS } from './util.js'
-import { tmpdir } from 'node:os'
-import { randomUUID } from 'node:crypto'
-import { join } from 'node:path'
+import { station, FIL_WALLET_ADDRESS, PASSPHRASE, getUniqueTempDir } from './util.js'
 import streamMatch from 'stream-match'
 import getStream from 'get-stream'
+import { once } from 'node:events'
 
 describe('Station', () => {
   it('runs Zinnia', async () => {
     const ps = startStation()
-    await Promise.all([
-      streamMatch(ps.stdout, 'totalJobsCompleted'),
-      streamMatch(ps.stdout, 'Spark started'),
-      streamMatch(ps.stdout, 'Voyager started')
+    await Promise.race([
+      once(ps, 'exit'),
+      Promise.all([
+        streamMatch(ps.stdout, 'totalJobsCompleted'),
+        streamMatch(ps.stdout, 'Spark started'),
+        streamMatch(ps.stdout, 'Voyager started')
+      ])
     ])
+    // Assert that the process did not exit prematurely
+    assert.strictEqual(ps.exitCode, null)
     stopStation()
   })
   // No experimental modules available at this point
@@ -50,12 +53,12 @@ describe('Station', () => {
   function startStation (cliArgs = []) {
     assert(!ps, 'Station is already running')
 
-    const CACHE_ROOT = join(tmpdir(), randomUUID())
-    const STATE_ROOT = join(tmpdir(), randomUUID())
+    const CACHE_ROOT = getUniqueTempDir()
+    const STATE_ROOT = getUniqueTempDir()
     ps = execa(
       station,
       cliArgs,
-      { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
+      { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS, PASSPHRASE } }
     )
     stdout = getStream(ps.stdout)
     stderr = getStream(ps.stderr)

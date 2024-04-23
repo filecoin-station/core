@@ -11,7 +11,10 @@ import { fetch } from 'undici'
 import { ethAddressFromDelegated } from '@glif/filecoin-address'
 import { formatEther } from 'ethers'
 
-const { FIL_WALLET_ADDRESS } = process.env
+const {
+  FIL_WALLET_ADDRESS,
+  PASSPHRASE
+} = process.env
 
 const moduleNames = [
   'zinnia'
@@ -23,8 +26,6 @@ const panic = msg => {
 }
 
 export const station = async ({ json, experimental }) => {
-  const STATION_ID = (await getStationId()).publicKey
-
   if (!FIL_WALLET_ADDRESS) panic('FIL_WALLET_ADDRESS required')
   if (FIL_WALLET_ADDRESS.startsWith('f1')) {
     panic('f1 addresses are currently not supported. Please use an f4 or 0x address')
@@ -35,6 +36,11 @@ export const station = async ({ json, experimental }) => {
   ) {
     panic('FIL_WALLET_ADDRESS must start with f410 or 0x')
   }
+
+  if (!PASSPHRASE) panic('PASSPHRASE required')
+
+  const STATION_ID = (await getStationId({ secretStore: paths.secretStore, passphrase: PASSPHRASE })).publicKey
+
   const fetchRes = await pRetry(
     () => fetch(`https://station-wallet-screening.fly.dev/${FIL_WALLET_ADDRESS}`),
     {
