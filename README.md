@@ -54,9 +54,15 @@ The following configuration options are shared by all Station commands:
   - Windows: `%TEMP%/Filecoin Station Core`
 - `$STATE_ROOT` _(string; optional)_: Station stores logs and module state in
   this directory. Defaults to
+
   - Linux: `${XDG_STATE_HOME:-~/.local/state}/filecoin-station-core`
   - macOS: `~/Library/Application Support/app.filstation.core`
   - Windows: `%LOCALAPPDATA%/Filecoin Station Core`
+
+  **IMPORTANT:** State files must be stored in a directory that's local to the
+  computer running the Station. This directory must not be shared with other
+  computers operated by the user, e.g. via Windows Domain profile or cloud
+  storage like iCloud Drive, Dropbox and OneDrive.
 
 ## Commands
 
