@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 import { execa } from 'execa'
-import { station, FIL_WALLET_ADDRESS, PASSPHRASE } from './util.js'
+import { station, FIL_WALLET_ADDRESS, PASSPHRASE, getUniqueTempDir } from './util.js'
 import { once } from 'node:events'
 
 describe('CLI', () => {
@@ -8,27 +8,38 @@ describe('CLI', () => {
     it('fails without address', async () => {
       await assert.rejects(execa(station, {
         env: {
-          PASSPHRASE: 'secret'
+          STATE_ROOT: getUniqueTempDir(),
+          PASSPHRASE
         }
       }))
     })
     it('fails with sanctioned address', async () => {
       await assert.rejects(execa(station, {
         env: {
-          PASSPHRASE: 'secret',
+          STATE_ROOT: getUniqueTempDir(),
+          PASSPHRASE,
           FIL_WALLET_ADDRESS: '0x1da5821544e25c636c1417ba96ade4cf6d2f9b5a'
         }
       }))
     })
-    it('fails without passphrase', async () => {
-      await assert.rejects(execa(station, {
+    it('starts without passphrase in a fresh install', async () => {
+      const ps = execa(station, {
         env: {
+          STATE_ROOT: getUniqueTempDir(),
           FIL_WALLET_ADDRESS
         }
-      }))
+      })
+      await once(ps.stdout, 'data')
+      ps.kill()
     })
     it('works with address and passphrase', async () => {
-      const ps = execa(station, { env: { FIL_WALLET_ADDRESS, PASSPHRASE } })
+      const ps = execa(station, {
+        env: {
+          STATE_ROOT: getUniqueTempDir(),
+          FIL_WALLET_ADDRESS,
+          PASSPHRASE
+        }
+      })
       await once(ps.stdout, 'data')
       ps.kill()
     })
