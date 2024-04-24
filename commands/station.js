@@ -37,9 +37,8 @@ export const station = async ({ json, experimental }) => {
     panic('FIL_WALLET_ADDRESS must start with f410 or 0x')
   }
 
-  if (!PASSPHRASE) panic('PASSPHRASE required')
-
-  const STATION_ID = (await getStationId({ secretsDir: paths.secrets, passphrase: PASSPHRASE })).publicKey
+  const keypair = await getStationId({ secretsDir: paths.secrets, passphrase: PASSPHRASE })
+  const STATION_ID = keypair.publicKey
 
   const fetchRes = await pRetry(
     () => fetch(`https://station-wallet-screening.fly.dev/${FIL_WALLET_ADDRESS}`),

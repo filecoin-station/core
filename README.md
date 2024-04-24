@@ -87,8 +87,8 @@ the configuration options described in
   `0x000000000000000000000000000000000000dEaD`. Please note that any earnings
   sent there will be lost.
 
-- `PASSPHRASE` _(string; required)_: a passphrase to protect the Station
-  instance private key stored in a file inside `STATE_ROOT` directory.
+- `PASSPHRASE` _(string; optional)_: a passphrase to protect the Station
+  instance private key stored in a file inside the `STATE_ROOT` directory.
 
 - `MODULE_FILTER` _(string; optional)_: Run only the Zinnia module with the
   given name. Eg:

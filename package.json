@@ -16,7 +16,7 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "npm run test:lint",
-    "start": "cross-env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD PASSPHRASE=secret  STATE_ROOT=.state CACHE_ROOT=.cache node ./bin/station.js",
+    "start": "cross-env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD STATE_ROOT=.state CACHE_ROOT=.cache node ./bin/station.js",
     "test": "npm run test:lint && npm run test:unit",
     "test:lint": "prettier --check . && standard",
     "test:types": "tsc -p .",
