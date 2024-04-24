@@ -7,15 +7,15 @@ import { getUniqueTempDir } from './util.js'
 describe('station-id', () => {
   describe('getStationId', () => {
     it('creates a new key and stores it in the given path', async () => {
-      const secretStore = getUniqueTempDir()
-      const generated = await getStationId({ secretStore, passphrase: 'secret' })
+      const secretsDir = getUniqueTempDir()
+      const generated = await getStationId({ secretsDir, passphrase: 'secret' })
       assert.match(generated.publicKey, /^[0-9a-z]+$/)
       assert.match(generated.privateKey, /^[0-9a-z]+$/)
 
-      await fs.stat(path.join(secretStore, 'station_id'))
+      await fs.stat(path.join(secretsDir, 'station_id'))
       // the check passes if the statement above does not throw
 
-      const loaded = await getStationId({ secretStore, passphrase: 'secret' })
+    const loaded = await getStationId({ secretsDir, passphrase: 'secret' })
       assert.deepStrictEqual(loaded, generated)
     })
   })

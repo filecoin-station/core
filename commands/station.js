@@ -39,7 +39,7 @@ export const station = async ({ json, experimental }) => {
 
   if (!PASSPHRASE) panic('PASSPHRASE required')
 
-  const STATION_ID = (await getStationId({ secretStore: paths.secretStore, passphrase: PASSPHRASE })).publicKey
+  const STATION_ID = (await getStationId({ secretsDir: paths.secrets, passphrase: PASSPHRASE })).publicKey
 
   const fetchRes = await pRetry(
     () => fetch(`https://station-wallet-screening.fly.dev/${FIL_WALLET_ADDRESS}`),
