@@ -109,7 +109,7 @@ jobs:
       - name: Start Station Core container without PASSPHRASE
         run: |
          docker run \
-           --name station-unsecure \
+           --name station_unsecure \
            --detach \
            --env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD \
            $IMAGEID
@@ -119,7 +119,7 @@ jobs:
       - name: Print station activity
         run: |
           sleep 10 # Wait for Station modules to start
-          docker logs station-unsecure
+          docker logs station_unsecure
 
       - name: Check | Spark started
-        run: docker logs station-unsecure | grep "Spark started"
+        run: docker logs station_unsecure | grep "Spark started"
