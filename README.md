@@ -59,10 +59,10 @@ The following configuration options are shared by all Station commands:
   - macOS: `~/Library/Application Support/app.filstation.core`
   - Windows: `%LOCALAPPDATA%/Filecoin Station Core`
 
-  **IMPORTANT:** The`$STATE_ROOT` directory must be local to the
-  computer running the Station. This directory must not be shared with other
-  computers operated by the user, e.g. via Windows Domain profile or cloud
-  storage like iCloud Drive, Dropbox and OneDrive.
+  **IMPORTANT:** The`$STATE_ROOT` directory must be local to the computer
+  running the Station. This directory must not be shared with other computers
+  operated by the user, e.g. via Windows Domain profile or cloud storage like
+  iCloud Drive, Dropbox and OneDrive.
 
 ## Commands
 
