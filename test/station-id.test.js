@@ -19,6 +19,15 @@ describe('station-id', () => {
       assert.deepStrictEqual(loaded, generated)
     })
 
+    it('returns a public key that is exactly 88 characters long', async () => {
+      // spark-api is enforcing this constraint and rejecting measurements containing stationId
+      // in a different format
+      const secretsDir = getUniqueTempDir()
+      const { publicKey } = await await getStationId({ secretsDir, passphrase: 'secret' })
+      assert.strictEqual(publicKey.length, 88, 'publicKey.length')
+      assert.match(publicKey, /^[0-9A-Za-z]*$/)
+    })
+
     it('skips encryption when passphrase is not set', async () => {
       const secretsDir = getUniqueTempDir()
       const generated = await getStationId({ secretsDir, passphrase: '' })
