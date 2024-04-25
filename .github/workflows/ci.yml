@@ -84,12 +84,13 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/filecoin-station/core
           cache-to: type=inline
 
-      - name: Start Station Core container
+      - name: Start Station Core container with PASSPHRASE
         run: |
          docker run \
            --name station \
            --detach \
            --env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD \
+           --env PASSPHRASE=secret \
            $IMAGEID
         env:
           IMAGEID: ${{ steps.docker_build.outputs.imageid }}
@@ -104,3 +105,21 @@ jobs:
 
       - name: Check | Voyager started
         run: docker logs station | grep "Voyager started"
+
+      - name: Start Station Core container without PASSPHRASE
+        run: |
+         docker run \
+           --name station_unsecure \
+           --detach \
+           --env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD \
+           $IMAGEID
+        env:
+          IMAGEID: ${{ steps.docker_build.outputs.imageid }}
+
+      - name: Print station activity
+        run: |
+          sleep 10 # Wait for Station modules to start
+          docker logs station_unsecure
+
+      - name: Check | Spark started
+        run: docker logs station_unsecure | grep "Spark started"
