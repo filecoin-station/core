@@ -91,7 +91,7 @@ export const station = async ({ json, experimental }) => {
   const modules = [
     zinniaRuntime.run({
       STATION_ID,
-      FIL_WALLET_ADDRESS,
+      FIL_WALLET_ADDRESS: ethAddress,
       ethAddress,
       STATE_ROOT: join(paths.moduleState, 'zinnia'),
       CACHE_ROOT: join(paths.moduleCache, 'zinnia'),
