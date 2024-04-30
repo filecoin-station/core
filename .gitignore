@@ -102,3 +102,4 @@ typings/
 modules
 
 dist
+.state

@@ -1,6 +1,6 @@
 {
   "name": "@filecoin-station/core",
-  "version": "20.1.17",
+  "version": "20.2.1",
   "description": "Filecoin Station Core",
   "license": "(Apache-2.0 AND MIT)",
   "repository": "filecoin-station/core",
@@ -16,11 +16,11 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "npm run test:lint",
-    "start": "FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD node ./bin/station.js",
+    "start": "cross-env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD STATE_ROOT=.state CACHE_ROOT=.cache node ./bin/station.js",
     "test": "npm run test:lint && npm run test:unit",
     "test:lint": "prettier --check . && standard",
     "test:types": "tsc -p .",
-    "test:unit": "mocha",
+    "test:unit": "cross-env STATE_ROOT=test/.state CACHE_ROOT=test/.cache mocha",
     "version": "node ./scripts/version.js",
     "postinstall": "node ./scripts/post-install.js",
     "postpublish": "node ./scripts/post-publish.js",
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@types/yargs": "^17.0.24",
+    "cross-env": "^7.0.3",
     "get-stream": "^9.0.0",
     "mocha": "^10.2.0",
     "np": "^10.0.0",
@@ -52,7 +53,7 @@
     "ipfs-unixfs-exporter": "^13.4.0",
     "p-retry": "^6.1.0",
     "tar": "^7.0.0",
-    "undici": "^5.20.0",
+    "undici": "^6.14.1",
     "unzip-stream": "^0.3.1",
     "w3name": "^1.0.8",
     "yargs": "^17.7.1"

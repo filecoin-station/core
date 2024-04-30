@@ -1,12 +1,18 @@
 name: CI
-on: [push]
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
-        node: ['18', '19', '20', '21']
+        node: ['18', '20', '21']
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -14,6 +20,7 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm ci --omit=dev
       - run: npm ci
+      - run: npm run test:types
       - run: npm run test:lint
         if: matrix.os != 'windows-latest'
       - run: npm run test:unit
@@ -77,12 +84,13 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/filecoin-station/core
           cache-to: type=inline
 
-      - name: Start Station Core container
+      - name: Start Station Core container with PASSPHRASE
         run: |
          docker run \
            --name station \
            --detach \
            --env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD \
+           --env PASSPHRASE=secret \
            $IMAGEID
         env:
           IMAGEID: ${{ steps.docker_build.outputs.imageid }}
@@ -94,6 +102,24 @@ jobs:
 
       - name: Check | Spark started
         run: docker logs station | grep "Spark started"
-      
+
       - name: Check | Voyager started
         run: docker logs station | grep "Voyager started"
+
+      - name: Start Station Core container without PASSPHRASE
+        run: |
+         docker run \
+           --name station_unsecure \
+           --detach \
+           --env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD \
+           $IMAGEID
+        env:
+          IMAGEID: ${{ steps.docker_build.outputs.imageid }}
+
+      - name: Print station activity
+        run: |
+          sleep 10 # Wait for Station modules to start
+          docker logs station_unsecure
+
+      - name: Check | Spark started
+        run: docker logs station_unsecure | grep "Spark started"

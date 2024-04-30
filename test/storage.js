@@ -1,5 +1,5 @@
 import { execa } from 'execa'
-import { station, FIL_WALLET_ADDRESS } from './util.js'
+import { station, FIL_WALLET_ADDRESS, PASSPHRASE } from './util.js'
 import { once } from 'node:events'
 import { tmpdir } from 'node:os'
 import fs from 'node:fs/promises'
@@ -12,7 +12,7 @@ describe('Storage', async () => {
     const STATE_ROOT = join(tmpdir(), randomUUID())
     const ps = execa(
       station,
-      { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS } }
+      { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS, PASSPHRASE } }
     )
     while (true) {
       await once(ps.stdout, 'data')

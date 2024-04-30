@@ -37,7 +37,7 @@ $ npm install -g @filecoin-station/core
 ## Usage
 
 ```bash
-$ FIL_WALLET_ADDRESS=... station
+$ FIL_WALLET_ADDRESS=... PASSPHRASE=... station
 ```
 
 ## Common Configuration
@@ -54,9 +54,15 @@ The following configuration options are shared by all Station commands:
   - Windows: `%TEMP%/Filecoin Station Core`
 - `$STATE_ROOT` _(string; optional)_: Station stores logs and module state in
   this directory. Defaults to
+
   - Linux: `${XDG_STATE_HOME:-~/.local/state}/filecoin-station-core`
   - macOS: `~/Library/Application Support/app.filstation.core`
   - Windows: `%LOCALAPPDATA%/Filecoin Station Core`
+
+  **IMPORTANT:** The`$STATE_ROOT` directory must be local to the computer
+  running the Station. This directory must not be shared with other computers
+  operated by the user, e.g. via Windows Domain profile or cloud storage like
+  iCloud Drive, Dropbox and OneDrive.
 
 ## Commands
 
@@ -80,6 +86,9 @@ the configuration options described in
   If you just want to give `core` a quick spin, you can use the address
   `0x000000000000000000000000000000000000dEaD`. Please note that any earnings
   sent there will be lost.
+
+- `PASSPHRASE` _(string; optional)_: a passphrase to protect the Station
+  instance private key stored in a file inside the `STATE_ROOT` directory.
 
 - `MODULE_FILTER` _(string; optional)_: Run only the Zinnia module with the
   given name. Eg:

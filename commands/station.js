@@ -5,12 +5,16 @@ import { runPingLoop, runMachinesLoop } from '../lib/telemetry.js'
 import fs from 'node:fs/promises'
 import { metrics } from '../lib/metrics.js'
 import { paths } from '../lib/paths.js'
+import { getStationId } from '../lib/station-id.js'
 import pRetry from 'p-retry'
 import { fetch } from 'undici'
 import { ethAddressFromDelegated } from '@glif/filecoin-address'
 import { formatEther } from 'ethers'
 
-const { FIL_WALLET_ADDRESS } = process.env
+const {
+  FIL_WALLET_ADDRESS,
+  PASSPHRASE
+} = process.env
 
 const moduleNames = [
   'zinnia'
@@ -32,6 +36,10 @@ export const station = async ({ json, experimental }) => {
   ) {
     panic('FIL_WALLET_ADDRESS must start with f410 or 0x')
   }
+
+  const keypair = await getStationId({ secretsDir: paths.secrets, passphrase: PASSPHRASE })
+  const STATION_ID = keypair.publicKey
+
   const fetchRes = await pRetry(
     () => fetch(`https://station-wallet-screening.fly.dev/${FIL_WALLET_ADDRESS}`),
     {
@@ -84,6 +92,7 @@ export const station = async ({ json, experimental }) => {
 
   await Promise.all([
     zinniaRuntime.run({
+      STATION_ID,
       FIL_WALLET_ADDRESS,
       ethAddress,
       STATE_ROOT: join(paths.moduleState, 'zinnia'),
@@ -101,7 +110,7 @@ export const station = async ({ json, experimental }) => {
       },
       onMetrics: m => metrics.submit('zinnia', m)
     }),
-    runPingLoop(),
+    runPingLoop({ STATION_ID }),
     runMachinesLoop()
   ])
 }
