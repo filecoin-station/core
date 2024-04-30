@@ -111,6 +111,6 @@ export const station = async ({ json, experimental }) => {
       onMetrics: m => metrics.submit('zinnia', m)
     }),
     runPingLoop({ STATION_ID }),
-    runMachinesLoop()
+    runMachinesLoop({ STATION_ID })
   ])
 }
