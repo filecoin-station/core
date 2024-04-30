@@ -4,18 +4,23 @@ import path from 'node:path'
 import { decrypt, encrypt, getStationId } from '../lib/station-id.js'
 import { getUniqueTempDir } from './util.js'
 
+const log = {
+  error () {},
+  warn () {}
+}
+
 describe('station-id', () => {
   describe('getStationId', () => {
     it('creates a new key and stores it in the given path', async () => {
       const secretsDir = getUniqueTempDir()
-      const generated = await getStationId({ secretsDir, passphrase: 'secret' })
+      const generated = await getStationId({ secretsDir, passphrase: 'secret', log })
       assert.match(generated.publicKey, /^[0-9a-z]+$/)
       assert.match(generated.privateKey, /^[0-9a-z]+$/)
 
       await fs.stat(path.join(secretsDir, 'station_id'))
       // the check passes if the statement above does not throw
 
-      const loaded = await getStationId({ secretsDir, passphrase: 'secret' })
+      const loaded = await getStationId({ secretsDir, passphrase: 'secret', log })
       assert.deepStrictEqual(loaded, generated)
     })
 
@@ -23,39 +28,39 @@ describe('station-id', () => {
       // spark-api is enforcing this constraint and rejecting measurements containing stationId
       // in a different format
       const secretsDir = getUniqueTempDir()
-      const { publicKey } = await await getStationId({ secretsDir, passphrase: 'secret' })
+      const { publicKey } = await await getStationId({ secretsDir, passphrase: 'secret', log })
       assert.strictEqual(publicKey.length, 88, 'publicKey.length')
       assert.match(publicKey, /^[0-9A-Za-z]*$/)
     })
 
     it('skips encryption when passphrase is not set', async () => {
       const secretsDir = getUniqueTempDir()
-      const generated = await getStationId({ secretsDir, passphrase: '' })
+      const generated = await getStationId({ secretsDir, passphrase: '', log })
       assert.match(generated.publicKey, /^[0-9a-z]+$/)
       assert.match(generated.privateKey, /^[0-9a-z]+$/)
 
       await fs.stat(path.join(secretsDir, 'station_id'))
       // the check passes if the statement above does not throw
 
-      const loaded = await getStationId({ secretsDir, passphrase: '' })
+      const loaded = await getStationId({ secretsDir, passphrase: '', log })
       assert.deepStrictEqual(loaded, generated)
     })
 
     it('provides a helpful error message when the file cannot be decrypted', async () => {
       const secretsDir = getUniqueTempDir()
-      await getStationId({ secretsDir, passphrase: 'secret' })
+      await getStationId({ secretsDir, passphrase: 'secret', log })
       await assert.rejects(
-        getStationId({ secretsDir, passphrase: 'wrong pass' }),
+        getStationId({ secretsDir, passphrase: 'wrong pass', log }),
         /Cannot decrypt Station ID file. Did you configure the correct PASSPHRASE/
       )
     })
 
     it('encrypts plaintext station_id file when PASSPHRASE is provided', async () => {
       const secretsDir = getUniqueTempDir()
-      const generated = await getStationId({ secretsDir, passphrase: '' })
+      const generated = await getStationId({ secretsDir, passphrase: '', log })
       const plaintext = await fs.readFile(path.join(secretsDir, 'station_id'))
 
-      const loaded = await getStationId({ secretsDir, passphrase: 'super-secret' })
+      const loaded = await getStationId({ secretsDir, passphrase: 'super-secret', log })
       assert.deepStrictEqual(loaded, generated)
 
       const ciphertext = await fs.readFile(path.join(secretsDir, 'station_id'))
