@@ -1,7 +1,7 @@
 import { join } from 'node:path'
 import * as zinniaRuntime from '../lib/zinnia.js'
 import { formatActivityObject, activities } from '../lib/activity.js'
-import { startPingLoop } from '../lib/telemetry.js'
+import { runPingLoop, runMachinesLoop } from '../lib/telemetry.js'
 import fs from 'node:fs/promises'
 import { metrics } from '../lib/metrics.js'
 import { paths } from '../lib/paths.js'
@@ -53,8 +53,6 @@ export const station = async ({ json, experimental }) => {
   const ethAddress = FIL_WALLET_ADDRESS.startsWith('0x')
     ? FIL_WALLET_ADDRESS
     : ethAddressFromDelegated(FIL_WALLET_ADDRESS)
-
-  startPingLoop({ STATION_ID }).unref()
   for (const moduleName of moduleNames) {
     await fs.mkdir(join(paths.moduleCache, moduleName), { recursive: true })
     await fs.mkdir(join(paths.moduleState, moduleName), { recursive: true })
@@ -88,10 +86,14 @@ export const station = async ({ json, experimental }) => {
     }
   })
 
-  const modules = [
+  if (experimental) {
+    console.error('No experimental modules available at this point')
+  }
+
+  await Promise.all([
     zinniaRuntime.run({
       STATION_ID,
-      FIL_WALLET_ADDRESS,
+      FIL_WALLET_ADDRESS: ethAddress,
       ethAddress,
       STATE_ROOT: join(paths.moduleState, 'zinnia'),
       CACHE_ROOT: join(paths.moduleCache, 'zinnia'),
@@ -107,12 +109,8 @@ export const station = async ({ json, experimental }) => {
         })
       },
       onMetrics: m => metrics.submit('zinnia', m)
-    })
-  ]
-
-  if (experimental) {
-    console.error('No experimental modules available at this point')
-  }
-
-  await Promise.all(modules)
+    }),
+    runPingLoop({ STATION_ID }),
+    runMachinesLoop({ STATION_ID })
+  ])
 }

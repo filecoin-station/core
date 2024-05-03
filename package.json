@@ -1,6 +1,6 @@
 {
   "name": "@filecoin-station/core",
-  "version": "20.2.1",
+  "version": "20.4.1",
   "description": "Filecoin Station Core",
   "license": "(Apache-2.0 AND MIT)",
   "repository": "filecoin-station/core",
@@ -20,7 +20,7 @@
     "test": "npm run test:lint && npm run test:unit",
     "test:lint": "prettier --check . && standard",
     "test:types": "tsc -p .",
-    "test:unit": "cross-env STATE_ROOT=test/.state CACHE_ROOT=test/.cache mocha",
+    "test:unit": "cross-env STATE_ROOT=test/.state CACHE_ROOT=test/.cache node --no-warnings=ExperimentalWarning node_modules/mocha/bin/_mocha",
     "version": "node ./scripts/version.js",
     "postinstall": "node ./scripts/post-install.js",
     "postpublish": "node ./scripts/post-publish.js",
