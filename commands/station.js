@@ -20,15 +20,19 @@ const moduleNames = [
   'zinnia'
 ]
 
-const panic = msg => {
+/**
+ * @param {string} msg
+ * @param {number} [exitCode]
+ */
+const panic = (msg, exitCode = 1) => {
   console.error(msg)
-  process.exit(1)
+  process.exit(exitCode)
 }
 
 export const station = async ({ json, experimental }) => {
   if (!FIL_WALLET_ADDRESS) panic('FIL_WALLET_ADDRESS required')
   if (FIL_WALLET_ADDRESS.startsWith('f1')) {
-    panic('f1 addresses are currently not supported. Please use an f4 or 0x address')
+    panic('Invalid FIL_WALLET_ADDRESS: f1 addresses are currently not supported. Please use an f4 or 0x address.')
   }
   if (
     !FIL_WALLET_ADDRESS.startsWith('f410') &&
@@ -48,7 +52,7 @@ export const station = async ({ json, experimental }) => {
         console.error('Failed to validate FIL_WALLET_ADDRESS address. Retrying...')
     }
   )
-  if (fetchRes.status === 403) panic('Invalid FIL_WALLET_ADDRESS address')
+  if (fetchRes.status === 403) panic('Invalid FIL_WALLET_ADDRESS address', 2)
   if (!fetchRes.ok) panic('Failed to validate FIL_WALLET_ADDRESS address')
   const ethAddress = FIL_WALLET_ADDRESS.startsWith('0x')
     ? FIL_WALLET_ADDRESS
