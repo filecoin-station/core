@@ -9,7 +9,11 @@ import { getStationId } from '../lib/station-id.js'
 import pRetry from 'p-retry'
 import { fetch } from 'undici'
 import { ethAddressFromDelegated } from '@glif/filecoin-address'
-import { formatEther } from 'ethers'
+import { ethers, formatEther } from 'ethers'
+import { Obj } from '../lib/obj.js'
+import { runUpdateRewardsLoop } from '../lib/rewards.js'
+import { runUpdateContractsLoop } from '../lib/contracts.js'
+import { fileURLToPath } from 'node:url'
 
 const {
   FIL_WALLET_ADDRESS,
@@ -94,8 +98,33 @@ export const station = async ({ json, experimental }) => {
     console.error('No experimental modules available at this point')
   }
 
+  const lastTotalJobsCompleted = new Obj(0)
+  const lastRewardsScheduledForAddress = new Obj()
+  const contracts = new Obj()
+
+  const fetchRequest = new ethers.FetchRequest(
+    'https://api.node.glif.io/rpc/v1'
+  )
+  fetchRequest.setHeader(
+    'Authorization',
+    'Bearer RXQ2SKH/BVuwN7wisZh3b5uXStGPj1JQIrIWD+rxF0Y='
+  )
+  const provider = new ethers.JsonRpcProvider(
+    fetchRequest,
+    null,
+    { batchMaxCount: 1 }
+  )
+  const abi = JSON.parse(
+    await fs.readFile(
+      fileURLToPath(new URL('../lib/abi.json', import.meta.url)),
+      'utf8'
+    )
+  )
+
   await Promise.all([
     zinniaRuntime.run({
+      provider,
+      abi,
       STATION_ID,
       FIL_WALLET_ADDRESS: ethAddress,
       ethAddress,
@@ -112,9 +141,19 @@ export const station = async ({ json, experimental }) => {
           source: activity.source || 'Zinnia'
         })
       },
-      onMetrics: m => metrics.submit('zinnia', m)
+      onMetrics: m => metrics.submit('zinnia', m),
+      lastTotalJobsCompleted,
+      lastRewardsScheduledForAddress
     }),
     runPingLoop({ STATION_ID }),
-    runMachinesLoop({ STATION_ID })
+    runMachinesLoop({ STATION_ID }),
+    runUpdateContractsLoop({ provider, abi, contracts }),
+    runUpdateRewardsLoop({
+      contracts,
+      ethAddress,
+      onMetrics: m => metrics.submit('zinnia', m),
+      lastTotalJobsCompleted,
+      lastRewardsScheduledForAddress
+    })
   ])
 }
