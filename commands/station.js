@@ -99,7 +99,7 @@ export const station = async ({ json, experimental }) => {
   }
 
   const lastTotalJobsCompleted = new Obj(0)
-  const lastRewardsScheduledForAddress = new Obj()
+  const lastRewardsScheduledForAddress = new Obj(0n)
   const contracts = new Obj()
 
   const fetchRequest = new ethers.FetchRequest(
