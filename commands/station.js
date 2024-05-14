@@ -10,7 +10,6 @@ import pRetry from 'p-retry'
 import { fetch } from 'undici'
 import { ethAddressFromDelegated } from '@glif/filecoin-address'
 import { ethers, formatEther } from 'ethers'
-import { Obj } from '../lib/obj.js'
 import { runUpdateRewardsLoop } from '../lib/rewards.js'
 import { runUpdateContractsLoop } from '../lib/contracts.js'
 import { fileURLToPath } from 'node:url'
@@ -98,7 +97,7 @@ export const station = async ({ json, experimental }) => {
     console.error('No experimental modules available at this point')
   }
 
-  const contracts = new Obj()
+  const contracts = []
 
   const fetchRequest = new ethers.FetchRequest(
     'https://api.node.glif.io/rpc/v1'
