@@ -109,11 +109,7 @@ export const station = async ({ json, experimental }) => {
     'Authorization',
     'Bearer RXQ2SKH/BVuwN7wisZh3b5uXStGPj1JQIrIWD+rxF0Y='
   )
-  const provider = new ethers.JsonRpcProvider(
-    fetchRequest,
-    null,
-    { batchMaxCount: 1 }
-  )
+  const provider = new ethers.JsonRpcProvider(fetchRequest)
   const abi = JSON.parse(
     await fs.readFile(
       fileURLToPath(new URL('../lib/abi.json', import.meta.url)),
