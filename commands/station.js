@@ -8,7 +8,7 @@ import { paths } from '../lib/paths.js'
 import { getStationId } from '../lib/station-id.js'
 import pRetry from 'p-retry'
 import { fetch } from 'undici'
-import { ethAddressFromDelegated } from '@glif/filecoin-address'
+import { ethAddressFromDelegated, isEthAddress } from '@glif/filecoin-address'
 import { ethers, formatEther } from 'ethers'
 import { runUpdateRewardsLoop } from '../lib/rewards.js'
 import { runUpdateContractsLoop } from '../lib/contracts.js'
@@ -42,6 +42,9 @@ export const station = async ({ json, experimental }) => {
     !FIL_WALLET_ADDRESS.startsWith('0x')
   ) {
     panic('FIL_WALLET_ADDRESS must start with f410 or 0x')
+  }
+  if (FIL_WALLET_ADDRESS.startsWith('0x') && !isEthAddress(FIL_WALLET_ADDRESS)) {
+    panic('Invalid FIL_WALLET_ADDRESS ethereum address', 2)
   }
 
   const keypair = await getStationId({ secretsDir: paths.secrets, passphrase: PASSPHRASE })
@@ -106,11 +109,7 @@ export const station = async ({ json, experimental }) => {
     'Authorization',
     'Bearer RXQ2SKH/BVuwN7wisZh3b5uXStGPj1JQIrIWD+rxF0Y='
   )
-  const provider = new ethers.JsonRpcProvider(
-    fetchRequest,
-    null,
-    { batchMaxCount: 1 }
-  )
+  const provider = new ethers.JsonRpcProvider(fetchRequest)
   const abi = JSON.parse(
     await fs.readFile(
       fileURLToPath(new URL('../lib/abi.json', import.meta.url)),

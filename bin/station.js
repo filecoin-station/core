@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { station } from '../commands/station.js'
-import Sentry from '@sentry/node'
+import * as Sentry from '@sentry/node'
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import fs from 'node:fs/promises'
