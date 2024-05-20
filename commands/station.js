@@ -10,7 +10,6 @@ import pRetry from 'p-retry'
 import { fetch } from 'undici'
 import { ethAddressFromDelegated, isEthAddress } from '@glif/filecoin-address'
 import { ethers, formatEther } from 'ethers'
-import { Obj } from '../lib/obj.js'
 import { runUpdateRewardsLoop } from '../lib/rewards.js'
 import { runUpdateContractsLoop } from '../lib/contracts.js'
 import { fileURLToPath } from 'node:url'
@@ -101,9 +100,7 @@ export const station = async ({ json, experimental }) => {
     console.error('No experimental modules available at this point')
   }
 
-  const lastTotalJobsCompleted = new Obj(0)
-  const lastRewardsScheduledForAddress = new Obj(0n)
-  const contracts = new Obj()
+  const contracts = []
 
   const fetchRequest = new ethers.FetchRequest(
     'https://api.node.glif.io/rpc/v1'
@@ -140,9 +137,7 @@ export const station = async ({ json, experimental }) => {
           source: activity.source || 'Zinnia'
         })
       },
-      onMetrics: m => metrics.submit('zinnia', m),
-      lastTotalJobsCompleted,
-      lastRewardsScheduledForAddress
+      onMetrics: m => metrics.submit('zinnia', m)
     }),
     runPingLoop({ STATION_ID }),
     runMachinesLoop({ STATION_ID }),
@@ -150,9 +145,7 @@ export const station = async ({ json, experimental }) => {
     runUpdateRewardsLoop({
       contracts,
       ethAddress,
-      onMetrics: m => metrics.submit('zinnia', m),
-      lastTotalJobsCompleted,
-      lastRewardsScheduledForAddress
+      onMetrics: m => metrics.submit('zinnia', m)
     })
   ])
 }
