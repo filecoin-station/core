@@ -3,12 +3,15 @@
   "version": "20.6.1",
   "description": "Filecoin Station Core",
   "license": "(Apache-2.0 AND MIT)",
-  "repository": "filecoin-station/core",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/filecoin-station/core.git"
+  },
   "main": "index.js",
   "types": "dist/index.d.ts",
   "type": "module",
   "bin": {
-    "station": "./bin/station.js"
+    "station": "bin/station.js"
   },
   "engines": {
     "node": ">=18"
