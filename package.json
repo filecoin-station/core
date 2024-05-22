@@ -1,6 +1,6 @@
 {
   "name": "@filecoin-station/core",
-  "version": "20.6.3",
+  "version": "20.6.4",
   "description": "Filecoin Station Core",
   "license": "(Apache-2.0 AND MIT)",
   "repository": {
@@ -68,5 +68,5 @@
     "lib",
     "scripts"
   ],
-  "sentryEnvironment": "development"
+  "sentryEnvironment": "production"
 }
