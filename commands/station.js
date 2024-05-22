@@ -141,7 +141,12 @@ export const station = async ({ json, experimental }) => {
     }),
     runPingLoop({ STATION_ID }),
     runMachinesLoop({ STATION_ID }),
-    runUpdateContractsLoop({ provider, abi, contracts }),
+    runUpdateContractsLoop({
+      provider,
+      abi,
+      contracts,
+      onActivity: (activity) => activities.submit(activity)
+    }),
     runUpdateRewardsLoop({
       contracts,
       ethAddress,
