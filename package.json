@@ -65,7 +65,8 @@
     "bin",
     "commands",
     "dist",
-    "lib"
+    "lib",
+    "scripts"
   ],
   "sentryEnvironment": "development"
 }
