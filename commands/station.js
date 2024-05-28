@@ -12,7 +12,6 @@ import { ethAddressFromDelegated, isEthAddress } from '@glif/filecoin-address'
 import { ethers, formatEther } from 'ethers'
 import { runUpdateRewardsLoop } from '../lib/rewards.js'
 import { runUpdateContractsLoop } from '../lib/contracts.js'
-import { fileURLToPath } from 'node:url'
 
 const {
   FIL_WALLET_ADDRESS,
@@ -110,17 +109,10 @@ export const station = async ({ json, experimental }) => {
     'Bearer RXQ2SKH/BVuwN7wisZh3b5uXStGPj1JQIrIWD+rxF0Y='
   )
   const provider = new ethers.JsonRpcProvider(fetchRequest)
-  const abi = JSON.parse(
-    await fs.readFile(
-      fileURLToPath(new URL('../lib/abi.json', import.meta.url)),
-      'utf8'
-    )
-  )
 
   await Promise.all([
     zinniaRuntime.run({
       provider,
-      abi,
       STATION_ID,
       FIL_WALLET_ADDRESS: ethAddress,
       ethAddress,
@@ -143,7 +135,6 @@ export const station = async ({ json, experimental }) => {
     runMachinesLoop({ STATION_ID }),
     runUpdateContractsLoop({
       provider,
-      abi,
       contracts,
       onActivity: (activity) => activities.submit(activity)
     }),
