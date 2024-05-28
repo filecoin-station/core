@@ -12,7 +12,6 @@ import { ethAddressFromDelegated, isEthAddress } from '@glif/filecoin-address'
 import { ethers, formatEther } from 'ethers'
 import { runUpdateRewardsLoop } from '../lib/rewards.js'
 import { runUpdateContractsLoop } from '../lib/contracts.js'
-import { fileURLToPath } from 'node:url'
 
 const {
   FIL_WALLET_ADDRESS,
@@ -136,7 +135,6 @@ export const station = async ({ json, experimental }) => {
     runMachinesLoop({ STATION_ID }),
     runUpdateContractsLoop({
       provider,
-      abi,
       contracts,
       onActivity: (activity) => activities.submit(activity)
     }),
