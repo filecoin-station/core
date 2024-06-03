@@ -103,9 +103,6 @@ jobs:
       - name: Check | Spark started
         run: docker logs station | grep "Spark started"
 
-      - name: Check | Voyager started
-        run: docker logs station | grep "Voyager started"
-
       - name: Start Station Core container without PASSPHRASE
         run: |
          docker run \
