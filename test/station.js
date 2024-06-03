@@ -12,8 +12,7 @@ describe('Station', () => {
       once(ps, 'exit'),
       Promise.all([
         streamMatch(ps.stdout, 'totalJobsCompleted'),
-        streamMatch(ps.stdout, 'Spark started'),
-        streamMatch(ps.stdout, 'Voyager started')
+        streamMatch(ps.stdout, 'Spark started')
       ])
     ])
     // Assert that the process did not exit prematurely
@@ -32,8 +31,7 @@ describe('Station', () => {
     const ps = startStation()
     await Promise.all([
       streamMatch(ps.stdout, 'totalJobsCompleted'),
-      streamMatch(ps.stdout, 'Spark started'),
-      streamMatch(ps.stdout, 'Voyager started')
+      streamMatch(ps.stdout, 'Spark started')
     ])
     stopStation()
   })
@@ -42,8 +40,7 @@ describe('Station', () => {
 
     await Promise.all([
       streamMatch(ps.stdout, 'jobs-completed'),
-      streamMatch(ps.stdout, /activity:info.*(Spark started)/),
-      streamMatch(ps.stdout, /activity:info.*(Voyager started)/)
+      streamMatch(ps.stdout, /activity:info.*(Spark started)/)
     ])
 
     stopStation()

@@ -93,7 +93,6 @@ the configuration options described in
 - `MODULE_FILTER` _(string; optional)_: Run only the Zinnia module with the
   given name. Eg:
   - `MODULE_FILTER=spark`
-  - `MODULE_FILTER=voyager`
 
 This command outputs metrics and activity events:
 
