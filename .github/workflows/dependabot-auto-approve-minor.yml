@@ -22,6 +22,7 @@ jobs:
           - np
           - ethers
           - execa
+          - '@ipld/car'
     steps:
       - name: Dependabot metadata
         id: metadata
