@@ -158,13 +158,15 @@ $ station --version
 ## Docker
 
 Deploy Station with [Docker](https://www.docker.com/). Please replace
-`FIL_WALLET_ADDRESS`.
+`FIL_WALLET_ADDRESS` and ensure the passed `state` folder is persisted across
+machine restarts.
 
 ```bash
 $ docker run \
 	--name station \
 	--detach \
 	--env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD \
+  -v ./state:/home/node/.local/state/
 	ghcr.io/filecoin-station/core
 ```
 
