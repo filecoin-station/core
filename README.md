@@ -166,7 +166,7 @@ $ docker run \
 	--name station \
 	--detach \
 	--env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD \
-  -v ./state:/home/node/.local/state/
+        -v ./state:/home/node/.local/state/
 	ghcr.io/filecoin-station/core
 ```
 
