@@ -68,7 +68,7 @@ jobs:
 
       - name: Build and load Docker image
         id: docker_build
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           load: true
@@ -77,7 +77,7 @@ jobs:
           cache-to: type=inline
 
       - name: Build Docker image for other platforms
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/arm64
