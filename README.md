@@ -140,10 +140,12 @@ $ station --help
 Usage: station [options]
 
 Options:
-  -j, --json          Output JSON                                      [boolean]
-      --experimental  Also run experimental modules                    [boolean]
-  -v, --version       Show version number                              [boolean]
-  -h, --help          Show help                                        [boolean]
+  -j, --json                      Output JSON                          [boolean]
+      --experimental              Also run experimental modules        [boolean]
+      --recreateStationIdOnError  Recreate Station ID if it is corrupted
+                                                                       [boolean]
+  -v, --version                   Show version number                  [boolean]
+  -h, --help                      Show help                            [boolean]
 ```
 
 ### `$ station --version`

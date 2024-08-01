@@ -31,7 +31,7 @@ const panic = (msg, exitCode = 1) => {
   process.exit(exitCode)
 }
 
-export const station = async ({ json, experimental }) => {
+export const station = async ({ json, recreateStationIdOnError, experimental }) => {
   if (!FIL_WALLET_ADDRESS) panic('FIL_WALLET_ADDRESS required')
   if (FIL_WALLET_ADDRESS.startsWith('f1')) {
     panic('Invalid FIL_WALLET_ADDRESS: f1 addresses are currently not supported. Please use an f4 or 0x address.')
@@ -46,7 +46,7 @@ export const station = async ({ json, experimental }) => {
     panic('Invalid FIL_WALLET_ADDRESS ethereum address', 2)
   }
 
-  const keypair = await getStationId({ secretsDir: paths.secrets, passphrase: PASSPHRASE })
+  const keypair = await getStationId({ secretsDir: paths.secrets, passphrase: PASSPHRASE, recreateOnError: recreateStationIdOnError })
   const STATION_ID = keypair.publicKey
 
   const fetchRes = await pRetry(
