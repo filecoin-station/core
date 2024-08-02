@@ -31,8 +31,12 @@ yargs(hideBin(process.argv))
       .option('experimental', {
         type: 'boolean',
         description: 'Also run experimental modules'
+      })
+      .option('recreateStationIdOnError', {
+        type: 'boolean',
+        description: 'Recreate Station ID if it is corrupted'
       }),
-    ({ json, experimental }) => station({ json, experimental })
+    ({ json, experimental, recreateStationIdOnError }) => station({ json, experimental, recreateStationIdOnError })
   )
   .version(`${pkg.name}: ${pkg.version}`)
   .alias('v', 'version')
