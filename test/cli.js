@@ -64,6 +64,33 @@ describe('CLI', () => {
       await once(ps.stdout, 'data')
       ps.kill()
     })
+    it('fails with the wrong pass phrase', async () => {
+      const STATE_ROOT = getUniqueTempDir()
+      {
+        const ps = execa(station, {
+          env: {
+            STATE_ROOT,
+            FIL_WALLET_ADDRESS,
+            PASSPHRASE
+          }
+        })
+        await once(ps.stdout, 'data')
+        ps.kill()
+      }
+      try {
+        await execa(station, {
+          env: {
+            STATE_ROOT,
+            FIL_WALLET_ADDRESS,
+            PASSPHRASE: `${PASSPHRASE}x`
+          }
+        })
+      } catch (err) {
+        assert.strictEqual(err.exitCode, 1)
+        return
+      }
+      assert.fail('Expected Station Core to return a non-zero exit code')
+    })
   })
 
   describe('--version', () => {
