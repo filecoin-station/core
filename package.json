@@ -69,5 +69,5 @@
     "lib",
     "scripts"
   ],
-  "sentryEnvironment": "production"
+  "sentryEnvironment": "development"
 }
