@@ -55,6 +55,12 @@ describe('station-id', () => {
       )
     })
 
+    it('recreates unreadable station ids on demand', async () => {
+      const secretsDir = getUniqueTempDir()
+      await getStationId({ secretsDir, passphrase: 'secret', log })
+      await getStationId({ secretsDir, passphrase: 'new pass', recreateOnError: true, log })
+    })
+
     it('encrypts plaintext station_id file when PASSPHRASE is provided', async () => {
       const secretsDir = getUniqueTempDir()
       const generated = await getStationId({ secretsDir, passphrase: '', log })
