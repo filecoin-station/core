@@ -10,7 +10,7 @@ import * as paths from '../lib/paths.js'
 const pkg = JSON.parse(await fs.readFile(paths.packageJSON, 'utf8'))
 
 Sentry.init({
-  dsn: 'https://c21b3ce464c161f63d32fc64be84477a@o1408530.ingest.us.sentry.io/4504792315199488',
+  dsn: 'https://b3447d316f9b72ca8f499fb307be8f38@o1408530.ingest.us.sentry.io/4504792315199488',
   release: pkg.version,
   environment: pkg.sentryEnvironment,
   tracesSampleRate: 0.1,
