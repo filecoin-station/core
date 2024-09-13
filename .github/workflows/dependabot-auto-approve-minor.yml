@@ -24,6 +24,7 @@ jobs:
           - execa
           - '@ipld/car'
           - '@filecoin-station/spark-impact-evaluator'
+          - standard
     steps:
       - name: Dependabot metadata
         id: metadata
