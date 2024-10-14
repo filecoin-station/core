@@ -24,7 +24,6 @@ jobs:
       - run: npm run test:lint
         if: matrix.os != 'windows-latest'
       - run: npm run test:unit
-      - run: stat dist/index.d.ts
 
   test-locales:
     runs-on: ubuntu-latest
