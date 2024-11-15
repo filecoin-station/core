@@ -25,6 +25,7 @@ jobs:
           - '@ipld/car'
           - '@filecoin-station/spark-impact-evaluator'
           - standard
+          - p-retry
     steps:
       - name: Dependabot metadata
         id: metadata
