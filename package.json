@@ -38,7 +38,7 @@
     "@types/yargs": "^17.0.24",
     "cross-env": "^7.0.3",
     "get-stream": "^9.0.0",
-    "mocha": "^10.2.0",
+    "mocha": "^11.0.1",
     "np": "^10.0.0",
     "prettier": "^3.0.0",
     "standard": "^17.0.0",
