@@ -27,6 +27,7 @@ jobs:
           - standard
           - p-retry
           - cross-spawn
+          - nanoid
     steps:
       - name: Dependabot metadata
         id: metadata
