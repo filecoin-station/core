@@ -40,8 +40,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/filecoin-station/core
-            ghcr.io/filecoin-station/core:${{ steps.package-version.outputs.current-version }}
+            ghcr.io/CheckerNetwork/core
+            ghcr.io/CheckerNetwork/core:${{ steps.package-version.outputs.current-version }}
           platforms: linux/amd64,linux/arm64
-          cache-from: type=registry,ref=ghcr.io/filecoin-station/core
+          cache-from: type=registry,ref=ghcr.io/CheckerNetwork/core
           cache-to: type=inline

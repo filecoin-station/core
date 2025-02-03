@@ -169,7 +169,7 @@ $ docker run \
 	--detach \
 	--env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD \
         -v ./state:/home/node/.local/state/
-	ghcr.io/filecoin-station/core
+	ghcr.io/CheckerNetwork/core
 ```
 
 ## Manual Deployment (Ubuntu)
