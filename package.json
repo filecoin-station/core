@@ -5,7 +5,7 @@
   "license": "(Apache-2.0 AND MIT)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CheckerNetwork/checker.git"
+    "url": "git+https://github.com/CheckerNetwork/node.git"
   },
   "main": "index.js",
   "types": "dist/index.d.ts",
