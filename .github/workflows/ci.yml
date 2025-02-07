@@ -97,7 +97,7 @@ jobs:
 
       - name: Print checker activity
         run: |
-          sleep 10 # Wait for Checker modules to start
+          sleep 10 # Wait for Checker subnets to start
           docker logs checker
 
       - name: Check | Spark started
@@ -115,7 +115,7 @@ jobs:
 
       - name: Print checker activity
         run: |
-          sleep 10 # Wait for Checker modules to start
+          sleep 10 # Wait for Checker subnets to start
           docker logs checker_unsecure
 
       - name: Check | Spark started

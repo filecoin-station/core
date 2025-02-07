@@ -71,7 +71,7 @@ export const checker = async ({ json, recreateCheckerIdOnError, experimental }) 
     if (json) {
       console.log(JSON.stringify({
         type: `activity:${activity.type}`,
-        module: activity.source,
+        subnet: activity.source,
         message: activity.message
       }))
     } else {
@@ -96,7 +96,7 @@ export const checker = async ({ json, recreateCheckerIdOnError, experimental }) 
   })
 
   if (experimental) {
-    console.error('No experimental modules available at this point')
+    console.error('No experimental subnets available at this point')
   }
 
   const contracts = []
@@ -118,12 +118,12 @@ export const checker = async ({ json, recreateCheckerIdOnError, experimental }) 
       ethAddress,
       STATE_ROOT: join(paths.moduleState, 'zinnia'),
       CACHE_ROOT: join(paths.moduleCache, 'zinnia'),
-      moduleVersionsDir: paths.moduleVersionsDir,
-      moduleSourcesDir: paths.moduleSourcesDir,
+      subnetVersionsDir: paths.subnetVersionsDir,
+      subnetSourcesDir: paths.subnetSourcesDir,
       onActivity: activity => {
         activities.submit({
           ...activity,
-          // Zinnia will try to overwrite `source` if a module created the
+          // Zinnia will try to overwrite `source` if a subnet created the
           // activity. Using the spread syntax won't work because a
           // `source: null` would overwrite the default value.
           source: activity.source || 'Zinnia'

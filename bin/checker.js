@@ -30,7 +30,7 @@ yargs(hideBin(process.argv))
       })
       .option('experimental', {
         type: 'boolean',
-        description: 'Also run experimental modules'
+        description: 'Also run experimental subnets'
       })
       .option('recreateCheckerIdOnError', {
         type: 'boolean',

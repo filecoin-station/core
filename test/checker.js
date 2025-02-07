@@ -19,11 +19,11 @@ describe('Checker', () => {
     assert.strictEqual(ps.exitCode, null)
     stopChecker()
   })
-  // No experimental modules available at this point
-  // it('runs experimental modules', () => {
+  // No experimental subnets available at this point
+  // it('runs experimental subnets', () => {
   //   it('runs Bacalhau', async () => {
   //     const ps = startChecker(['--experimental'])
-  //     await streamMatch(ps.stdout, 'Bacalhau module started.')
+  //     await streamMatch(ps.stdout, 'Bacalhau subnet started.')
   //     stopChecker()
   //   })
   // })

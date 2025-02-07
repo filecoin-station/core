@@ -53,7 +53,7 @@ The following configuration options are shared by all Checker commands:
   - Linux: `${XDG_CACHE_HOME:-~/.cache}/checker-network-node`
   - macOS: `~/Library/Caches/network.checker.node`
   - Windows: `%TEMP%/Checker Network`
-- `$STATE_ROOT` _(string; optional)_: Checker stores logs and module state in
+- `$STATE_ROOT` _(string; optional)_: Checker stores logs and subnet state in
   this directory. Defaults to
 
   - Linux: `${XDG_STATE_HOME:-~/.local/state}/checker-network-node`
@@ -91,9 +91,9 @@ the configuration options described in
 - `PASSPHRASE` _(string; optional)_: a passphrase to protect the Checker
   instance private key stored in a file inside the `STATE_ROOT` directory.
 
-- `MODULE_FILTER` _(string; optional)_: Run only the Zinnia module with the
+- `SUBNET_FILTER` _(string; optional)_: Run only the subnet with the
   given name. Eg:
-  - `MODULE_FILTER=spark`
+  - `SUBNET_FILTER=spark`
 
 This command outputs metrics and activity events:
 
@@ -111,8 +111,8 @@ $ checker
 ```bash
 $ checker --json
 {"type":"jobs-completed","total":161}
-{"type":"activity:info","module":"Saturn","message":"Saturn Node will try to connect to the Saturn Orchestrator..."}
-{"type":"activity:info","module":"Saturn","message":"Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network..."}
+{"type":"activity:info","subnet":"Saturn","message":"Saturn Node will try to connect to the Saturn Orchestrator..."}
+{"type":"activity:info","subnet":"Saturn","message":"Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network..."}
 ...
 ```
 
@@ -121,16 +121,16 @@ For the JSON output, the following event types exist:
 - `jobs-completed`
   - `total`
 - `activity:info`
-  - `module`
+  - `subnet`
   - `message`
 - `activity:error`
-  - `module`
+  - `subnet`
   - `message`
 
-Set the flag `--experimental` to run modules not yet considered safe for
+Set the flag `--experimental` to run subnets not yet considered safe for
 production use. _Run this at your own risk!_
 
-No modules currently in experimental mode.
+No subnets currently in experimental mode.
 
 ### `$ checker --help`
 
@@ -142,7 +142,7 @@ Usage: checker [options]
 
 Options:
   -j, --json                      Output JSON                          [boolean]
-      --experimental              Also run experimental modules        [boolean]
+      --experimental              Also run experimental subnets        [boolean]
       --recreateCheckerIdOnError  Recreate Checker ID if it is corrupted
                                                                        [boolean]
   -v, --version                   Show version number                  [boolean]
