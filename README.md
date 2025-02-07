@@ -24,9 +24,10 @@ Checker Node supports different deployment options:
 
 ## Installation
 
-> **Note**: Checker Node requires Node.js, we recommend using the latest LTS version.
-> You can install Node.js using your favorite package manager or get the
-> official installer from [Node.js downloads](https://nodejs.org/en/download/).
+> **Note**: Checker Node requires Node.js, we recommend using the latest LTS
+> version. You can install Node.js using your favorite package manager or get
+> the official installer from
+> [Node.js downloads](https://nodejs.org/en/download/).
 
 With Node.js installed, run `npm` to install Checker Node.
 
