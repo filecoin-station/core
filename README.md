@@ -3,13 +3,13 @@
 	 :artificial_satellite:
 	<br>
 	<br>
-	Checker
+	Checker Node
 	<br>
 	<br>
 	<br>
 </h1>
 
-> Checker is a node implementation for the
+> Checker Node is a node implementation for the
 > [Checker Network](https://checker.network), suitable for running on all kinds
 > of servers..
 
@@ -17,21 +17,21 @@
 
 ## Deployment
 
-Checker supports different deployment options:
+Checker Node supports different deployment options:
 
 - [Docker](#docker)
 - [Manual Deployment (Ubuntu)](#manual-deployment-ubuntu)
 
 ## Installation
 
-> **Note**: Checker requires Node.js, we recommend using the latest LTS version.
+> **Note**: Checker Node requires Node.js, we recommend using the latest LTS version.
 > You can install Node.js using your favorite package manager or get the
 > official installer from [Node.js downloads](https://nodejs.org/en/download/).
 
-With Node.js installed, run `npm` to install Checker.
+With Node.js installed, run `npm` to install Checker Node.
 
 ```bash
-$ npm install -g @checkernetwork/checker
+$ npm install -g @checkernetwork/node
 ```
 
 ## Usage
@@ -42,22 +42,22 @@ $ FIL_WALLET_ADDRESS=... PASSPHRASE=... checker
 
 ## Common Configuration
 
-Checker is configured using environment variables (see
+Checker Node is configured using environment variables (see
 [The Twelve-Factor App](https://12factor.net/config)).
 
 The following configuration options are shared by all Checker commands:
 
 - `$CACHE_ROOT` _(string; optional)_: Checker stores temporary files (e.g.
   cached data) in this directory. Defaults to
-  - Linux: `${XDG_CACHE_HOME:-~/.cache}/checker-network-checker`
-  - macOS: `~/Library/Caches/network.checker.checker`
-  - Windows: `%TEMP%/Filecoin Checker`
+  - Linux: `${XDG_CACHE_HOME:-~/.cache}/checker-network-node`
+  - macOS: `~/Library/Caches/network.checker.node`
+  - Windows: `%TEMP%/Checker Network`
 - `$STATE_ROOT` _(string; optional)_: Checker stores logs and module state in
   this directory. Defaults to
 
-  - Linux: `${XDG_STATE_HOME:-~/.local/state}/checker-network-checker`
-  - macOS: `~/Library/Application Support/network.checker.checker`
-  - Windows: `%LOCALAPPDATA%/Filecoin Checker`
+  - Linux: `${XDG_STATE_HOME:-~/.local/state}/checker-network-node`
+  - macOS: `~/Library/Application Support/network.checker.node`
+  - Windows: `%LOCALAPPDATA%/Checker Network`
 
   **IMPORTANT:** The`$STATE_ROOT` directory must be local to the computer
   running the Checker. This directory must not be shared with other computers
@@ -154,7 +154,7 @@ Show version number.
 
 ```bash
 $ checker --version
-@checkernetwork/checker: 1.0.1
+@checkernetwork/node: 1.0.1
 ```
 
 ## Docker
@@ -182,13 +182,13 @@ $ curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - &&\
 sudo apt-get install -y nodejs
 
 # Install core
-$ npm install -g @checkernetwork/checker
+$ npm install -g @checkernetwork/node
 
 # Create systemd service
 # Don't forget to replace FIL_WALLET_ADDRESS and User
 $ sudo tee /etc/systemd/system/checker.service > /dev/null <<EOF
 [Unit]
-Description=Filecoin Checker
+Description=Checker Network Node
 Documentation=https://github.com/CheckerNetwork/node
 After=network.target
 
