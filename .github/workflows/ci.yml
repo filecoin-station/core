@@ -84,7 +84,7 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/CheckerNetwork/checker
           cache-to: type=inline
 
-      - name: Start Checker container with PASSPHRASE
+      - name: Start Checker Node container with PASSPHRASE
         run: |
          docker run \
            --name checker \
@@ -103,7 +103,7 @@ jobs:
       - name: Check | Spark started
         run: docker logs checker | grep "Spark started"
 
-      - name: Start Checker container without PASSPHRASE
+      - name: Start Checker Node container without PASSPHRASE
         run: |
          docker run \
            --name checker_unsecure \
