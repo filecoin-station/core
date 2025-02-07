@@ -99,7 +99,7 @@ typings/
 # TernJS port file
 .tern-port
 .DS_Store
-modules
+runtimes
 
 dist
 .state

@@ -22,8 +22,8 @@ describe('Storage', async () => {
       } catch {}
     }
     ps.kill()
-    await fs.stat(join(CACHE_ROOT, 'modules'))
+    await fs.stat(join(CACHE_ROOT, 'runtimes'))
     await fs.stat(STATE_ROOT)
-    await fs.stat(join(STATE_ROOT, 'modules'))
+    await fs.stat(join(STATE_ROOT, 'runtimes'))
   })
 })

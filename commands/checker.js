@@ -18,7 +18,7 @@ const {
   PASSPHRASE
 } = process.env
 
-const moduleNames = [
+const runtimeNames = [
   'zinnia'
 ]
 
@@ -62,9 +62,9 @@ export const checker = async ({ json, recreateCheckerIdOnError, experimental }) 
   const ethAddress = FIL_WALLET_ADDRESS.startsWith('0x')
     ? FIL_WALLET_ADDRESS
     : ethAddressFromDelegated(FIL_WALLET_ADDRESS)
-  for (const moduleName of moduleNames) {
-    await fs.mkdir(join(paths.moduleCache, moduleName), { recursive: true })
-    await fs.mkdir(join(paths.moduleState, moduleName), { recursive: true })
+  for (const runtimeName of runtimeNames) {
+    await fs.mkdir(join(paths.runtimeCache, runtimeName), { recursive: true })
+    await fs.mkdir(join(paths.runtimeState, runtimeName), { recursive: true })
   }
 
   activities.onActivity(activity => {
@@ -116,8 +116,8 @@ export const checker = async ({ json, recreateCheckerIdOnError, experimental }) 
       CHECKER_ID,
       FIL_WALLET_ADDRESS: ethAddress,
       ethAddress,
-      STATE_ROOT: join(paths.moduleState, 'zinnia'),
-      CACHE_ROOT: join(paths.moduleCache, 'zinnia'),
+      STATE_ROOT: join(paths.runtimeState, 'zinnia'),
+      CACHE_ROOT: join(paths.runtimeCache, 'zinnia'),
       subnetVersionsDir: paths.subnetVersionsDir,
       subnetSourcesDir: paths.subnetSourcesDir,
       onActivity: activity => {
