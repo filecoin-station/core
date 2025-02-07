@@ -13,7 +13,7 @@
 > [Checker Network](https://checker.network), suitable for running on all kinds
 > of servers..
 
-[![CI](https://github.com/CheckerNetwork/checker/actions/workflows/ci.yml/badge.svg)](https://github.com/CheckerNetwork/checker/actions/workflows/ci.yml)
+[![CI](https://github.com/CheckerNetwork/node/actions/workflows/ci.yml/badge.svg)](https://github.com/CheckerNetwork/node/actions/workflows/ci.yml)
 
 ## Deployment
 
@@ -169,7 +169,7 @@ $ docker run \
 	--detach \
 	--env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD \
         -v ./state:/home/node/.local/state/
-	ghcr.io/CheckerNetwork/checker
+	ghcr.io/CheckerNetwork/node
 ```
 
 ## Manual Deployment (Ubuntu)
@@ -189,7 +189,7 @@ $ npm install -g @checkernetwork/checker
 $ sudo tee /etc/systemd/system/checker.service > /dev/null <<EOF
 [Unit]
 Description=Filecoin Checker
-Documentation=https://github.com/CheckerNetwork/checker
+Documentation=https://github.com/CheckerNetwork/node
 After=network.target
 
 [Service]

@@ -73,7 +73,7 @@ jobs:
           context: .
           load: true
           tags: core-test
-          cache-from: type=registry,ref=ghcr.io/CheckerNetwork/checker
+          cache-from: type=registry,ref=ghcr.io/CheckerNetwork/node
           cache-to: type=inline
 
       - name: Build Docker image for other platforms
@@ -81,7 +81,7 @@ jobs:
         with:
           context: .
           platforms: linux/arm64
-          cache-from: type=registry,ref=ghcr.io/CheckerNetwork/checker
+          cache-from: type=registry,ref=ghcr.io/CheckerNetwork/node
           cache-to: type=inline
 
       - name: Start Checker Node container with PASSPHRASE
