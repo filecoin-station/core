@@ -1,7 +1,7 @@
 {
   "name": "@checkernetwork/node",
   "version": "21.2.5",
-  "description": "Checker for the Checker Network",
+  "description": "Checker Network Node",
   "license": "(Apache-2.0 AND MIT)",
   "repository": {
     "type": "git",
