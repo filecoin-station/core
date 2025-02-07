@@ -91,8 +91,8 @@ the configuration options described in
 - `PASSPHRASE` _(string; optional)_: a passphrase to protect the Checker
   instance private key stored in a file inside the `STATE_ROOT` directory.
 
-- `SUBNET_FILTER` _(string; optional)_: Run only the subnet with the
-  given name. Eg:
+- `SUBNET_FILTER` _(string; optional)_: Run only the subnet with the given name.
+  Eg:
   - `SUBNET_FILTER=spark`
 
 This command outputs metrics and activity events:
