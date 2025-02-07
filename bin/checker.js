@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { station } from '../commands/station.js'
+import { checker } from '../commands/checker.js'
 import * as Sentry from '@sentry/node'
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
@@ -21,7 +21,7 @@ yargs(hideBin(process.argv))
   .usage('Usage: $0 [options]')
   .command(
     '$0',
-    'Start Station',
+    'Start Checker',
     yargs => yargs
       .option('json', {
         alias: 'j',
@@ -32,11 +32,11 @@ yargs(hideBin(process.argv))
         type: 'boolean',
         description: 'Also run experimental modules'
       })
-      .option('recreateStationIdOnError', {
+      .option('recreateCheckerIdOnError', {
         type: 'boolean',
-        description: 'Recreate Station ID if it is corrupted'
+        description: 'Recreate Checker ID if it is corrupted'
       }),
-    ({ json, experimental, recreateStationIdOnError }) => station({ json, experimental, recreateStationIdOnError })
+    ({ json, experimental, recreateCheckerIdOnError }) => checker({ json, experimental, recreateCheckerIdOnError })
   )
   .version(`${pkg.name}: ${pkg.version}`)
   .alias('v', 'version')

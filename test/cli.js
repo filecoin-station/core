@@ -1,12 +1,12 @@
 import assert from 'node:assert'
 import { execa } from 'execa'
-import { station, FIL_WALLET_ADDRESS, PASSPHRASE, getUniqueTempDir } from './util.js'
+import { checker, FIL_WALLET_ADDRESS, PASSPHRASE, getUniqueTempDir } from './util.js'
 import { once } from 'node:events'
 
 describe('CLI', () => {
   describe('FIL_WALLET_ADDRESS', () => {
     it('fails without address', async () => {
-      await assert.rejects(execa(station, {
+      await assert.rejects(execa(checker, {
         env: {
           STATE_ROOT: getUniqueTempDir(),
           PASSPHRASE
@@ -15,7 +15,7 @@ describe('CLI', () => {
     })
     it('fails with sanctioned address', async () => {
       try {
-        await execa(station, {
+        await execa(checker, {
           env: {
             STATE_ROOT: getUniqueTempDir(),
             PASSPHRASE,
@@ -26,11 +26,11 @@ describe('CLI', () => {
         assert.strictEqual(err.exitCode, 2)
         return
       }
-      assert.fail('Expected Station Core to return a non-zero exit code')
+      assert.fail('Expected Checker to return a non-zero exit code')
     })
     it('fails with invalid 0x address', async () => {
       try {
-        await execa(station, {
+        await execa(checker, {
           env: {
             STATE_ROOT: getUniqueTempDir(),
             PASSPHRASE,
@@ -41,10 +41,10 @@ describe('CLI', () => {
         assert.strictEqual(err.exitCode, 2)
         return
       }
-      assert.fail('Expected Station Core to return a non-zero exit code')
+      assert.fail('Expected Checker to return a non-zero exit code')
     })
     it('starts without passphrase in a fresh install', async () => {
-      const ps = execa(station, {
+      const ps = execa(checker, {
         env: {
           STATE_ROOT: getUniqueTempDir(),
           FIL_WALLET_ADDRESS
@@ -54,7 +54,7 @@ describe('CLI', () => {
       ps.kill()
     })
     it('works with address and passphrase', async () => {
-      const ps = execa(station, {
+      const ps = execa(checker, {
         env: {
           STATE_ROOT: getUniqueTempDir(),
           FIL_WALLET_ADDRESS,
@@ -66,7 +66,7 @@ describe('CLI', () => {
     })
     it('fails with the wrong pass phrase', async () => {
       const STATE_ROOT = getUniqueTempDir()
-      const ps = execa(station, {
+      const ps = execa(checker, {
         env: {
           STATE_ROOT,
           FIL_WALLET_ADDRESS,
@@ -76,7 +76,7 @@ describe('CLI', () => {
       await once(ps.stdout, 'data')
       ps.kill()
       try {
-        await execa(station, {
+        await execa(checker, {
           env: {
             STATE_ROOT,
             FIL_WALLET_ADDRESS,
@@ -87,15 +87,15 @@ describe('CLI', () => {
         assert.strictEqual(err.exitCode, 1)
         return
       }
-      assert.fail('Expected Station Core to return a non-zero exit code')
+      assert.fail('Expected Checker to return a non-zero exit code')
     })
   })
 
-  describe('--recreateStationIdOnError', () => {
-    it('recreates the station id on demand', async () => {
+  describe('--recreateCheckerIdOnError', () => {
+    it('recreates the checker id on demand', async () => {
       const STATE_ROOT = getUniqueTempDir()
       {
-        const ps = execa(station, {
+        const ps = execa(checker, {
           env: {
             STATE_ROOT,
             FIL_WALLET_ADDRESS,
@@ -106,7 +106,7 @@ describe('CLI', () => {
         ps.kill()
       }
       {
-        const ps = execa(station, ['--recreateStationIdOnError'], {
+        const ps = execa(checker, ['--recreateCheckerIdOnError'], {
           env: {
             STATE_ROOT,
             FIL_WALLET_ADDRESS,
@@ -121,15 +121,15 @@ describe('CLI', () => {
 
   describe('--version', () => {
     it('outputs version', async () => {
-      await execa(station, ['--version'])
-      await execa(station, ['-v'])
+      await execa(checker, ['--version'])
+      await execa(checker, ['-v'])
     })
   })
 
   describe('--help', () => {
     it('outputs help text', async () => {
-      await execa(station, ['--help'])
-      await execa(station, ['-h'])
+      await execa(checker, ['--help'])
+      await execa(checker, ['-h'])
     })
   })
 })

@@ -1,17 +1,17 @@
 {
-  "name": "@filecoin-station/core",
+  "name": "@checkernetwork/checker",
   "version": "21.2.5",
-  "description": "Filecoin Station Core",
+  "description": "Checker for the Checker Network",
   "license": "(Apache-2.0 AND MIT)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/filecoin-station/core.git"
+    "url": "git+https://github.com/CheckerNetwork/checker.git"
   },
   "main": "index.js",
   "types": "dist/index.d.ts",
   "type": "module",
   "bin": {
-    "station": "bin/station.js"
+    "checker": "bin/checker.js"
   },
   "engines": {
     "node": ">=18"
@@ -19,7 +19,7 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "npm run test:lint",
-    "start": "cross-env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD STATE_ROOT=.state CACHE_ROOT=.cache node ./bin/station.js",
+    "start": "cross-env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD STATE_ROOT=.state CACHE_ROOT=.cache node ./bin/checker.js",
     "test": "npm run test:lint && npm run test:types && npm run test:unit",
     "test:lint": "prettier --check . && standard",
     "test:types": "tsc -p .",
