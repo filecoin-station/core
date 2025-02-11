@@ -29,6 +29,7 @@ jobs:
           - cross-spawn
           - nanoid
           - w3name
+          - '@web3-storage/car-block-validator'
     steps:
       - name: Dependabot metadata
         id: metadata
