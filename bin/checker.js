@@ -17,6 +17,8 @@ Sentry.init({
   ignoreErrors: [/EACCES/, /EPERM/, /ENOSPC/, /EPIPE/]
 })
 
+await paths.maybeMigrateStateRoot()
+
 yargs(hideBin(process.argv))
   .usage('Usage: $0 [options]')
   .command(
