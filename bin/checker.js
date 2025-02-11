@@ -6,6 +6,7 @@ import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import fs from 'node:fs/promises'
 import * as paths from '../lib/paths.js'
+import { maybeMigrateRuntimeState } from '../lib/migrate.js'
 
 const pkg = JSON.parse(await fs.readFile(paths.packageJSON, 'utf8'))
 
@@ -17,7 +18,7 @@ Sentry.init({
   ignoreErrors: [/EACCES/, /EPERM/, /ENOSPC/, /EPIPE/]
 })
 
-await paths.maybeMigrateStateRoot()
+await maybeMigrateRuntimeState()
 
 yargs(hideBin(process.argv))
   .usage('Usage: $0 [options]')
