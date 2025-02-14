@@ -5,7 +5,7 @@ import { runPingLoop, runMachinesLoop } from '../lib/telemetry.js'
 import fs from 'node:fs/promises'
 import { metrics } from '../lib/metrics.js'
 import { paths } from '../lib/paths.js'
-import { getStationId } from '../lib/station-id.js'
+import { getCheckerId } from '../lib/checker-id.js'
 import pRetry from 'p-retry'
 import { fetch } from 'undici'
 import { ethAddressFromDelegated, isEthAddress } from '@glif/filecoin-address'
@@ -18,7 +18,7 @@ const {
   PASSPHRASE
 } = process.env
 
-const moduleNames = [
+const runtimeNames = [
   'zinnia'
 ]
 
@@ -31,7 +31,7 @@ const panic = (msg, exitCode = 1) => {
   process.exit(exitCode)
 }
 
-export const station = async ({ json, recreateStationIdOnError, experimental }) => {
+export const checker = async ({ json, recreateCheckerIdOnError, experimental }) => {
   if (!FIL_WALLET_ADDRESS) panic('FIL_WALLET_ADDRESS required')
   if (FIL_WALLET_ADDRESS.startsWith('f1')) {
     panic('Invalid FIL_WALLET_ADDRESS: f1 addresses are currently not supported. Please use an f4 or 0x address.')
@@ -46,8 +46,8 @@ export const station = async ({ json, recreateStationIdOnError, experimental }) 
     panic('Invalid FIL_WALLET_ADDRESS ethereum address', 2)
   }
 
-  const keypair = await getStationId({ secretsDir: paths.secrets, passphrase: PASSPHRASE, recreateOnError: recreateStationIdOnError })
-  const STATION_ID = keypair.publicKey
+  const keypair = await getCheckerId({ secretsDir: paths.secrets, passphrase: PASSPHRASE, recreateOnError: recreateCheckerIdOnError })
+  const CHECKER_ID = keypair.publicKey
 
   const fetchRes = await pRetry(
     () => fetch(`https://station-wallet-screening.fly.dev/${FIL_WALLET_ADDRESS}`),
@@ -62,16 +62,16 @@ export const station = async ({ json, recreateStationIdOnError, experimental }) 
   const ethAddress = FIL_WALLET_ADDRESS.startsWith('0x')
     ? FIL_WALLET_ADDRESS
     : ethAddressFromDelegated(FIL_WALLET_ADDRESS)
-  for (const moduleName of moduleNames) {
-    await fs.mkdir(join(paths.moduleCache, moduleName), { recursive: true })
-    await fs.mkdir(join(paths.moduleState, moduleName), { recursive: true })
+  for (const runtimeName of runtimeNames) {
+    await fs.mkdir(join(paths.runtimeCache, runtimeName), { recursive: true })
+    await fs.mkdir(join(paths.runtimeState, runtimeName), { recursive: true })
   }
 
   activities.onActivity(activity => {
     if (json) {
       console.log(JSON.stringify({
         type: `activity:${activity.type}`,
-        module: activity.source,
+        subnet: activity.source,
         message: activity.message
       }))
     } else {
@@ -96,7 +96,7 @@ export const station = async ({ json, recreateStationIdOnError, experimental }) 
   })
 
   if (experimental) {
-    console.error('No experimental modules available at this point')
+    console.error('No experimental subnets available at this point')
   }
 
   const contracts = []
@@ -113,17 +113,17 @@ export const station = async ({ json, recreateStationIdOnError, experimental }) 
   await Promise.all([
     zinniaRuntime.run({
       provider,
-      STATION_ID,
+      CHECKER_ID,
       FIL_WALLET_ADDRESS: ethAddress,
       ethAddress,
-      STATE_ROOT: join(paths.moduleState, 'zinnia'),
-      CACHE_ROOT: join(paths.moduleCache, 'zinnia'),
-      moduleVersionsDir: paths.moduleVersionsDir,
-      moduleSourcesDir: paths.moduleSourcesDir,
+      STATE_ROOT: join(paths.runtimeState, 'zinnia'),
+      CACHE_ROOT: join(paths.runtimeCache, 'zinnia'),
+      subnetVersionsDir: paths.subnetVersionsDir,
+      subnetSourcesDir: paths.subnetSourcesDir,
       onActivity: activity => {
         activities.submit({
           ...activity,
-          // Zinnia will try to overwrite `source` if a module created the
+          // Zinnia will try to overwrite `source` if a subnet created the
           // activity. Using the spread syntax won't work because a
           // `source: null` would overwrite the default value.
           source: activity.source || 'Zinnia'
@@ -131,8 +131,8 @@ export const station = async ({ json, recreateStationIdOnError, experimental }) 
       },
       onMetrics: m => metrics.submit('zinnia', m)
     }),
-    runPingLoop({ STATION_ID }),
-    runMachinesLoop({ STATION_ID }),
+    runPingLoop({ CHECKER_ID }),
+    runMachinesLoop({ CHECKER_ID }),
     runUpdateContractsLoop({
       provider,
       contracts,

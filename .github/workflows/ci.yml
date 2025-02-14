@@ -73,7 +73,7 @@ jobs:
           context: .
           load: true
           tags: core-test
-          cache-from: type=registry,ref=ghcr.io/filecoin-station/core
+          cache-from: type=registry,ref=ghcr.io/CheckerNetwork/node
           cache-to: type=inline
 
       - name: Build Docker image for other platforms
@@ -81,13 +81,13 @@ jobs:
         with:
           context: .
           platforms: linux/arm64
-          cache-from: type=registry,ref=ghcr.io/filecoin-station/core
+          cache-from: type=registry,ref=ghcr.io/CheckerNetwork/node
           cache-to: type=inline
 
-      - name: Start Station Core container with PASSPHRASE
+      - name: Start Checker Node container with PASSPHRASE
         run: |
          docker run \
-           --name station \
+           --name checker \
            --detach \
            --env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD \
            --env PASSPHRASE=secret \
@@ -95,28 +95,28 @@ jobs:
         env:
           IMAGEID: ${{ steps.docker_build.outputs.imageid }}
 
-      - name: Print station activity
+      - name: Print checker activity
         run: |
-          sleep 10 # Wait for Station modules to start
-          docker logs station
+          sleep 10 # Wait for Checker subnets to start
+          docker logs checker
 
       - name: Check | Spark started
-        run: docker logs station | grep "Spark started"
+        run: docker logs checker | grep "Spark started"
 
-      - name: Start Station Core container without PASSPHRASE
+      - name: Start Checker Node container without PASSPHRASE
         run: |
          docker run \
-           --name station_unsecure \
+           --name checker_unsecure \
            --detach \
            --env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD \
            $IMAGEID
         env:
           IMAGEID: ${{ steps.docker_build.outputs.imageid }}
 
-      - name: Print station activity
+      - name: Print checker activity
         run: |
-          sleep 10 # Wait for Station modules to start
-          docker logs station_unsecure
+          sleep 10 # Wait for Checker subnets to start
+          docker logs checker_unsecure
 
       - name: Check | Spark started
-        run: docker logs station_unsecure | grep "Spark started"
+        run: docker logs checker_unsecure | grep "Spark started"

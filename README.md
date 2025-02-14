@@ -3,72 +3,73 @@
 	 :artificial_satellite:
 	<br>
 	<br>
-	Station Core
+	Checker Node
 	<br>
 	<br>
 	<br>
 </h1>
 
-> Station Core is a headless version of Filecoin Station suitable for running on
-> all kinds of servers.
+> Checker Node is a node implementation for the
+> [Checker Network](https://checker.network), suitable for running on all kinds
+> of servers..
 
-[![CI](https://github.com/filecoin-station/core/actions/workflows/ci.yml/badge.svg)](https://github.com/filecoin-station/core/actions/workflows/ci.yml)
+[![CI](https://github.com/CheckerNetwork/node/actions/workflows/ci.yml/badge.svg)](https://github.com/CheckerNetwork/node/actions/workflows/ci.yml)
 
 ## Deployment
 
-Station Core supports different deployment options:
+Checker Node supports different deployment options:
 
 - [Docker](#docker)
 - [Manual Deployment (Ubuntu)](#manual-deployment-ubuntu)
 
 ## Installation
 
-> **Note**: Station Core requires Node.js, we recommend using the latest LTS
+> **Note**: Checker Node requires Node.js, we recommend using the latest LTS
 > version. You can install Node.js using your favorite package manager or get
 > the official installer from
 > [Node.js downloads](https://nodejs.org/en/download/).
 
-With Node.js installed, run `npm` to install Station Core.
+With Node.js installed, run `npm` to install Checker Node.
 
 ```bash
-$ npm install -g @filecoin-station/core
+$ npm install -g @checkernetwork/node
 ```
 
 ## Usage
 
 ```bash
-$ FIL_WALLET_ADDRESS=... PASSPHRASE=... station
+$ FIL_WALLET_ADDRESS=... PASSPHRASE=... checker
 ```
 
 ## Common Configuration
 
-Station Core is configured using environment variables (see
+Checker Node is configured using environment variables (see
 [The Twelve-Factor App](https://12factor.net/config)).
 
-The following configuration options are shared by all Station commands:
+The following configuration options are shared by all Checker commands:
 
-- `$CACHE_ROOT` _(string; optional)_: Station stores temporary files (e.g.
+- `$CACHE_ROOT` _(string; optional)_: Checker stores temporary files (e.g.
   cached data) in this directory. Defaults to
-  - Linux: `${XDG_CACHE_HOME:-~/.cache}/filecoin-station-core`
-  - macOS: `~/Library/Caches/app.filstation.core`
-  - Windows: `%TEMP%/Filecoin Station Core`
-- `$STATE_ROOT` _(string; optional)_: Station stores logs and module state in
+  - Linux: `${XDG_CACHE_HOME:-~/.cache}/checker-network-node`
+  - macOS: `~/Library/Caches/network.checker.node`
+  - Windows: `%TEMP%/Checker Network`
+- `$STATE_ROOT` _(string; optional)_: Checker stores logs and subnet state in
   this directory. Defaults to
 
-  - Linux: `${XDG_STATE_HOME:-~/.local/state}/filecoin-station-core`
-  - macOS: `~/Library/Application Support/app.filstation.core`
-  - Windows: `%LOCALAPPDATA%/Filecoin Station Core`
+  - Linux: `${XDG_STATE_HOME:-~/.local/state}/checker-network-node`
+  - macOS: `~/Library/Application Support/network.checker.node`
+  - Windows: `%LOCALAPPDATA%/Checker Network`
 
   **IMPORTANT:** The`$STATE_ROOT` directory must be local to the computer
-  running the Station. This directory must not be shared with other computers
+  running the Checker. This directory must not be shared with other computers
   operated by the user, e.g. via Windows Domain profile or cloud storage like
   iCloud Drive, Dropbox and OneDrive.
 
 ## Commands
 
-### `$ station`
+### `$ checker`
 
-Start a new Station process. The Station will run in foreground and can be
+Start a new Checker process. The Checker will run in foreground and can be
 terminated by pressing Ctrl+C.
 
 This command has the following additional configuration in addition to common
@@ -79,7 +80,7 @@ the configuration options described in
   will receive rewards. The value must be a mainnet address starting with
   `f410`, `0x`.
 
-  `f1` addresses currently are not supported. Rewards for Station operators are
+  `f1` addresses currently are not supported. Rewards for Checker operators are
   administered by a FEVM smart contract. It is currently technically complex to
   make payments to f1 addresses.
 
@@ -87,17 +88,17 @@ the configuration options described in
   `0x000000000000000000000000000000000000dEaD`. Please note that any earnings
   sent there will be lost.
 
-- `PASSPHRASE` _(string; optional)_: a passphrase to protect the Station
+- `PASSPHRASE` _(string; optional)_: a passphrase to protect the Checker
   instance private key stored in a file inside the `STATE_ROOT` directory.
 
-- `MODULE_FILTER` _(string; optional)_: Run only the Zinnia module with the
-  given name. Eg:
-  - `MODULE_FILTER=spark`
+- `SUBNET_FILTER` _(string; optional)_: Run only the subnet with the given name.
+  Eg:
+  - `SUBNET_FILTER=spark`
 
 This command outputs metrics and activity events:
 
 ```bash
-$ station
+$ checker
 {
   "totalJobsCompleted": 161,
   "rewardsScheduledForAddress": "0.041033208757289921"
@@ -108,10 +109,10 @@ $ station
 ```
 
 ```bash
-$ station --json
+$ checker --json
 {"type":"jobs-completed","total":161}
-{"type":"activity:info","module":"Saturn","message":"Saturn Node will try to connect to the Saturn Orchestrator..."}
-{"type":"activity:info","module":"Saturn","message":"Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network..."}
+{"type":"activity:info","subnet":"Saturn","message":"Saturn Node will try to connect to the Saturn Orchestrator..."}
+{"type":"activity:info","subnet":"Saturn","message":"Saturn Node was able to connect to the Orchestrator and will now start connecting to the Saturn network..."}
 ...
 ```
 
@@ -120,56 +121,56 @@ For the JSON output, the following event types exist:
 - `jobs-completed`
   - `total`
 - `activity:info`
-  - `module`
+  - `subnet`
   - `message`
 - `activity:error`
-  - `module`
+  - `subnet`
   - `message`
 
-Set the flag `--experimental` to run modules not yet considered safe for
+Set the flag `--experimental` to run subnets not yet considered safe for
 production use. _Run this at your own risk!_
 
-No modules currently in experimental mode.
+No subnets currently in experimental mode.
 
-### `$ station --help`
+### `$ checker --help`
 
 Show help.
 
 ```bash
-$ station --help
-Usage: station [options]
+$ checker --help
+Usage: checker [options]
 
 Options:
   -j, --json                      Output JSON                          [boolean]
-      --experimental              Also run experimental modules        [boolean]
-      --recreateStationIdOnError  Recreate Station ID if it is corrupted
+      --experimental              Also run experimental subnets        [boolean]
+      --recreateCheckerIdOnError  Recreate Checker ID if it is corrupted
                                                                        [boolean]
   -v, --version                   Show version number                  [boolean]
   -h, --help                      Show help                            [boolean]
 ```
 
-### `$ station --version`
+### `$ checker --version`
 
 Show version number.
 
 ```bash
-$ station --version
-@filecoin-station/core: 1.0.1
+$ checker --version
+@checkernetwork/node: 1.0.1
 ```
 
 ## Docker
 
-Deploy Station with [Docker](https://www.docker.com/). Please replace
+Deploy Checker with [Docker](https://www.docker.com/). Please replace
 `FIL_WALLET_ADDRESS` and ensure the passed `state` folder is persisted across
 machine restarts.
 
 ```bash
 $ docker run \
-	--name station \
+	--name checker \
 	--detach \
 	--env FIL_WALLET_ADDRESS=0x000000000000000000000000000000000000dEaD \
         -v ./state:/home/node/.local/state/
-	ghcr.io/CheckerNetwork/core
+	ghcr.io/CheckerNetwork/node
 ```
 
 ## Manual Deployment (Ubuntu)
@@ -182,21 +183,21 @@ $ curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - &&\
 sudo apt-get install -y nodejs
 
 # Install core
-$ npm install -g @filecoin-station/core
+$ npm install -g @checkernetwork/node
 
 # Create systemd service
 # Don't forget to replace FIL_WALLET_ADDRESS and User
-$ sudo tee /etc/systemd/system/station.service > /dev/null <<EOF
+$ sudo tee /etc/systemd/system/checker.service > /dev/null <<EOF
 [Unit]
-Description=Filecoin Station Core
-Documentation=https://github.com/filecoin-station/core
+Description=Checker Network Node
+Documentation=https://github.com/CheckerNetwork/node
 After=network.target
 
 [Service]
 Environment=FIL_WALLET_ADDRESS=XYZ
 Type=simple
 User=XYZ
-ExecStart=/usr/bin/station
+ExecStart=/usr/bin/checker
 Restart=always
 
 [Install]
@@ -205,11 +206,11 @@ EOF
 
 # Start service
 $ sudo systemctl daemon-reload
-$ sudo systemctl start station
-$ sudo systemctl status station
+$ sudo systemctl start checker
+$ sudo systemctl status checker
 
 # Read logs
-$ journalctl -u station.service
+$ journalctl -u checker.service
 ```
 
 ## Disclaimer

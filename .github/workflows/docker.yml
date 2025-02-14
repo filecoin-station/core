@@ -40,8 +40,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/CheckerNetwork/core
-            ghcr.io/CheckerNetwork/core:${{ steps.package-version.outputs.current-version }}
+            ghcr.io/CheckerNetwork/node
+            ghcr.io/CheckerNetwork/node:${{ steps.package-version.outputs.current-version }}
           platforms: linux/amd64,linux/arm64
-          cache-from: type=registry,ref=ghcr.io/CheckerNetwork/core
+          cache-from: type=registry,ref=ghcr.io/CheckerNetwork/node
           cache-to: type=inline

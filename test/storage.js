@@ -1,5 +1,5 @@
 import { execa } from 'execa'
-import { station, FIL_WALLET_ADDRESS, PASSPHRASE } from './util.js'
+import { checker, FIL_WALLET_ADDRESS, PASSPHRASE } from './util.js'
 import { once } from 'node:events'
 import { tmpdir } from 'node:os'
 import fs from 'node:fs/promises'
@@ -11,7 +11,7 @@ describe('Storage', async () => {
     const CACHE_ROOT = join(tmpdir(), randomUUID())
     const STATE_ROOT = join(tmpdir(), randomUUID())
     const ps = execa(
-      station,
+      checker,
       { env: { CACHE_ROOT, STATE_ROOT, FIL_WALLET_ADDRESS, PASSPHRASE } }
     )
     while (true) {
@@ -22,8 +22,8 @@ describe('Storage', async () => {
       } catch {}
     }
     ps.kill()
-    await fs.stat(join(CACHE_ROOT, 'modules'))
+    await fs.stat(join(CACHE_ROOT, 'runtimes'))
     await fs.stat(STATE_ROOT)
-    await fs.stat(join(STATE_ROOT, 'modules'))
+    await fs.stat(join(STATE_ROOT, 'runtimes'))
   })
 })

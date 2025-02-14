@@ -5,11 +5,11 @@ describe('Metrics', () => {
   describe('submit', () => {
     it('should merge metrics', () => {
       const metrics = new Metrics()
-      metrics.submit('module1', {
+      metrics.submit('subnet1', {
         totalJobsCompleted: 1,
         rewardsScheduledForAddress: 1n
       })
-      metrics.submit('module2', {
+      metrics.submit('subnet2', {
         totalJobsCompleted: 2,
         rewardsScheduledForAddress: 2n
       })
@@ -37,15 +37,15 @@ describe('Metrics', () => {
         }
         i++
       })
-      metrics.submit('module1', {
+      metrics.submit('subnet1', {
         totalJobsCompleted: 1,
         rewardsScheduledForAddress: 0n
       })
-      metrics.submit('module1', {
+      metrics.submit('subnet1', {
         totalJobsCompleted: 1,
         rewardsScheduledForAddress: 0n
       })
-      metrics.submit('module2', {
+      metrics.submit('subnet2', {
         totalJobsCompleted: 1,
         rewardsScheduledForAddress: 0n
       })

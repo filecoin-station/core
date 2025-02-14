@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-import { station } from '../commands/station.js'
+import { checker } from '../commands/checker.js'
 import * as Sentry from '@sentry/node'
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import fs from 'node:fs/promises'
 import * as paths from '../lib/paths.js'
+import { maybeMigrateRuntimeState } from '../lib/migrate.js'
 
 const pkg = JSON.parse(await fs.readFile(paths.packageJSON, 'utf8'))
 
@@ -17,11 +18,13 @@ Sentry.init({
   ignoreErrors: [/EACCES/, /EPERM/, /ENOSPC/, /EPIPE/]
 })
 
+await maybeMigrateRuntimeState()
+
 yargs(hideBin(process.argv))
   .usage('Usage: $0 [options]')
   .command(
     '$0',
-    'Start Station',
+    'Start Checker',
     yargs => yargs
       .option('json', {
         alias: 'j',
@@ -30,13 +33,13 @@ yargs(hideBin(process.argv))
       })
       .option('experimental', {
         type: 'boolean',
-        description: 'Also run experimental modules'
+        description: 'Also run experimental subnets'
       })
-      .option('recreateStationIdOnError', {
+      .option('recreateCheckerIdOnError', {
         type: 'boolean',
-        description: 'Recreate Station ID if it is corrupted'
+        description: 'Recreate Checker ID if it is corrupted'
       }),
-    ({ json, experimental, recreateStationIdOnError }) => station({ json, experimental, recreateStationIdOnError })
+    ({ json, experimental, recreateCheckerIdOnError }) => checker({ json, experimental, recreateCheckerIdOnError })
   )
   .version(`${pkg.name}: ${pkg.version}`)
   .alias('v', 'version')
